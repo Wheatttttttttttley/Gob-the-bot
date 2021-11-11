@@ -1,5 +1,7 @@
 const { Client, Collection, Intents } = require('discord.js');
-require('dotenv').config();
+if (!process.env.TOKEN) {
+    require('dotenv').config();
+}
 
 const client = new Client({ intents: [
     Intents.FLAGS.GUILDS,
