@@ -19,12 +19,21 @@ const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
     try {
         console.log('Started refreshing application (/) commands.');
 
-        await rest.put(
-            // Global commands use it when deploys
-            Routes.applicationCommands(process.env.CLIENT_ID),
-            // Routes.applicationGuildCommands(clientId, guildId),
-            { body: commands },
-        );
+        // dev mode
+        if (process.env.GUILD_ID) {
+            console.log('Running in dev mode.');
+            await rest.put(
+                Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
+                { body: commands },
+            );
+        } else {
+        // production mode
+            console.log('Running in production mode.');
+            await rest.put(
+                Routes.applicationCommands(process.env.CLIENT_ID),
+                { body: commands },
+            );
+        }
 
         console.log('Successfully reloaded application (/) commands.');
     } catch (error) {

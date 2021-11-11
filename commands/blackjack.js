@@ -182,7 +182,7 @@ async function gameRunner(game, interaction) {
         game.sendMessage(game.showCardAndPoints());
     }
 
-    if (game.player.points > game.dealer.points) {
+    if (game.player.points > game.dealer.points || game.dealer.isBusted) {
         game.sendMessage(`${game.showCardAndPoints()}\nYou win!`);
     } else if (game.player.points < game.dealer.points) {
         game.sendMessage(`${game.showCardAndPoints()}\nYou lose!`);
@@ -193,8 +193,12 @@ async function gameRunner(game, interaction) {
 }
 
 async function execute(interaction) {
-    const game = new Game(interaction.user);
-    gameRunner(game, interaction);
+    if (interaction.guild.me.permissionsIn(interaction.channel).has('MANAGE_MESSAGES')) {
+        const game = new Game(interaction.user);
+        gameRunner(game, interaction);
+    } else {
+        interaction.reply('Gob doesn\'t have manage messages permission.');
+    }
 }
 
 module.exports = {
