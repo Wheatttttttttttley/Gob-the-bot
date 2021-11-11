@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/deploy-commands.js && node src/index.js"
+    "dev": "node src/deploy-commands.js && node src/index.js",
+    "deploy-command": "node src/deploy-commands.js",
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +16,8 @@
     "@discordjs/builders": "^0.7.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "discord-api-types": "^0.24.0",
-    "discord.js": "^13.2.0"
+    "discord.js": "^13.2.0",
+    "dotenv": "^10.0.0"
   },
   "devDependencies": {
     "eslint": "^8.1.0"
