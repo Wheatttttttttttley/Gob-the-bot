@@ -1,5 +1,5 @@
 const { Client, Collection, Intents } = require('discord.js');
-const { token } = require('../config.json');
+// const { token } = require('../config.json');
 
 const client = new Client({ intents: [
     Intents.FLAGS.GUILDS,
@@ -11,7 +11,7 @@ const client = new Client({ intents: [
 (async () => {
     console.log('Initializing...');
 
-    await client.login(token);
+    await client.login(process.env.TOKEN);
     client.user.setActivity('you crying inside', { type : 'WATCHING' });
 
     client.commands = new Collection();

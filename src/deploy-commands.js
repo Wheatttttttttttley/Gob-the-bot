@@ -1,6 +1,6 @@
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { clientId, guildId, token } = require('../config.json');
+// const { clientId, guildId, token } = require('../config.json');
 const fs = require('fs');
 
 const commands = [];
@@ -11,7 +11,7 @@ for (const file of commandFiles) {
     commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: '9' }).setToken(token);
+const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 
 (async () => {
     try {
@@ -19,8 +19,8 @@ const rest = new REST({ version: '9' }).setToken(token);
 
         await rest.put(
             // Global commands use it when deploys
-            // Routes.applicationCommands(clientId),
-            Routes.applicationGuildCommands(clientId, guildId),
+            Routes.applicationCommands(process.env.CLIENT_ID),
+            // Routes.applicationGuildCommands(clientId, guildId),
             { body: commands },
         );
 

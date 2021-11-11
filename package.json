@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/deploy-commands.js && node src/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/deploy-commands.js && node src/index.js"
   },
   "keywords": [],
   "author": "",
