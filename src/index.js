@@ -11,15 +11,13 @@ const client = new Client({ intents: [
 });
 
 (async () => {
-    console.log('Initializing...');
-
     await client.login(process.env.TOKEN);
-    client.user.setActivity('you crying inside', { type : 'WATCHING' });
 
     client.commands = new Collection();
     await require('./registry.js').initialize();
 
-    console.log(`Ready! Logged in as ${client.user.tag}`);
+    console.log(`Ready! Logged in as ${client.user.tag}!`);
+    client.user.setActivity('you crying inside', { type : 'WATCHING' });
 })();
 
 module.exports = { client };

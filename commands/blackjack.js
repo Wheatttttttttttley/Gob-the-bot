@@ -1,10 +1,15 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+const playerSchema = require('../schemas/playerSchema');
 const sleep = require('util').promisify(setTimeout);
 
 const data = new SlashCommandBuilder()
     .setName('blackjack')
-    .setDescription('Start a game of blackjack!');
+    .setDescription('Start a game of blackjack!')
+    .addNumberOption(option =>
+        option.setName('bet')
+            .setRequired(true)
+            .setDescription('The amount of money you want to bet.'));
 
 class Player {
     constructor() {
@@ -52,11 +57,12 @@ class Card {
 }
 
 class Game {
-    constructor(user) {
+    constructor(user, bet) {
         this.user = user;
         this.player = new Player();
         this.dealer = new Player();
-        this.bet = 1000;
+        this.bet = bet;
+
         this.messageEmbed = null;
     }
 
@@ -113,7 +119,7 @@ class Game {
     }
 }
 
-async function gameRunner(game, interaction) {
+async function gameRunner(interaction, game) {
     game.player.addCard(new Card());
     game.player.addCard(new Card());
     game.dealer.addCard(new Card());
@@ -122,14 +128,14 @@ async function gameRunner(game, interaction) {
     if (game.player.points === 21 && game.dealer.points === 21) {
         game.dealer.hand[1].visible = true;
         game.sendMessage(`${game.showCardAndPoints()}\nDraw!`, interaction);
-        return;
+        return 1.0;
     } else if (game.player.points === 21) {
         game.sendMessage(`${game.showCardAndPoints()}\nYou win!`, interaction);
-        return;
+        return 1.5;
     } else if (game.dealer.points === 21) {
         game.dealer.hand[1].visible = true;
         game.sendMessage(`${game.showCardAndPoints()}\nYou lose!`, interaction);
-        return;
+        return 0.0;
     }
 
     const emoji_filter = (reaction, user) => {
@@ -154,7 +160,7 @@ async function gameRunner(game, interaction) {
             .catch(() => {
                 game.sendMessage('You don\'t answer in time!');
                 game.player.isBusted = true;
-                return;
+                return 0.0;
             });
         if (isStanding || game.player.isBusted || game.player.points === 21) {
             break;
@@ -166,10 +172,10 @@ async function gameRunner(game, interaction) {
 
     if (game.player.isBusted) {
         game.sendMessage(`${game.showCardAndPoints()}\nYou lose!`);
-        return;
+        return 0.0;
     } else if (game.player.points === 21) {
         game.sendMessage(`${game.showCardAndPoints()}\nYou win!`);
-        return;
+        return 1.0;
     }
 
     game.dealer.hand[1].visible = true;
@@ -184,21 +190,38 @@ async function gameRunner(game, interaction) {
 
     if (game.player.points > game.dealer.points || game.dealer.isBusted) {
         game.sendMessage(`${game.showCardAndPoints()}\nYou win!`);
+        return 1.0;
     } else if (game.player.points < game.dealer.points) {
         game.sendMessage(`${game.showCardAndPoints()}\nYou lose!`);
+        return 0.0;
     } else {
         game.sendMessage(`${game.showCardAndPoints()}\nDraw!`);
+        return 1.0;
     }
-    return;
 }
 
 async function execute(interaction) {
-    if (interaction.guild.me.permissionsIn(interaction.channel).has('MANAGE_MESSAGES')) {
-        const game = new Game(interaction.user);
-        gameRunner(game, interaction);
-    } else {
+    if (!interaction.guild.me.permissionsIn(interaction.channel).has('MANAGE_MESSAGES')) {
         interaction.reply('Gob doesn\'t have manage messages permission.');
+        return;
     }
+
+    const playerBet = interaction.options.getNumber('bet');
+    playerSchema.findOne({ _id: interaction.user.id })
+        .then(async (player) => {
+            if (player.balance < playerBet) {
+                interaction.reply('You don\'t have enough money.');
+                return;
+            }
+            player.balance -= playerBet;
+            await player.updateOne({ balance: player.balance });
+
+            const game = new Game(interaction.user, playerBet);
+            const multiplier = await gameRunner(interaction, game);
+
+            player.balance += (playerBet * multiplier);
+            await player.updateOne({ balance: player.balance });
+        });
 }
 
 module.exports = {

@@ -1,4 +1,5 @@
 const { client } = require('./index.js');
+const mongoose = require('mongoose');
 const fs = require('fs');
 
 async function registerCommands() {
@@ -21,9 +22,21 @@ async function registerEvents() {
     }
 }
 
+// Connect to MongoDB
+async function mongoConnect() {
+    await mongoose.connect(process.env.MONGO_URI || '', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        keepAlive: true,
+    });
+}
 async function initialize() {
+    console.log('Registering events');
     await registerEvents();
+    console.log('Registering commands');
     await registerCommands();
+    console.log('Connecting to MongoDB');
+    await mongoConnect();
 }
 
 module.exports = {
