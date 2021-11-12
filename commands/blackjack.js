@@ -44,6 +44,33 @@ class Player {
         }
     }
 
+    showCards() {
+        let cards = '';
+        for (let i = 0; i < this.hand.length; i++) {
+            if (this.hand[i].visible) {
+                cards += this.hand[i].suit + this.hand[i].rank + ' ';
+            }
+        }
+        return cards;
+    }
+
+    getPoints() {
+        if (!this.hand[1].visible) {
+            let point = 0;
+            if (this.hand[0].value === 0) {
+                point = 11;
+            } else if (this.hand[0].value >= 9) {
+                point = 10;
+            } else {
+                point = this.hand[0].value + 1;
+            }
+            return point;
+        }
+
+        return this.points;
+
+    }
+
 }
 
 class Card {
@@ -66,46 +93,20 @@ class Game {
         this.messageEmbed = null;
     }
 
-    showCards() {
-        let cards = '';
-        for (let i = 0; i < this.player.hand.length; i++) {
-            cards += this.player.hand[i].suit + this.player.hand[i].rank + ' ';
-        }
-        cards += '\n';
-        for (let i = 0; i < this.dealer.hand.length; i++) {
-            if (this.dealer.hand[i].visible) {
-                cards += this.dealer.hand[i].suit + this.dealer.hand[i].rank + ' ';
-            }
-        }
-        return cards;
-    }
-
-    showPoints() {
-        if (!this.dealer.hand[1].visible) {
-            let point = 0;
-            if (this.dealer.hand[0].value === 0) {
-                point = 11;
-            } else if (this.dealer.hand[0].value >= 9) {
-                point = 10;
-            } else {
-                point = this.dealer.hand[0].value + 1;
-            }
-            return `Your points: ${this.player.points}\nDealer's points: ${point}`;
-        }
-
-        return `Your points: ${this.player.points}\nDealer's points: ${this.dealer.points}`;
-    }
-
     showCardAndPoints() {
-        return this.showCards() + '\n' + this.showPoints();
-    }
-
-    async sendMessage(message, interaction = null) {
         const embed = new MessageEmbed()
             .setColor('#0099ff')
             .setTitle(`${this.user.username}'s Blackjack`)
-            .setDescription(message);
+            .setDescription(`**Welcome to blackjack!**\n**Staring bet:** ***${this.bet}***`)
+            .addFields(
+                { name: `Player (Points: ${this.player.getPoints()})`, value: this.player.showCards() },
+                { name: `Dealer (Points: ${this.dealer.getPoints()})`, value: this.dealer.showCards() },
+            )
+            .setFooter('You can either react with 👍 to hit or react with 👎 to stand.');
+        return embed;
+    }
 
+    async sendMessage(embed, interaction) {
         if (interaction) {
             if (!interaction.replied) {
                 this.messageEmbed = await interaction.reply({ embeds: [embed], fetchReply: true });
@@ -120,31 +121,31 @@ class Game {
 }
 
 async function gameRunner(interaction, game) {
+    // Deal cards
     game.player.addCard(new Card());
     game.player.addCard(new Card());
     game.dealer.addCard(new Card());
     game.dealer.addCard(new Card(false));
 
+    // Show cards
     if (game.player.points === 21 && game.dealer.points === 21) {
         game.dealer.hand[1].visible = true;
-        game.sendMessage(`${game.showCardAndPoints()}\nDraw!`, interaction);
-        return 1.0;
+        return 'Draw';
     } else if (game.player.points === 21) {
-        game.sendMessage(`${game.showCardAndPoints()}\nYou win!`, interaction);
-        return 1.5;
+        return 'Blackjack';
     } else if (game.dealer.points === 21) {
         game.dealer.hand[1].visible = true;
-        game.sendMessage(`${game.showCardAndPoints()}\nYou lose!`, interaction);
-        return 0.0;
+        return 'LoseBlackjack';
     }
 
     const emoji_filter = (reaction, user) => {
         return ['👍', '👎'].includes(reaction.emoji.name) && user.id === interaction.user.id;
     };
 
-    await game.sendMessage(`${game.showCardAndPoints()}\nHit or stand?`, interaction);
+    await game.sendMessage(game.showCardAndPoints(), interaction);
     game.messageEmbed.react('👍').then(() => game.messageEmbed.react('👎'));
 
+    // Player's turn
     while (true) {
         let isStanding = false;
         await game.messageEmbed.awaitReactions({ filter: emoji_filter, max: 1, time: 30000, errors: ['time'] })
@@ -160,68 +161,112 @@ async function gameRunner(interaction, game) {
             .catch(() => {
                 game.sendMessage('You don\'t answer in time!');
                 game.player.isBusted = true;
-                return 0.0;
+                return 'Lose';
             });
         if (isStanding || game.player.isBusted || game.player.points === 21) {
             break;
         } else {
-            await game.sendMessage(`${game.showCardAndPoints()}\nHit or stand?`);
+            await game.sendMessage(game.showCardAndPoints());
             game.messageEmbed.react('👍').then(() => game.messageEmbed.react('👎'));
         }
     }
 
     if (game.player.isBusted) {
-        game.sendMessage(`${game.showCardAndPoints()}\nYou lose!`);
-        return 0.0;
+        return 'LoseBust';
     } else if (game.player.points === 21) {
-        game.sendMessage(`${game.showCardAndPoints()}\nYou win!`);
-        return 1.0;
+        return 'Win';
     }
 
+    // Dealer's turn
     game.dealer.hand[1].visible = true;
     game.sendMessage(game.showCardAndPoints());
 
-    // Dealer's turn
     while (game.dealer.points < 17 && game.player.points > game.dealer.points) {
         await sleep(1500);
         game.dealer.addCard(new Card());
         game.sendMessage(game.showCardAndPoints());
     }
 
+    // Find winner
     if (game.player.points > game.dealer.points || game.dealer.isBusted) {
-        game.sendMessage(`${game.showCardAndPoints()}\nYou win!`);
-        return 1.0;
+        return 'Win';
     } else if (game.player.points < game.dealer.points) {
-        game.sendMessage(`${game.showCardAndPoints()}\nYou lose!`);
-        return 0.0;
+        return 'Lose';
     } else {
-        game.sendMessage(`${game.showCardAndPoints()}\nDraw!`);
-        return 1.0;
+        return 'Draw';
     }
 }
 
+const warningEmbed = new MessageEmbed()
+    .setTitle(':warning:ALERT:warning:')
+    .setColor(0xE74C3C);
+
 async function execute(interaction) {
+    // Check if bot has permission to edit the message
     if (!interaction.guild.me.permissionsIn(interaction.channel).has('MANAGE_MESSAGES')) {
-        interaction.reply('Gob doesn\'t have manage messages permission.');
+        warningEmbed.setDescription('Gob doesn\'t have "Mange Messages" permission. Please try again!');
+        interaction.reply({ embeds: [warningEmbed] });
         return;
     }
 
     const playerBet = interaction.options.getNumber('bet');
     playerSchema.findOne({ _id: interaction.user.id })
         .then(async (player) => {
+            // Check if player exists
+            if (!player) {
+                warningEmbed.setDescription('Gob can\'t find your account. Please try again!');
+                interaction.reply({ embeds: [warningEmbed] });
+                return;
+            }
+            // Check if player has enough money
             if (player.balance < playerBet) {
-                interaction.reply('You don\'t have enough money.');
+                warningEmbed.setTitle(':warning:BROKE ALERT:warning:')
+                    .setDescription('You don\'t have enough money!');
+                interaction.reply({ embeds: [warningEmbed] });
                 return;
             }
             player.balance -= playerBet;
             await player.updateOne({ balance: player.balance });
 
+            // Create game
             const game = new Game(interaction.user, playerBet);
-            const multiplier = await gameRunner(interaction, game);
+            const result = await gameRunner(interaction, game);
 
-            player.balance += (playerBet * multiplier);
+            const resultEmbed = game.showCardAndPoints();
+
+            // Result of game
+            if (result === 'Win') {
+                resultEmbed.addField('Result', `You won ${playerBet}$`)
+                    .setColor('#57F287');
+                player.balance += playerBet * 2;
+            } else if (result === 'Blackjack') {
+                resultEmbed.addField('Result', `You got blackjack! \n You won ${playerBet * 1.5}!`)
+                    .setColor('#F1C40F');
+                player.balance += playerBet * 2.5;
+            } else if (result === 'Draw') {
+                resultEmbed.addField('Result', 'Draw! You got your bet back')
+                    .setColor(0x99AAB5);
+                player.balance += playerBet;
+            } else if (result === 'Lose') {
+                resultEmbed.addField('Result', 'You lost your bet!')
+                    .setColor(0xE74C3C);
+            } else if (result === 'LoseBlackjack') {
+                resultEmbed.addField('Result', 'Dealer got blackjack!\nYou lost your bet!')
+                    .setColor(0xE74C3C);
+            } else if (result === 'LoseBust') {
+                resultEmbed.addField('Result', 'You busted!\nYou lost your bet!')
+                    .setColor(0xE74C3C);
+            }
+
+            if (!interaction.replied) {
+                game.sendMessage(resultEmbed, interaction);
+            } else {
+                game.sendMessage(resultEmbed);
+            }
+            // Update player balance
             await player.updateOne({ balance: player.balance });
-        });
+        })
+        .catch(console.error);
 }
 
 module.exports = {
