@@ -9,26 +9,34 @@ const data = new SlashCommandBuilder()
         options.setName('user')
             .setDescription('The user to check the balance of.'));
 
-const warningEmbed = new MessageEmbed()
-    .setTitle(':warning:ALERT:warning:')
-    .setColor(0xE74C3C);
+function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
+    return { embeds: [new MessageEmbed().setTitle(':warning: ' + title + ' :warning:').setDescription('***' + description + '***').setColor(0xE74C3C)] };
+}
 
-async function execute(interaction) {
-    let id = interaction.user.id;
-    try {
-        id = interaction.options.getUser('user').id;
-    } catch {
-        // Do nothing
-    }
-    playerSchema.findOne({ _id: id })
-        .then(player => {
+function execute(interaction) {
+    const user = interaction.options?.getUser('user') || interaction.user;
+
+    playerSchema.findOne({ _id: user.id })
+        .then(async player => {
+            // if can't find player
             if (!player) {
-                warningEmbed.setDescription('Gob can\'t find the account. Please try again.');
-                interaction.reply({ embeds: [warningEmbed] });
+                // try create player
+                try {
+                    await new playerSchema({
+                        _id: user.id,
+                        balance: 1000,
+                    }).save();
+                } catch {
+                // if the player already exists, there must be an error
+                    interaction.reply(warningEmbed('ACCOUNT MISSING ALERT', 'Gob can\'t find your account. Please try again!'));
+                } finally {
+                    execute(interaction);
+                }
                 return;
             }
+
             const balanceEmbed = new MessageEmbed()
-                .setTitle(`${interaction.user.username}'s balance`)
+                .setTitle(`${user.username}'s balance`)
                 .setColor(0x2ECC71)
                 .setDescription(`:dollar:: ${player.balance}`);
 
