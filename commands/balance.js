@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const playerSchema = require('../schemas/playerSchema');
+
+const { AccountManager } = require('../src/account-manager.js');
 
 const data = new SlashCommandBuilder()
     .setName('balance')
@@ -10,39 +11,23 @@ const data = new SlashCommandBuilder()
             .setDescription('The user to check the balance of.'));
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [new MessageEmbed().setTitle(':warning: ' + title + ' :warning:').setDescription('***' + description + '***').setColor(0xE74C3C)] };
+    return { embeds: [new MessageEmbed().setTitle(':warning: ' + title + ' :warning:').setDescription('**' + description + '**').setColor(0xE74C3C)] };
 }
 
-function execute(interaction) {
+async function execute(interaction) {
     const user = interaction.options?.getUser('user') || interaction.user;
 
-    playerSchema.findOne({ _id: user.id })
-        .then(async player => {
-            // if can't find player
-            if (!player) {
-                // try create player
-                try {
-                    await new playerSchema({
-                        _id: user.id,
-                        balance: 1000,
-                    }).save();
-                } catch {
-                // if the player already exists, there must be an error
-                    interaction.reply(warningEmbed('ACCOUNT MISSING ALERT', 'Gob can\'t find your account. Please try again!'));
-                } finally {
-                    execute(interaction);
-                }
-                return;
-            }
-
+    AccountManager.getBalance(user)
+        .then(balance => {
             const balanceEmbed = new MessageEmbed()
-                .setTitle(`${user.username}'s balance`)
+                .setTitle(`:moneybag: Balance of ${user.username} :moneybag:`)
                 .setColor(0x2ECC71)
-                .setDescription(`:dollar:: ${player.balance}`);
-
+                .setDescription(`**:dollar: : ${balance}**`);
             interaction.reply({ embeds: [balanceEmbed] });
-        })
-        .catch(console.error);
+
+        }).catch(err => {
+            interaction.reply(warningEmbed('Error', err));
+        });
 }
 
 module.exports = {
