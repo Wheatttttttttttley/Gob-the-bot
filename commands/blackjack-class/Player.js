@@ -1,3 +1,10 @@
+/**
+ *
+ * @property {array} hand
+ * @property {number} aceCount
+ * @property {number} points
+ * @property {boolean} isBusted
+ */
 class Player {
     constructor() {
         this.hand = [];

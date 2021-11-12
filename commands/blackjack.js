@@ -32,63 +32,52 @@ async function execute(interaction) {
         return;
     }
 
-    await AccountManager.getAccount(interaction.user.id)
-        .then(player => {
-            // Check if player exists
-            if (!player) {
-                interaction.reply(warningEmbed('ACCOUNT ALERT', 'Gob can\'t find your account. Please try again!'));
-                return;
-            }
+    const playerBalance = await AccountManager.getBalance(interaction.user);
+    if (playerBalance < playerBet) {
+        interaction.reply(warningEmbed('INSUFFICIENT FUNDS ALERT', `You don't have enough money to bet ${playerBet}`));
+        return;
+    }
+    AccountManager.updateBalance(interaction.user.id, -playerBet);
 
-            // Check if player has enough money
-            if (player.balance < playerBet) {
-                interaction.reply(warningEmbed('NOT ENOUGH MONEY ALERT', 'You don\'t have enough money!'));
-                return;
-            }
-        })
-        .then(async () => {
-            AccountManager.updateBalance(interaction.user.id, -playerBet);
+    // Create game
+    const game = new Game(interaction, playerBet);
+    const result = await game.gameRunner();
+    await sleep(500);
 
-            // Create game
-            const game = new Game(interaction, playerBet);
-            const result = await game.gameRunner();
-            await sleep(500);
+    const resultEmbed = game.cardAndPointsEmbed();
 
-            const resultEmbed = game.cardAndPointsEmbed();
+    // Result of game
+    switch (result) {
+    case 'Win':
+        AccountManager.updateBalance(interaction.user.id, playerBet * 2);
 
-            // Result of game
-            switch (result) {
-            case 'Win':
-                AccountManager.updateBalance(interaction.user.id, playerBet * 2);
+        resultEmbed.addField(':tada: WIN :tada:', `***You won ${ game.bet }!***`)
+            .setColor(0x57F287);
+        break;
+    case 'Blackjack':
+        AccountManager.updateBalance(interaction.user.id, playerBet * 2.5);
 
-                resultEmbed.addField(':tada: WIN :tada:', `***You won ${ game.bet }!***`)
-                    .setColor(0x57F287);
-                break;
-            case 'Blackjack':
-                AccountManager.updateBalance(interaction.user.id, playerBet * 2.5);
+        resultEmbed.addField(':tada: BLACKJACK :tada:', `***You got blackjack! You won ${ Math.ceil(game.bet * 1.5) }!***`)
+            .setColor(0x57F287);
+        break;
+    case 'Draw':
+        AccountManager.updateBalance(interaction.user.id, playerBet * 1.0);
 
-                resultEmbed.addField(':tada: BLACKJACK :tada:', `***You got blackjack! You won ${ Math.ceil(game.bet * 1.5) }!***`)
-                    .setColor(0x57F287);
-                break;
-            case 'Draw':
-                AccountManager.updateBalance(interaction.user.id, playerBet * 1.0);
+        resultEmbed.addField(':neutral_face: DRAW :neutral_face:', '***You got your bet back!***')
+            .setColor(0x99AAB5);
+        break;
+    case 'Lose':
+        resultEmbed.addField(':sob: LOSE :sob:', `***You lost ${game.bet}$!***`)
+            .setColor(0xE74C3C);
+        break;
+    case 'Timeout':
+        resultEmbed.addField(':sob: TIMEOUT :sob:', `***You didn't react in time! You lost ${game.bet}!***`)
+            .setColor(0xE74C3C);
+        break;
+    }
 
-                resultEmbed.addField(':neutral_face: DRAW :neutral_face:', '***You got your bet back!***')
-                    .setColor(0x99AAB5);
-                break;
-            case 'Lose':
-                resultEmbed.addField(':sob: LOSE :sob:', `***You lost ${game.bet}$!***`)
-                    .setColor(0xE74C3C);
-                break;
-            case 'Timeout':
-                resultEmbed.addField(':sob: TIMEOUT :sob:', `***You didn't react in time! You lost ${game.bet}!***`)
-                    .setColor(0xE74C3C);
-                break;
-            }
-
-            await game.sendEmbed(resultEmbed);
-            AccountManager.updateRole(interaction.channel, interaction.user);
-        });
+    await game.sendEmbed(resultEmbed);
+    AccountManager.updateRole(interaction.channel, interaction.user);
 }
 
 module.exports = {

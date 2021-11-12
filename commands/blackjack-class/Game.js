@@ -6,12 +6,27 @@ const { AccountManager } = require('../../src/account-manager.js');
 
 const sleep = require('util').promisify(setTimeout);
 
+/**
+ * @classdesc The Game class is used to represent a blackjack game.
+ * @class Game
+ *
+ * @param {Discord.Interaction} interaction The interaction object.
+ * @param {Discord.User} user The user that started the game.
+ * @param {Number} bet The amount of money the user bet.
+ *
+ * @property {Discord.Interaction} interaction The interaction of the game.
+ * @property {Discord.User} user The user that started the game.
+ * @property {Player} player The player of the game.
+ * @property {Player} dealer The dealer of the game.
+ * @property {Number} bet The bet of the game.
+ *
+ * @returns {String} game result message.
+ */
 class Game {
     constructor(interaction, bet) {
         this.interaction = interaction;
         this.user = interaction.user;
         this.player = new Player();
-        this.playerSecondHand = new Player();
         this.dealer = new Player();
         this.bet = bet;
 

@@ -1,3 +1,12 @@
+/**
+ *
+ * @param {boolean} visible
+ *
+ * @property {emoji} suit
+ * @property {number} value
+ * @property {emoji} rank
+ * @property {boolean} visible
+ */
 class Card {
     constructor(visible = true) {
         this.suit = ['♣️', '♦️', '♥️', '♠️'][Math.floor(Math.random() * 4)];
