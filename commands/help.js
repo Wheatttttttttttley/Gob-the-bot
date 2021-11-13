@@ -21,8 +21,9 @@ async function execute(interaction) {
             .addField(':game_die: Games :game_die:',
                 '`/blackjack` - Play a game of blackjack.\n\
                 `/roll (WIP)` - Roll a dice.\n\
-                `/flip (WIP)` - Flip a coin.\n\
-                `/rps (WIP)` - Play Rock, Paper, Scissors.')
+                `/flip` - Flip a coin.\n\
+                `/rps` - Play Rock, Paper, Scissors.\n\
+                `/highlow`- Play a game of high/low.')
             .addField(':information_source: Information :information_source:',
                 '`/help` - This help message.\n\
                 `/profile (WIP)` - See profile.\n\

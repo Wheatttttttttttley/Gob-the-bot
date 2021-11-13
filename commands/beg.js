@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
-const { AccountManager } = require('../src/account-manager.js');
+const { AccountManager } = require('../engine/account-manager.js');
 
 const sleep = require('util').promisify(setTimeout);
 
@@ -17,7 +17,7 @@ async function execute(interaction) {
     const user = interaction.options?.getUser('user') || interaction.user;
 
     // beg for moeny
-    AccountManager.Account(user.id)
+    AccountManager.getAccount(user.id)
         .then(async (account) => {
             const balance = account.balance;
             interaction.deferReply();
@@ -36,7 +36,7 @@ async function execute(interaction) {
             } else if (balance > 0) {
                 const begEmbed = new MessageEmbed()
                     .setTitle('🤬 Go away! 🤬')
-                    .setDescription('You alreaday have money!')
+                    .setDescription('You already have enough money!')
                     .setColor(0xE74C3C);
                 interaction.editReply({ embeds: [begEmbed] });
             }

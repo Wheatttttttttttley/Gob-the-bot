@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
-const { AccountManager } = require('../src/account-manager.js');
+const { AccountManager } = require('../engine/account-manager.js');
 
 const data = new SlashCommandBuilder()
     .setName('balance')

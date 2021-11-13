@@ -1,4 +1,4 @@
-const { client } = require('../src/index.js');
+const { client } = require('../index.js');
 const { MessageEmbed } = require('discord.js');
 
 const playerSchema = require('../schemas/playerSchema.js');

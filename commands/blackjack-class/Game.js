@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 
 const { Player } = require('./Player.js');
 const { Card } = require('./Card.js');
-const { AccountManager } = require('../../src/account-manager.js');
+const { AccountManager } = require('../../engine/account-manager.js');
 
 const sleep = require('util').promisify(setTimeout);
 
@@ -38,11 +38,13 @@ class Game {
     async reactMessageEmbed() {
         this.gameMessage.react('👍');
         this.gameMessage.react('👎');
-        const playerBalance = await AccountManager.getAccount(this.user.id).balance;
-        if (playerBalance >= this.bet) {
-            this.gameMessage.react('💵');
-            this.emojiArray.push('💵');
-        }
+        await AccountManager.getAccount(this.user.id)
+            .then(player => {
+                if (player.balance >= this.bet) {
+                    this.gameMessage.react('💵');
+                    this.emojiArray.push('💵');
+                }
+            });
     }
 
     cardAndPointsEmbed() {
