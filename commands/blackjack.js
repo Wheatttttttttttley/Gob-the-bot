@@ -68,6 +68,11 @@ async function execute(interaction) {
         resultEmbed.addField(':sob: TIMEOUT :sob:', `***You didn't react in time! You lost ${game.bet}!***`)
             .setColor(0xE74C3C);
         break;
+    case 'Surrender':
+        AccountManager.addBalance(interaction.user.id, game.bet * 0.5);
+        resultEmbed.addField(':sob: SURRENDER :sob:', `***You surrendered! You lost ${game.bet * 0.5}!***`)
+            .setColor(0xE74C3C);
+        break;
     }
 
     await game.sendEmbed(resultEmbed);

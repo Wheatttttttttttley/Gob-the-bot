@@ -32,7 +32,7 @@ class Game {
 
         this.gameMessage = null;
 
-        this.emojiArray = ['👍', '👎'];
+        this.emojiArray = ['👍', '👎', '🏳'];
     }
 
     async reactMessageEmbed() {
@@ -44,6 +44,7 @@ class Game {
                     this.gameMessage.react('💵');
                     this.emojiArray.push('💵');
                 }
+                this.gameMessage.react('🏳');
             });
     }
 
@@ -56,7 +57,7 @@ class Game {
                 { name: `Player (Points: ${this.player.getPoints()})`, value: this.player.showCards() },
                 { name: `Dealer (Points: ${this.dealer.getPoints()})`, value: this.dealer.showCards() },
             )
-            .setFooter('React with either 👍 to hit, 👎 to stand, or 💵 to double');
+            .setFooter('React with either 👍 to hit, 👎 to stand, 💵 to double, or 🏳 to surrender');
         return embed;
     }
 
@@ -96,7 +97,7 @@ class Game {
             return this.emojiArray.includes(reaction.emoji.name) && user.id === this.user.id;
         };
 
-        let playerTurn = true;
+        let playerTurn = true, isSurrender = false;
         while (playerTurn) {
             await this.gameMessage.awaitReactions({ filter: emojiFilter, max: 1, time: 60000, errors: ['time'] })
                 .then(async (collected) => {
@@ -110,6 +111,9 @@ class Game {
                         AccountManager.addBalance(this.user.id, -this.bet);
                         this.bet *= 2;
                         this.player.addCard(new Card());
+                        playerTurn = false;
+                    } else if (reaction.emoji.name === '🏳') {
+                        isSurrender = true;
                         playerTurn = false;
                     }
                 })
@@ -130,6 +134,8 @@ class Game {
             return 'Lose';
         } else if (this.player.points === 21) {
             return 'Win';
+        } else if (isSurrender) {
+            return 'Surrender';
         }
 
         // Dealer's turn
