@@ -38,7 +38,7 @@ class Game {
     async reactMessageEmbed() {
         this.gameMessage.react('👍');
         this.gameMessage.react('👎');
-        const playerBalance = await AccountManager.getBalance(this.user);
+        const playerBalance = await AccountManager.getAccount(this.user.id).balance;
         if (playerBalance >= this.bet) {
             this.gameMessage.react('💵');
             this.emojiArray.push('💵');
@@ -105,7 +105,7 @@ class Game {
                     } else if (reaction.emoji.name === '👎') {
                         playerTurn = false;
                     } else if (reaction.emoji.name === '💵') {
-                        AccountManager.updateBalance(this.user.id, -this.bet);
+                        AccountManager.addBalance(this.user.id, -this.bet);
                         this.bet *= 2;
                         this.player.addCard(new Card());
                         playerTurn = false;

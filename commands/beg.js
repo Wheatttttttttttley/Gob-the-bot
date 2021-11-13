@@ -17,14 +17,15 @@ async function execute(interaction) {
     const user = interaction.options?.getUser('user') || interaction.user;
 
     // beg for moeny
-    AccountManager.getBalance(user)
-        .then(async (balance) => {
+    AccountManager.Account(user.id)
+        .then(async (account) => {
+            const balance = account.balance;
             interaction.deferReply();
             await sleep(3000);
 
-            if (balance <= 0) {
-                const rnd_money = Math.floor(Math.random() * (200 - 1) + 50);
-                AccountManager.updateBalance(user.id, rnd_money);
+            if (balance <= 10) {
+                const rnd_money = Math.floor(Math.random() * (200 - 50 + 1) + 50);
+                AccountManager.addBalance(user.id, rnd_money);
 
                 const begEmbed = new MessageEmbed()
                     .setTitle('😥 Poor little beggar, here\'s some money! 😥')

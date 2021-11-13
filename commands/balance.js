@@ -17,12 +17,12 @@ function warningEmbed(title = 'ALERT', description = 'Something went wrong. Plea
 async function execute(interaction) {
     const user = interaction.options?.getUser('user') || interaction.user;
 
-    AccountManager.getBalance(user)
-        .then(balance => {
+    AccountManager.getAccount(user.id)
+        .then(player => {
             const balanceEmbed = new MessageEmbed()
                 .setTitle(`:moneybag: Balance of ${user.username} :moneybag:`)
                 .setColor(0x2ECC71)
-                .setDescription(`**:dollar: : ${balance}**`);
+                .setDescription(`**:dollar: : ${player.balance}**`);
             interaction.reply({ embeds: [balanceEmbed] });
 
         }).catch(err => {

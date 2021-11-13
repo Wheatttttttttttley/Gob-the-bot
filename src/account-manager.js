@@ -41,7 +41,7 @@ class AccountManager {
         });
     }
 
-    async updateBalance(id, amount) {
+    async addBalance(id, amount) {
         return new Promise((resolve, reject) => {
             try {
                 playerSchema.findOneAndUpdate({ _id: id }, { $inc: { balance: amount } })
@@ -107,29 +107,6 @@ class AccountManager {
                 })
                 .catch(err => {
                     reject(err);
-                });
-        });
-    }
-
-    async getBalance(user) {
-        return new Promise((resolve, reject) => {
-            playerSchema.findOne({ _id: user.id })
-                .then(async player => {
-                    if (!player) {
-                        try {
-                            await this.createAccount(user.id);
-                        } catch (err) {
-                        // reject if can't find the user but can't create the account
-                            reject(err);
-                        } finally {
-                            // try again
-                            await this.getBalance(user)
-                                .then(resolve)
-                                .catch(reject);
-                        }
-                    } else {
-                        resolve(player.balance);
-                    }
                 });
         });
     }
