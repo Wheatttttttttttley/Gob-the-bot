@@ -50,7 +50,7 @@ async function execute(interaction) {
 
     await dailyRewardSchema.findOneAndUpdate(objId, objId, { upsert: true });
 
-    AccountManager.addBalance(id, 10000);
+    AccountManager.addBalance(id, 2000);
 
     claimedCache.push(id);
 

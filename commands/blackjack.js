@@ -43,19 +43,19 @@ async function execute(interaction) {
     // Result of game
     switch (result) {
     case 'Win':
-        AccountManager.addBalance(interaction.user.id, playerBet * 2);
+        AccountManager.addBalance(interaction.user.id, game.bet * 2);
 
         resultEmbed.addField(':tada: WIN :tada:', `***You won ${ game.bet }!***`)
             .setColor(0x57F287);
         break;
     case 'Blackjack':
-        AccountManager.addBalance(interaction.user.id, Math.ceil(playerBet * 2.5));
+        AccountManager.addBalance(interaction.user.id, Math.ceil(game.bet * 2.5));
 
         resultEmbed.addField(':tada: BLACKJACK :tada:', `***You got blackjack! You won ${ Math.ceil(game.bet * 1.5) }!***`)
             .setColor(0x57F287);
         break;
     case 'Draw':
-        AccountManager.addBalance(interaction.user.id, playerBet * 1.0);
+        AccountManager.addBalance(interaction.user.id, game.bet * 1.0);
 
         resultEmbed.addField(':neutral_face: DRAW :neutral_face:', '***You got your bet back!***')
             .setColor(0x99AAB5);
