@@ -26,8 +26,8 @@ async function execute(interaction) {
         return;
     }
 
-    const playerBalance = await AccountManager.getAccount(interaction.user.id).balance;
-    if (playerBalance < playerBet) {
+    const player = await AccountManager.getAccount(interaction.user.id);
+    if (player.balance < playerBet) {
         interaction.reply(warningEmbed('INSUFFICIENT FUNDS ALERT', `You don't have enough money to bet ${playerBet}`));
         return;
     }
