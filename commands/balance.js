@@ -26,7 +26,7 @@ async function execute(interaction) {
             interaction.reply({ embeds: [balanceEmbed] });
 
         }).catch(err => {
-            interaction.reply(warningEmbed('Error', err));
+            interaction.reply(warningEmbed('ERROR', err));
         });
 }
 

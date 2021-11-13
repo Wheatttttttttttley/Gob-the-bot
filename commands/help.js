@@ -14,6 +14,7 @@ async function execute(interaction) {
             .setDescription('This is a list of commands you can use in this server.')
             .addField(':money_with_wings: Currency :money_with_wings:',
                 '`/balance` - See current balance.\n\
+                `/beg` - Beg people for some money.\n\
                 `/loan (WIP)` - Get a loan.\n\
                 `/pay (WIP)` - Pay the loan.\n\
                 `/transfer (WIP)` - Transfer money to someone.')
