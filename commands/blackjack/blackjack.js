@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 const { Game } = require('./blackjack-class/Game.js');
-const { AccountManager } = require('../engine/account-manager.js');
+const { AccountManager } = require('../../engine/account-manager.js');
 
 const sleep = require('util').promisify(setTimeout);
 

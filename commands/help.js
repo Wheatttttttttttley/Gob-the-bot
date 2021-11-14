@@ -10,21 +10,21 @@ async function execute(interaction) {
         embeds: [new MessageEmbed()
             .setTitle('Help')
             .setColor(0x1ABC9C)
-            .setFooter('Powered by Wheatlet\'s engine')
+            .setFooter('Powered by Wheatley\'s engine')
             .setDescription('This is a list of commands you can use in this server.')
-            .addField(':money_with_wings: Currency :money_with_wings:',
+            .addField('💸 Currency 💵',
                 '`/balance` - See current balance.\n\
                 `/beg` - Beg people for some money.\n\
                 `/loan (WIP)` - Get a loan.\n\
                 `/pay (WIP)` - Pay the loan.\n\
-                `/transfer (WIP)` - Transfer money to someone.')
-            .addField(':game_die: Games :game_die:',
+                `/transfer` - Transfer money to someone.')
+            .addField('🎲 Games 🎲',
                 '`/blackjack` - Play a game of blackjack.\n\
                 `/roll (WIP)` - Roll a dice.\n\
                 `/flip` - Flip a coin.\n\
                 `/rps` - Play Rock, Paper, Scissors.\n\
                 `/highlow`- Play a game of high/low.')
-            .addField(':information_source: Information :information_source:',
+            .addField('ℹ Information ℹ',
                 '`/help` - This help message.\n\
                 `/profile (WIP)` - See profile.\n\
                 `/info (WIP)` - Information about the bot.')],

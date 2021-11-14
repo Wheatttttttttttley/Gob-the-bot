@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 
 const { Player } = require('./Player.js');
 const { Card } = require('./Card.js');
-const { AccountManager } = require('../../engine/account-manager.js');
+const { AccountManager } = require('../../../engine/account-manager.js');
 
 const sleep = require('util').promisify(setTimeout);
 
@@ -81,10 +81,10 @@ class Game {
 
         // Show cards
         if (this.player.points === 21 && this.dealer.points === 21) {
-            this.dealer.hand[1].visible = true;
+            this.dealer.hand[1].isFaceUp = true;
             return 'Draw';
         } else if (this.dealer.points === 21) {
-            this.dealer.hand[1].visible = true;
+            this.dealer.hand[1].isFaceUp = true;
             return 'Lose';
         } else if (this.player.points === 21) {
             return 'Blackjack';
@@ -139,7 +139,7 @@ class Game {
         }
 
         // Dealer's turn
-        this.dealer.hand[1].visible = true;
+        this.dealer.hand[1].isFaceUp = true;
         this.sendEmbed(this.cardAndPointsEmbed());
 
         while (this.dealer.points < 17 && this.player.points > this.dealer.points) {

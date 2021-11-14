@@ -1,8 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
-const { AccountManager } = require('../engine/account-manager.js');
-const dailyRewardSchema = require('../schemas/dailyRewardSchema.js');
+const { AccountManager } = require('../../engine/account-manager.js');
+const dailyRewardSchema = require('../../schemas/dailyRewardSchema.js');
 
 let claimedCache = [];
 

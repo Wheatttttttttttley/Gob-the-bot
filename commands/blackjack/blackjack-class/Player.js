@@ -41,7 +41,7 @@ class Player {
     showCards() {
         let cards = '';
         for (let i = 0; i < this.hand.length; i++) {
-            if (this.hand[i].visible) {
+            if (this.hand[i].isFaceUp) {
                 cards += this.hand[i].suit + this.hand[i].rank + ' ';
             }
         }
@@ -49,7 +49,7 @@ class Player {
     }
 
     getPoints() {
-        if (!this.hand[1].visible) {
+        if (!this.hand[1].isFaceUp) {
             let point = 0;
             if (this.hand[0].value === 0) {
                 point = 11;
