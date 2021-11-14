@@ -20,7 +20,12 @@ const data = new SlashCommandBuilder()
             .addChoice('low', 'low'));
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [new MessageEmbed().setTitle(`:warning: ${title} :warning:`).setDescription(`**${description}**`).setColor(0xE74C3C)] };
+    return { embeds: [
+        new MessageEmbed()
+            .setTitle(`⚠ ${title} ⚠`)
+            .setDescription(`**${description}**`)
+            .setColor(0xE74C3C)],
+    };
 }
 
 async function execute(interaction) {
@@ -37,7 +42,7 @@ async function execute(interaction) {
     }
 
     const embed = new MessageEmbed()
-        .setTitle(':game_die: High/Low :game_die:')
+        .setTitle('🎲 High/Low 🎲')
         .setDescription(`You bet **${bet}$** and guessed **${guess}**`)
         .setColor(0xFFFF00);
     await interaction.reply({ embeds: [embed] });
@@ -49,12 +54,12 @@ async function execute(interaction) {
     const result = rndNumber > 5 ? 'high' : 'low';
 
     if (result === guess) {
-        embed.setTitle(':tada: YOU WIN :tada:')
+        embed.setTitle('🎉 YOU WIN 🎉')
             .setColor(0x2ECC71)
             .setDescription(`The number was **${rndNumber}\nYou won ${bet} 💵**`);
         AccountManager.addBalance(interaction.user.id, bet * 2);
     } else {
-        embed.setTitle(':sob: YOU LOSE :sob:')
+        embed.setTitle('😭 YOU LOSE 😭')
             .setColor(0xE74C3C)
             .setDescription(`The number was **${rndNumber}\nYou lost ${bet} 💵**`);
     }

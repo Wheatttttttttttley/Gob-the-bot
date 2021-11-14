@@ -12,8 +12,8 @@ const data = new SlashCommandBuilder()
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
     return { embeds: [
         new MessageEmbed()
-            .setTitle(':warning: ' + title + ' :warning:')
-            .setDescription('**' + description + '**')
+            .setTitle(`⚠ ${title} ⚠`)
+            .setDescription(`**${description}**`)
             .setColor(0xE74C3C)],
     };
 }

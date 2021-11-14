@@ -4,7 +4,12 @@ const { MessageEmbed } = require('discord.js');
 const playerSchema = require('../schemas/playerSchema.js');
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [new MessageEmbed().setTitle(`:warning: ${title} :warning:`).setDescription(`**${description}**`).setColor(0xE74C3C)] };
+    return { embeds: [
+        new MessageEmbed()
+            .setTitle(`⚠ ${title} ⚠`)
+            .setDescription(`**${description}**`)
+            .setColor(0xE74C3C)],
+    };
 }
 
 module.exports = {

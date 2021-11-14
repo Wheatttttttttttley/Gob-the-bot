@@ -20,7 +20,12 @@ const data = new SlashCommandBuilder()
             .addChoice('tails', 't'));
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [new MessageEmbed().setTitle(`:warning: ${title} :warning:`).setDescription(`**${description}**`).setColor(0xE74C3C)] };
+    return { embeds: [
+        new MessageEmbed()
+            .setTitle(`⚠ ${title} ⚠`)
+            .setDescription(`**${description}**`)
+            .setColor(0xE74C3C)],
+    };
 }
 
 async function execute(interaction) {
@@ -37,7 +42,7 @@ async function execute(interaction) {
     }
 
     const embed = new MessageEmbed()
-        .setTitle(':game_die: Coin flipping :game_die:')
+        .setTitle('🎲 Coin flipping 🎲')
         .setDescription(`You bet **${bet}** on **${side === 'h' ? 'heads' : 'tails'}**`)
         .setColor(0xE91E63);
     await interaction.reply({ embeds: [embed] });
@@ -48,13 +53,13 @@ async function execute(interaction) {
     const rndSide = Math.random() < 0.5 ? 'h' : 't';
     const result = rndSide === side ? 'win' : 'lose';
 
-    embed.setTitle(`:game_die: ${result.toUpperCase()}! :game_die:`)
+    embed.setTitle(`🎲 ${result.toUpperCase()}! 🎲`)
         .setDescription(rndSide === 'h' ? '**HEADS** 🌝' : '**TAILS** 🌚');
     if (result === 'win') {
-        embed.addField(':white_check_mark: You won! :white_check_mark:', `You won **${bet}**💵`).setColor(0x2ECC71);
+        embed.addField('✅ You won! ✅', `You won **${bet}**💵`).setColor(0x2ECC71);
         AccountManager.addBalance(interaction.user.id, 2 * bet);
     } else if (result === 'lose') {
-        embed.addField(':x: You lost! :x:', `You lost **${bet}**💵`).setColor(0xE74C3C);
+        embed.addField('❌ You lost! ❌', `You lost **${bet}**💵`).setColor(0xE74C3C);
     }
     await interaction.editReply({ embeds: [embed] });
 }

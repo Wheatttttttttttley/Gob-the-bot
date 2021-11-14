@@ -7,7 +7,7 @@ class AccountManager {
         // do nothing
     }
 
-    async createAccount(id) {
+    createAccount(id) {
         return new Promise((resolve, reject) => {
             playerSchema.create({ _id: id, balance: 1000 })
                 .then(() => {
@@ -19,7 +19,7 @@ class AccountManager {
         });
     }
 
-    async getAccount(id) {
+    getAccount(id) {
         return new Promise((resolve, reject) => {
             playerSchema.findOne({ _id: id })
                 .then(player => {
@@ -41,7 +41,7 @@ class AccountManager {
         });
     }
 
-    async addBalance(id, amount) {
+    addBalance(id, amount) {
         return new Promise((resolve, reject) => {
             try {
                 playerSchema.findOneAndUpdate({ _id: id }, { $inc: { balance: amount } })
@@ -57,51 +57,57 @@ class AccountManager {
         });
     }
 
-    async updateRole(channel, user) {
+    createRole(guild) {
         return new Promise((resolve, reject) => {
-            const guild = channel.guild;
-            const role = guild.roles.cache.find(r => r.name === 'Best Gambler');
-            // if guild doesn't have the role, create it
-            if (!role) {
-                try {
+            try {
+                resolve(
                     guild.roles.create({
                         name: 'Best Gambler',
                         color: 0x3498DB,
                         permissions: [],
-                    });
-                } catch (err) {
-                    reject(err);
-                }
+                    }),
+                );
+            } catch (err) {
+                reject(err);
             }
+        });
+    }
 
+    async updateRole(channel, user) {
+        const guild = channel.guild;
+        let role = guild.roles.cache.find(r => r.name === 'Best Gambler');
+        if (!role) {
+            role = await this.createRole(guild);
+        }
+        return new Promise((resolve, reject) => {
             const member = guild.members.cache.get(user.id);
             this.getAccount(user.id)
                 .then(async player => {
-                    if (player.balance >= 100000 && !member.roles.cache.has(role.id)) {
+                    if (player.balance >= 100000 && !member.roles.cache.has(role?.id)) {
                         try {
                             await member.roles.add(role);
-                            const roleEmbed = new MessageEmbed()
-                                .setTitle(`${user.username} has reached $100,000!`)
-                                .setColor(0x2ECC71)
-                                .setDescription(`:tada: **Congratulations!**\n${user.username} are one of the *Best Gambler* now`);
-                            channel.send({ embeds: [roleEmbed] });
+                            channel.send({ embeds: [
+                                new MessageEmbed()
+                                    .setTitle(`${user.username} has reached $100,000!`)
+                                    .setColor(0x2ECC71)
+                                    .setDescription(`:tada: **Congratulations!**\n${user.username} are one of the *Best Gambler* now`)],
+                            });
+                            resolve();
                         } catch (err) {
                             reject(err);
-                        } finally {
-                            resolve();
                         }
-                    } else if (player.balance < 75000 && member.roles.cache.has(role.id)) {
+                    } else if (player.balance < 75000 && member.roles.cache.has(role?.id)) {
                         try {
                             await member.roles.remove(role);
-                            const roleEmbed = new MessageEmbed()
-                                .setTitle(`${user.username} has dropped below $75,000!`)
-                                .setColor(0xE74C3C)
-                                .setDescription(`:cry: **Oh no!**\n${user.username} are no longer one of the *Best Gambler*`);
-                            channel.send({ embeds: [roleEmbed] });
+                            channel.send({ embeds: [
+                                new MessageEmbed()
+                                    .setTitle(`${user.username} has dropped below $75,000!`)
+                                    .setColor(0xE74C3C)
+                                    .setDescription(`:cry: **Oh no!**\n${user.username} are no longer one of the *Best Gambler*`)],
+                            });
+                            resolve();
                         } catch (err) {
                             reject(err);
-                        } finally {
-                            resolve();
                         }
                     }
                 })

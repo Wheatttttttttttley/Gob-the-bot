@@ -19,7 +19,12 @@ const data = new SlashCommandBuilder()
             .addChoice('scissors', 's'));
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [new MessageEmbed().setTitle(`:warning: ${title} :warning:`).setDescription(`**${description}**`).setColor(0xE74C3C)] };
+    return { embeds: [
+        new MessageEmbed()
+            .setTitle(`⚠ ${title} ⚠`)
+            .setDescription(`**${description}**`)
+            .setColor(0xE74C3C)],
+    };
 }
 
 async function execute(interaction) {
@@ -62,13 +67,13 @@ async function execute(interaction) {
         .addField('Bot choice', `:**${{ 'r' : 'ROCK 👊', 'p' : 'PAPER ✋', 's': 'SCISSORS ✌' }[botChoice]}**`, true);
 
     if (result === 'draw') {
-        embed.addField(':neutral_face: DRAW :neutral_face:', '***You got your bet back!***').setColor(0x99AAB5);
+        embed.addField('😐 DRAW 😐', '***You got your bet back!***').setColor(0x99AAB5);
     } else if (result === 'win') {
-        embed.addField(':tada: WIN :tada:', `***You won ${ bet }!***`)
+        embed.addField('🎉 WIN 🎉', `***You won ${ bet }!***`)
             .setColor(0x57F287);
         AccountManager.addBalance(interaction.user.id, bet);
     } else if (result === 'lose') {
-        embed.addField(':sob: LOSE :sob:', `***You lost ${bet}$!***`);
+        embed.addField('😭 LOSE 😭', `***You lost ${bet}$!***`);
         AccountManager.addBalance(interaction.user.id, -bet);
     }
 

@@ -13,8 +13,8 @@ const data = new SlashCommandBuilder()
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
     return { embeds: [
         new MessageEmbed()
-            .setTitle(':warning: ' + title + ' :warning:')
-            .setDescription('**' + description + '**')
+            .setTitle(`⚠ ${title} ⚠`)
+            .setDescription(`**${description}**`)
             .setColor(0xE74C3C)],
     };
 }
@@ -26,9 +26,9 @@ async function execute(interaction) {
         .then(player => {
             interaction.reply({ embeds: [
                 new MessageEmbed()
-                    .setTitle(`:moneybag: Balance of ${user.username} :moneybag:`)
+                    .setTitle(`💰 Balance of ${user.username} 💰`)
                     .setColor(0x2ECC71)
-                    .setDescription(`**:dollar: : ${player.balance}**`)],
+                    .setDescription(`**💵 : ${player.balance}**`)],
             });
 
         }).catch(err => {
