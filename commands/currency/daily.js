@@ -4,8 +4,6 @@ const { MessageEmbed } = require('discord.js');
 const { AccountManager } = require('../../engine/account-manager.js');
 const dailyRewardSchema = require('../../schemas/dailyRewardSchema.js');
 
-let claimedCache = [];
-
 const data = new SlashCommandBuilder()
     .setName('daily')
     .setDescription('Get your daily rewards!');
@@ -19,19 +17,8 @@ function warningEmbed(title = 'ALERT', description = 'Something went wrong. Plea
     };
 }
 
-const clearCache = () => {
-    claimedCache = [];
-    // clear cache after 10 minutes
-    setTimeout(clearCache, 1000 * 60 * 10);
-};
-clearCache();
-
 async function execute(interaction) {
     const id = interaction.user.id;
-
-    if (claimedCache.includes(id)) {
-        return interaction.reply(warningEmbed('ALREADY CLAIMED', 'You have already claimed your daily rewards!'));
-    }
 
     const objId = {
         _id: id,
@@ -43,12 +30,17 @@ async function execute(interaction) {
         const then = new Date(result.updatedAt).getTime();
         const now = new Date().getTime();
         const diff = now - then;
-        const diffHours = Math.floor(diff / (1000 * 60 * 60));
+        const left = 86400000 - diff;
+        const leftHours = Math.floor(left / 3600000);
+        const leftMinutes = Math.floor((left / 60000) % 60);
+        const leftSeconds = Math.floor((left / 1000) % 60);
 
-        if (diffHours < 23) {
-            claimedCache.push(id);
-
-            interaction.reply(warningEmbed('ALREADY CLAIMED', 'You have already claimed your daily rewards!'));
+        if (leftHours > 0 || leftMinutes > 0 || leftSeconds > 0) {
+            interaction.reply(
+                warningEmbed('ALREADY CLAIMED',
+                    `You have already claimed your daily rewards!\n\
+                    Cooldown (⌛): ${leftHours} h ${leftMinutes} m ${leftSeconds} s`,
+                ));
             return;
         }
     }
@@ -56,8 +48,6 @@ async function execute(interaction) {
     await dailyRewardSchema.findOneAndUpdate(objId, objId, { upsert: true });
 
     AccountManager.addBalance(id, 2000);
-
-    claimedCache.push(id);
 
     interaction.reply({ embeds: [
         new MessageEmbed()
