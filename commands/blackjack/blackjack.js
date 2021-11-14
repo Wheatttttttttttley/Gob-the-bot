@@ -50,38 +50,37 @@ async function execute(interaction) {
     case 'Win':
         AccountManager.addBalance(interaction.user.id, game.bet * 2);
 
-        resultEmbed.addField('🎉 WIN 🎉', `***You won ${ game.bet }!***`)
+        resultEmbed.addField('🎉 WIN 🎉', `You won **${ game.bet }** 💵`)
             .setColor(0x57F287);
         break;
     case 'Blackjack':
         AccountManager.addBalance(interaction.user.id, Math.ceil(game.bet * 2.5));
 
-        resultEmbed.addField('🎉 BLACKJACK 🎉', `***You got blackjack! You won ${ Math.ceil(game.bet * 1.5) }!***`)
+        resultEmbed.addField('🎉 BLACKJACK 🎉', `You got blackjack! You won **${ Math.ceil(game.bet * 1.5) }** 💵`)
             .setColor(0x57F287);
         break;
     case 'Draw':
         AccountManager.addBalance(interaction.user.id, game.bet * 1.0);
 
-        resultEmbed.addField('😐 DRAW 😐', '***You got your bet back!***')
+        resultEmbed.addField('😐 DRAW 😐', 'You got your bet back!')
             .setColor(0x99AAB5);
         break;
     case 'Lose':
-        resultEmbed.addField('😭 LOSE 😭', `***You lost ${game.bet}$!***`)
+        resultEmbed.addField('😭 LOSE 😭', `You lost **${game.bet}** 💵`)
             .setColor(0xE74C3C);
         break;
     case 'Timeout':
-        resultEmbed.addField('😭 TIMEOUT 😭', `***You didn't react in time! You lost ${game.bet}!***`)
+        resultEmbed.addField('😭 TIMEOUT 😭', `You didn't react in time! You lost **${game.bet}** 💵`)
             .setColor(0xE74C3C);
         break;
     case 'Surrender':
         AccountManager.addBalance(interaction.user.id, game.bet * 0.5);
-        resultEmbed.addField('🏳 SURRENDER 🏳', `***You surrendered! You lost ${game.bet * 0.5}!***`)
+        resultEmbed.addField('🏳 SURRENDER 🏳', `You surrendered! You lost **${game.bet * 0.5}** 💵`)
             .setColor(0xE74C3C);
         break;
     }
 
     await game.sendEmbed(resultEmbed);
-    await AccountManager.updateRole(interaction.channel, interaction.user);
 }
 
 module.exports = {

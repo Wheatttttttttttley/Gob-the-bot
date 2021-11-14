@@ -1,6 +1,7 @@
 const { client } = require('../index.js');
 const { MessageEmbed } = require('discord.js');
 
+const { AccountManager } = require('../engine/account-manager.js');
 const playerSchema = require('../schemas/playerSchema.js');
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
@@ -34,7 +35,8 @@ module.exports = {
                     if (!command) return;
 
                     try {
-                        await command.execute(interaction);
+                        await command.execute(interaction)
+                            .then(() => AccountManager.updateRole(interaction.channel, interaction.user));
                     } catch (error) {
                         console.error(error);
                         await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });

@@ -1,7 +1,10 @@
-.vscode
+.vscode/
 
-node_modules
+# Dependency directories
+node_modules/
 
+# eslint setting
 .eslintrc.json
 
+# API keys and secrets
 .env

@@ -51,8 +51,8 @@ class Game {
     cardAndPointsEmbed() {
         const embed = new MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(`🃏 ${this.user.username}'s Blackjack 🃏card`)
-            .setDescription(`**Bet:** ***${this.bet}***`)
+            .setTitle(`🃏 ${this.user.username}'s Blackjack card 🃏`)
+            .setDescription(`Bet: **${this.bet}** 💵`)
             .addFields(
                 { name: `Player (Points: ${this.player.getPoints()})`, value: this.player.showCards() },
                 { name: `Dealer (Points: ${this.dealer.getPoints()})`, value: this.dealer.showCards() },
