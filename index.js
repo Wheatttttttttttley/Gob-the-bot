@@ -15,14 +15,26 @@ const client = new Client({ intents: [
 });
 
 async function registerCommands() {
+    const commandFolders = [
+        'blackjack', 'currency', 'minigames',
+    ];
+
+    const commandFiles = [];
+    // Register commands in the command folders
+    for (const file of fs.readdirSync('./commands').filter(filename => filename.endsWith('.js'))) {
+        commandFiles.push(`./commands/${file}`);
+    }
+    for (const folder of commandFolders) {
+        for (const file of fs.readdirSync(`./commands/${folder}`).filter(filename => filename.endsWith('.js'))) {
+            commandFiles.push(`./commands/${folder}/${file}`);
+        }
+    }
 
     const commands = [];
-    const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
     client.commands = new Collection();
 
     for (const file of commandFiles) {
-        const command = require(`./commands/${file}`);
+        const command = require(file);
         commands.push(command.data.toJSON());
         client.commands.set(command.data.name, command);
     }

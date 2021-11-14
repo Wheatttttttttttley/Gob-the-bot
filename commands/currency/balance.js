@@ -11,7 +11,12 @@ const data = new SlashCommandBuilder()
             .setDescription('The user to check the balance of.'));
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [new MessageEmbed().setTitle(':warning: ' + title + ' :warning:').setDescription('**' + description + '**').setColor(0xE74C3C)] };
+    return { embeds: [
+        new MessageEmbed()
+            .setTitle(':warning: ' + title + ' :warning:')
+            .setDescription('**' + description + '**')
+            .setColor(0xE74C3C)],
+    };
 }
 
 async function execute(interaction) {
@@ -19,11 +24,12 @@ async function execute(interaction) {
 
     AccountManager.getAccount(user.id)
         .then(player => {
-            const balanceEmbed = new MessageEmbed()
-                .setTitle(`:moneybag: Balance of ${user.username} :moneybag:`)
-                .setColor(0x2ECC71)
-                .setDescription(`**:dollar: : ${player.balance}**`);
-            interaction.reply({ embeds: [balanceEmbed] });
+            interaction.reply({ embeds: [
+                new MessageEmbed()
+                    .setTitle(`:moneybag: Balance of ${user.username} :moneybag:`)
+                    .setColor(0x2ECC71)
+                    .setDescription(`**:dollar: : ${player.balance}**`)],
+            });
 
         }).catch(err => {
             interaction.reply(warningEmbed('ERROR', err));

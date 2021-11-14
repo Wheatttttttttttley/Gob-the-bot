@@ -16,7 +16,12 @@ const data = new SlashCommandBuilder()
             .setDescription('The amount to transfer.'));
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [new MessageEmbed().setTitle(':warning: ' + title + ' :warning:').setDescription('**' + description + '**').setColor(0xE74C3C)] };
+    return { embeds: [
+        new MessageEmbed()
+            .setTitle(':warning: ' + title + ' :warning:')
+            .setDescription('**' + description + '**')
+            .setColor(0xE74C3C)],
+    };
 }
 
 async function execute(interaction) {
@@ -51,12 +56,12 @@ async function execute(interaction) {
     AccountManager.addBalance(fromPlayer.id, -amount);
     AccountManager.addBalance(toPlayer.id, amount);
 
-    interaction.reply(
+    interaction.reply({ embeds: [
         new MessageEmbed()
-            .setTitle(':moneybag: TRANSFER :moneybag:')
-            .setDescription('**' + fromPlayer.username + '** transferred **' + amount + '** to **' + toPlayer.username + '**')
-            .setColor(0x2ECC71),
-    );
+            .setTitle('💸 TRANSFER 💸')
+            .setDescription(`**${fromPlayer.username}** transferred **${amount}** 💵 to **${toPlayer.username}**`)
+            .setColor(0x2ECC71)],
+    });
 }
 
 module.exports = {

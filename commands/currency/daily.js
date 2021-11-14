@@ -11,7 +11,12 @@ const data = new SlashCommandBuilder()
     .setDescription('Get your daily rewards!');
 
 function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [new MessageEmbed().setTitle(':warning: ' + title + ' :warning:').setDescription('**' + description + '**').setColor(0xE74C3C)] };
+    return { embeds: [
+        new MessageEmbed()
+            .setTitle(':warning: ' + title + ' :warning:')
+            .setDescription('**' + description + '**')
+            .setColor(0xE74C3C)],
+    };
 }
 
 const clearCache = () => {
@@ -54,11 +59,12 @@ async function execute(interaction) {
 
     claimedCache.push(id);
 
-    const successEmbed = new MessageEmbed()
-        .setTitle(':white_check_mark: SUCCESS')
-        .setDescription('You have claimed your daily rewards!\nYou have received\n**2000**💵')
-        .setColor(0x2ECC71);
-    interaction.reply({ embeds: [successEmbed] });
+    interaction.reply({ embeds: [
+        new MessageEmbed()
+            .setTitle(':white_check_mark: SUCCESS')
+            .setDescription('You have claimed your daily rewards!\nYou have received\n**2000**💵')
+            .setColor(0x2ECC71)],
+    });
 }
 
 module.exports = {
