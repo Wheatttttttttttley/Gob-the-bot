@@ -1,10 +1,11 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { CommandInteraction } from 'discord.js';
+import { promisify } from 'util';
+import { addBalance, getAccount } from '../../handlers/account-manager';
+import { warningEmbed } from '../../handlers/warningHandler';
+import { Game } from './blackjack-class/Game';
 
-const { Game } = require('./blackjack-class/Game.js');
-const { AccountManager } = require('../../engine/account-manager.js');
-
-const sleep = require('util').promisify(setTimeout);
+const sleep = promisify(setTimeout);
 
 const data = new SlashCommandBuilder()
     .setName('blackjack')
@@ -14,33 +15,26 @@ const data = new SlashCommandBuilder()
             .setRequired(true)
             .setDescription('The amount of money you want to bet.'));
 
-function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [
-        new MessageEmbed()
-            .setTitle(`⚠ ${title} ⚠`)
-            .setDescription(`**${description}**`)
-            .setColor(0xE74C3C)],
-    };
-}
-
-async function execute(interaction) {
-    const playerBet = interaction.options.getNumber('bet');
+const run = async (interaction: CommandInteraction): Promise<void> => {
+    const playerBet = interaction.options.getNumber('bet') || 0;
     // Check if bet is valid
     if (!Number.isInteger(playerBet) || playerBet < 0) {
-        interaction.reply(warningEmbed('INVALID BET ALERT', 'Bet must be a *non-negative integer*'));
+        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
         return;
     }
 
-    const player = await AccountManager.getAccount(interaction.user.id);
+    const player = await getAccount(interaction.user.id);
     if (player.balance < playerBet) {
-        interaction.reply(warningEmbed('INSUFFICIENT FUNDS ALERT', `You don't have enough money to bet ${playerBet}`));
+        interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${playerBet}` }));
         return;
     }
-    AccountManager.addBalance(interaction.user.id, -playerBet);
+    addBalance(interaction.user.id, -playerBet);
 
     // Create game
     const game = new Game(interaction, playerBet);
-    const result = await game.gameRunner();
+
+    type resultType = 'Win' | 'Blackjack' | 'Draw' | 'Lose' | 'Timeout' | 'Surrender';
+    const result = await game.gameRunner() as resultType;
     await sleep(500);
 
     const resultEmbed = game.cardAndPointsEmbed();
@@ -48,19 +42,19 @@ async function execute(interaction) {
     // Result of game
     switch (result) {
     case 'Win':
-        AccountManager.addBalance(interaction.user.id, game.bet * 2);
+        addBalance(interaction.user.id, game.bet * 2);
 
         resultEmbed.addField('🎉 WIN 🎉', `You won **${ game.bet }** 💵`)
             .setColor(0x57F287);
         break;
     case 'Blackjack':
-        AccountManager.addBalance(interaction.user.id, Math.ceil(game.bet * 2.5));
+        addBalance(interaction.user.id, Math.ceil(game.bet * 2.5));
 
         resultEmbed.addField('🎉 BLACKJACK 🎉', `You got blackjack! You won **${ Math.ceil(game.bet * 1.5) }** 💵`)
             .setColor(0x57F287);
         break;
     case 'Draw':
-        AccountManager.addBalance(interaction.user.id, game.bet * 1.0);
+        addBalance(interaction.user.id, game.bet * 1.0);
 
         resultEmbed.addField('😐 DRAW 😐', 'You got your bet back!')
             .setColor(0x99AAB5);
@@ -74,16 +68,16 @@ async function execute(interaction) {
             .setColor(0xE74C3C);
         break;
     case 'Surrender':
-        AccountManager.addBalance(interaction.user.id, game.bet * 0.5);
+        addBalance(interaction.user.id, game.bet * 0.5);
         resultEmbed.addField('🏳 SURRENDER 🏳', `You surrendered! You lost **${game.bet * 0.5}** 💵`)
             .setColor(0xE74C3C);
         break;
     }
 
     await game.sendEmbed(resultEmbed);
-}
+};
 
-module.exports = {
-    data: data,
-    execute: execute,
+export default {
+    data,
+    run,
 };

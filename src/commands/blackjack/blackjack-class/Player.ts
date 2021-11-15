@@ -1,11 +1,10 @@
-/**
- *
- * @property {array} hand
- * @property {number} aceCount
- * @property {number} points
- * @property {boolean} isBusted
- */
-class Player {
+import { Card } from './Card';
+
+export class Player {
+    hand: Card[];
+    aceCount: number;
+    points: number;
+    isBusted: boolean;
     constructor() {
         this.hand = [];
         this.aceCount = 0;
@@ -13,7 +12,7 @@ class Player {
         this.isBusted = false;
     }
 
-    addCard(card) {
+    addCard(card: Card): void {
         this.hand.push(card);
         if (card.value === 0) {
             if (this.points + 11 > 21) {
@@ -38,7 +37,7 @@ class Player {
         }
     }
 
-    showCards() {
+    showCards(): string {
         let cards = '';
         for (let i = 0; i < this.hand.length; i++) {
             if (this.hand[i].isFaceUp) {
@@ -48,7 +47,7 @@ class Player {
         return cards;
     }
 
-    getPoints() {
+    getPoints(): number {
         if (!this.hand[1].isFaceUp) {
             let point = 0;
             if (this.hand[0].value === 0) {
@@ -62,8 +61,5 @@ class Player {
         }
 
         return this.points;
-
     }
-
 }
-exports.Player = Player;

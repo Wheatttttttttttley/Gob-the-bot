@@ -4,7 +4,11 @@
 node_modules/
 
 # eslint setting
-.eslintrc.json
+.eslintrc
+.eslintignore
+
+# Ignore built ts
+/prod
 
 # API keys and secrets
 .env

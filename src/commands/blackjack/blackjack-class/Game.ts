@@ -1,29 +1,21 @@
-const { MessageEmbed } = require('discord.js');
+import { Collection, CommandInteraction, Interaction, Message, MessageEmbed, MessageReaction, User } from 'discord.js';
+import { promisify } from 'util';
+import { addBalance, getAccount } from '../../../handlers/account-manager';
+import { Card } from './Card.js';
+import { Player } from './Player.js';
 
-const { Player } = require('./Player.js');
-const { Card } = require('./Card.js');
-const { AccountManager } = require('../../../engine/account-manager.js');
 
-const sleep = require('util').promisify(setTimeout);
+const sleep = promisify(setTimeout);
 
-/**
- * @classdesc The Game class is used to represent a blackjack game.
- * @class Game
- *
- * @param {Discord.Interaction} interaction The interaction object.
- * @param {Discord.User} user The user that started the game.
- * @param {Number} bet The amount of money the user bet.
- *
- * @property {Discord.Interaction} interaction The interaction of the game.
- * @property {Discord.User} user The user that started the game.
- * @property {Player} player The player of the game.
- * @property {Player} dealer The dealer of the game.
- * @property {Number} bet The bet of the game.
- *
- * @returns {String} game result message.
- */
-class Game {
-    constructor(interaction, bet) {
+export class Game {
+    interaction: Interaction & CommandInteraction;
+    user: User;
+    player: Player;
+    dealer: Player;
+    bet: number;
+    gameMessage: Message | null;
+    emojiArray: string[];
+    constructor(interaction: Interaction & CommandInteraction, bet: number) {
         this.interaction = interaction;
         this.user = interaction.user;
         this.player = new Player();
@@ -36,15 +28,15 @@ class Game {
     }
 
     async reactMessageEmbed() {
-        this.gameMessage.react('👍');
-        this.gameMessage.react('👎');
-        await AccountManager.getAccount(this.user.id)
-            .then(player => {
+        this.gameMessage?.react('👍');
+        this.gameMessage?.react('👎');
+        await getAccount(this.user.id)
+            .then((player: { balance: number; }) => {
                 if (player.balance >= this.bet) {
-                    this.gameMessage.react('💵');
+                    this.gameMessage?.react('💵');
                     this.emojiArray.push('💵');
                 }
-                this.gameMessage.react('🏳');
+                this.gameMessage?.react('🏳');
             });
     }
 
@@ -61,11 +53,11 @@ class Game {
         return embed;
     }
 
-    async sendEmbed(embed) {
+    async sendEmbed(embed: MessageEmbed) {
         if (!this.interaction.replied) {
-            this.gameMessage = await this.interaction.reply({ embeds: [embed], fetchReply: true });
+            this.gameMessage = await this.interaction.reply({ embeds: [embed], fetchReply: true }) as Message;
         } else if (this.gameMessage) {
-            await this.gameMessage.reactions.removeAll();
+            await this.gameMessage.reactions?.removeAll();
             await this.gameMessage.edit({ embeds: [embed] });
         }
     }
@@ -93,26 +85,26 @@ class Game {
         // Player's turn
         this.reactMessageEmbed();
 
-        const emojiFilter = (reaction, user) => {
-            return this.emojiArray.includes(reaction.emoji.name) && user.id === this.user.id;
+        const emojiFilter = (reaction: MessageReaction, user: User) => {
+            return this.emojiArray.includes(reaction.emoji.name as string) && user.id === this.user.id;
         };
 
         let playerTurn = true, isSurrender = false;
         while (playerTurn) {
-            await this.gameMessage.awaitReactions({ filter: emojiFilter, max: 1, time: 60000, errors: ['time'] })
-                .then(async (collected) => {
+            await this.gameMessage?.awaitReactions({ filter: emojiFilter, max: 1, time: 60000, errors: ['time'] })
+                .then(async (collected: Collection<string, MessageReaction>): Promise<void> => {
                     const reaction = collected.first();
 
-                    if (reaction.emoji.name === '👍') {
+                    if (reaction?.emoji.name === '👍') {
                         this.player.addCard(new Card());
-                    } else if (reaction.emoji.name === '👎') {
+                    } else if (reaction?.emoji.name === '👎') {
                         playerTurn = false;
-                    } else if (reaction.emoji.name === '💵') {
-                        AccountManager.addBalance(this.user.id, -this.bet);
+                    } else if (reaction?.emoji.name === '💵') {
+                        addBalance(this.user.id, -this.bet);
                         this.bet *= 2;
                         this.player.addCard(new Card());
                         playerTurn = false;
-                    } else if (reaction.emoji.name === '🏳') {
+                    } else if (reaction?.emoji.name === '🏳') {
                         isSurrender = true;
                         playerTurn = false;
                     }
@@ -158,4 +150,3 @@ class Game {
         }
     }
 }
-exports.Game = Game;

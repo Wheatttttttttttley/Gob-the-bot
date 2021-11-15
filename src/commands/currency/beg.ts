@@ -1,28 +1,20 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { promisify } from 'util';
+import { addBalance, getAccount } from '../../handlers/account-manager';
+import { warningEmbed } from '../../handlers/warningHandler';
 
-const { AccountManager } = require('../../engine/account-manager.js');
-
-const sleep = require('util').promisify(setTimeout);
+const sleep = promisify(setTimeout);
 
 const data = new SlashCommandBuilder()
     .setName('beg')
     .setDescription('to beg for money...😓');
 
-function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [
-        new MessageEmbed()
-            .setTitle(`⚠ ${title} ⚠`)
-            .setDescription(`**${description}**`)
-            .setColor(0xE74C3C)],
-    };
-}
-
-async function execute(interaction) {
+async function run(interaction: CommandInteraction) {
     const user = interaction.options?.getUser('user') || interaction.user;
 
     // beg for moeny
-    AccountManager.getAccount(user.id)
+    getAccount(user.id)
         .then(async (account) => {
             const balance = account.balance;
             interaction.deferReply();
@@ -30,7 +22,7 @@ async function execute(interaction) {
 
             if (balance <= 10) {
                 const rnd_money = Math.floor(Math.random() * (200 - 50 + 1) + 50);
-                AccountManager.addBalance(user.id, rnd_money);
+                addBalance(user.id, rnd_money);
 
                 const begEmbed = new MessageEmbed()
                     .setTitle('😥 Poor little beggar, here\'s some money! 😥')
@@ -48,14 +40,14 @@ async function execute(interaction) {
 
         }).catch(err => {
             if (interaction.deferred) {
-                interaction.editReply(warningEmbed('ERROR', err));
+                interaction.editReply(warningEmbed({ title: 'ERROR', description: err }));
             } else {
-                interaction.reply(warningEmbed('ERROR', err));
+                interaction.reply(warningEmbed({ title: 'ERROR', description: err }));
             }
         });
 }
 
-module.exports = {
-    data: data,
-    execute: execute,
+export default {
+    data,
+    run,
 };

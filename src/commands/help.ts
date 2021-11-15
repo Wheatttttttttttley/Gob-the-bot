@@ -1,11 +1,11 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
 
 const data = new SlashCommandBuilder()
     .setName('help')
     .setDescription('Help! I need somebody help!');
 
-async function execute(interaction) {
+const run = async (interaction: CommandInteraction): Promise<void> => {
     interaction.reply({
         embeds: [
             new MessageEmbed()
@@ -31,9 +31,10 @@ async function execute(interaction) {
                     `/info (WIP)` - Information about the bot.'),
         ],
     });
-}
+};
 
-module.exports = {
-    data: data,
-    execute: execute,
+
+export default {
+    data,
+    run,
 };

@@ -5,6 +5,7 @@ Gob is a Discord bot that is designed to be a fun and easy way to play games.
 - [npm](https://www.npmjs.com)
 - [Discord.js](https://discord.js.org)
 - [MongoDB](https://www.mongodb.com)
+- [TypeScript](https://www.typescriptlang.org)
 - [Heroku](https://www.heroku.com) (optional)
 ## Getting Started
 1. Clone this repository to your local machine.

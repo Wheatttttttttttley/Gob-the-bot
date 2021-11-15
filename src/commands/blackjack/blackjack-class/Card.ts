@@ -1,13 +1,8 @@
-/**
- *
- * @param {boolean} isFaceUp
- *
- * @property {emoji} suit
- * @property {number} value
- * @property {emoji} rank
- * @property {boolean} isFaceUp
- */
-class Card {
+export class Card {
+    suit: string;
+    value: number;
+    rank: string;
+    isFaceUp: boolean;
     constructor(isFaceUp = true) {
         this.suit = ['♣️', '♦️', '♥️', '♠️'][Math.floor(Math.random() * 4)];
         this.value = Math.floor(Math.random() * 13);
@@ -16,4 +11,3 @@ class Card {
         this.isFaceUp = isFaceUp;
     }
 }
-exports.Card = Card;

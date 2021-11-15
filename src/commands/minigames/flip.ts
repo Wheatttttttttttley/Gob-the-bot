@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { CommandInteraction, MessageEmbed } from 'discord.js';
+import { promisify } from 'util';
+import { addBalance, getAccount } from '../../handlers/account-manager';
+import { warningEmbed } from '../../handlers/warningHandler';
 
-const { AccountManager } = require('../../engine/account-manager.js');
-
-const sleep = require('util').promisify(setTimeout);
+const sleep = promisify(setTimeout);
 
 const data = new SlashCommandBuilder()
     .setName('flip')
@@ -19,25 +20,16 @@ const data = new SlashCommandBuilder()
             .addChoice('heads', 'h')
             .addChoice('tails', 't'));
 
-function warningEmbed(title = 'ALERT', description = 'Something went wrong. Please contact me!') {
-    return { embeds: [
-        new MessageEmbed()
-            .setTitle(`⚠ ${title} ⚠`)
-            .setDescription(`**${description}**`)
-            .setColor(0xE74C3C)],
-    };
-}
-
-async function execute(interaction) {
-    const bet = interaction.options.getNumber('bet');
-    const side = interaction.options.getString('side');
-    const account = await AccountManager.getAccount(interaction.user.id);
+async function run(interaction: CommandInteraction) {
+    const bet = interaction.options.getNumber('bet') || 0;
+    const side = interaction.options.getString('side') || '';
+    const account = await getAccount(interaction.user.id);
 
     if (bet < 0 || !Number.isInteger(bet)) {
-        interaction.reply(warningEmbed('INVALID BET ALERT', 'Bet must be a *non-negative integer*'));
+        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
         return;
     } else if (bet > account.balance) {
-        interaction.reply(warningEmbed('INSUFFICIENT FUNDS ALERT', `You don't have enough money to bet ${bet}`));
+        interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
         return;
     }
 
@@ -46,7 +38,7 @@ async function execute(interaction) {
         .setDescription(`You bet **${bet}** on **${side === 'h' ? 'heads' : 'tails'}**`)
         .setColor(0xE91E63);
     await interaction.reply({ embeds: [embed] });
-    AccountManager.addBalance(interaction.user.id, -bet);
+    addBalance(interaction.user.id, -bet);
 
     await sleep(1500);
 
@@ -57,14 +49,14 @@ async function execute(interaction) {
         .setDescription(rndSide === 'h' ? '**HEADS** 🌝' : '**TAILS** 🌚');
     if (result === 'win') {
         embed.addField('✅ You won! ✅', `You won **${bet}**💵`).setColor(0x2ECC71);
-        AccountManager.addBalance(interaction.user.id, 2 * bet);
+        addBalance(interaction.user.id, 2 * bet);
     } else if (result === 'lose') {
         embed.addField('❌ You lost! ❌', `You lost **${bet}**💵`).setColor(0xE74C3C);
     }
     await interaction.editReply({ embeds: [embed] });
 }
 
-module.exports = {
-    data: data,
-    execute: execute,
+export default {
+    data,
+    run,
 };
