@@ -32,10 +32,10 @@ async function registerCommands(): Promise<void> {
         }
     }
 
-    const JSONCommands: JSON[] = [];
+    const JSONCommands: object[] = [];
 
     for (const file of commandFiles) {
-        import (file).then(module => {
+        await import (file).then(module => {
             const command = module.default;
             JSONCommands.push(command.data.toJSON());
             client.commands.set(command.data.name, command);

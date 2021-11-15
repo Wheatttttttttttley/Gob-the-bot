@@ -14,6 +14,7 @@ Gob is a Discord bot that is designed to be a fun and easy way to play games.
     ```
 1. run `npm install` in the root directory.
 1. Change `.env.example` to `.env` and setup your own token.
+1. run `npm run build` to build the bot.
 1. run `npm run start` to run the bot.
 1. Open your Discord client and join the server.
 1. Type `/help` to see a list of commands.
