@@ -1,4 +1,4 @@
-import { Guild, GuildChannel, GuildMember, MessageEmbed, Role, TextChannel, User } from 'discord.js';
+import { ColorResolvable, Guild, GuildChannel, GuildMember, MessageEmbed, Role, TextChannel, User } from 'discord.js';
 import PlayerModel, { PlayerInt } from '../models/playerModel';
 
 export function createAccount(id: string): Promise<void> {
@@ -101,13 +101,13 @@ export function updateLevel(channel: GuildChannel & TextChannel, user: User): Pr
 }
 
 
-function createRole(guild: Guild): Promise<Role> {
+function createRole(guild: Guild, name: string, color: ColorResolvable): Promise<Role> {
     return new Promise((resolve, reject) => {
         try {
             resolve(
                 guild.roles.create({
-                    name: process.env.EXCLUSIVE_ROLE_NAME as string,
-                    color: 0x3498DB,
+                    name: name,
+                    color: color,
                     permissions: [],
                 }),
             );
@@ -122,46 +122,49 @@ export async function updateRole(channel: GuildChannel & TextChannel, user: User
         console.log('Bot does not have permission to manage roles');
         return;
     }
+
     const guild = channel.guild;
-    let role: Role = guild.roles.cache.find(r => r.name === process.env.EXCLUSIVE_ROLE_NAME as string) || await createRole(guild);
+    let role: Role = guild.roles.cache.find(r => r.name === process.env.EXCLUSIVE_ROLE_NAME as string) || await createRole(guild, process.env.EXCLUSIVE_ROLE_NAME as string, 0x3498DB);
     if (!role) {
-        role = await createRole(guild);
+        role = await createRole(guild, process.env.EXCLUSIVE_ROLE_NAME as string, 0x3498DB);
+    }
+    if (!role.editable) {
+        console.log('Role is not editable by bot');
+        return;
     }
     const member: GuildMember = await guild.members.fetch(user.id);
 
     return new Promise<void>((resolve, reject) => {
-        getAccount(user.id)
-            .then(async (player: PlayerInt): Promise<void> => {
-                if (player.balance >= 100000 && !member.roles.cache.has(role.id)) {
-                    try {
-                        await member.roles.add(role);
-                        channel.send({ embeds: [
-                            new MessageEmbed()
-                                .setTitle(`🎊 ${user.username} has reached $100,000! 🎊`)
-                                .setColor(0x2ECC71)
-                                .setDescription(`🎉 **Congratulations!**\n${user.username} are one of the *${process.env.EXCLUSIVE_ROLE_NAME}* now`)],
-                        });
-                        resolve();
-                    } catch (err) {
-                        reject(err);
-                    }
-                } else if (player.balance < 75000 && member.roles.cache.has(role?.id)) {
-                    try {
-                        await member.roles.remove(role);
-                        channel.send({ embeds: [
-                            new MessageEmbed()
-                                .setTitle(`${user.username} has dropped below $75,000!`)
-                                .setColor(0xE74C3C)
-                                .setDescription(`:cry: **Oh no!**\n${user.username} are no longer one of the *${process.env.EXCLUSIVE_ROLE_NAME}*`)],
-                        });
-                        resolve();
-                    } catch (err) {
-                        reject(err);
-                    }
+        getAccount(user.id).then(async (player: PlayerInt): Promise<void> => {
+            if (player.balance >= 100000 && !member.roles.cache.has(role.id)) {
+                try {
+                    await member.roles.add(role);
+                    channel.send({ embeds: [
+                        new MessageEmbed()
+                            .setTitle(`🎊 ${user.username} has reached $100,000! 🎊`)
+                            .setColor(0x2ECC71)
+                            .setDescription(`🎉 **Congratulations!**\n${user.username} are one of the *${process.env.EXCLUSIVE_ROLE_NAME}* now`)],
+                    });
+                    resolve();
+                } catch (err) {
+                    reject(err);
                 }
-            })
-            .catch(err => {
-                reject(err);
-            });
+            } else if (player.balance < 75000 && member.roles.cache.has(role?.id)) {
+                try {
+                    await member.roles.remove(role);
+                    channel.send({ embeds: [
+                        new MessageEmbed()
+                            .setTitle(`${user.username} has dropped below $75,000!`)
+                            .setColor(0xE74C3C)
+                            .setDescription(`:cry: **Oh no!**\n${user.username} are no longer one of the *${process.env.EXCLUSIVE_ROLE_NAME}*`)],
+                    });
+                    resolve();
+                } catch (err) {
+                    reject(err);
+                }
+            }
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
