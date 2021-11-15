@@ -21,7 +21,6 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
                     `/transfer` - Transfer money to someone.')
                 .addField('🎲 Games 🎲',
                     '`/blackjack` - Play a game of blackjack.\n\
-                    `/roll (WIP)` - Roll a dice.\n\
                     `/flip` - Flip a coin.\n\
                     `/rps` - Play Rock, Paper, Scissors.\n\
                     `/highlow`- Play a game of high/low.')
