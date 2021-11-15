@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { addBalance, getAccount } from '../../handlers/account-manager';
+import { addBalance, addXP, getAccount } from '../../handlers/account-manager';
 import { warningEmbed } from '../../handlers/warningHandler';
 
 const data = new SlashCommandBuilder()
@@ -59,10 +59,12 @@ async function run(interaction: CommandInteraction) {
 
     if (result === 'draw') {
         embed.addField('😐 DRAW 😐', '***You got your bet back!***').setColor(0x99AAB5);
+        addXP(interaction.user.id, Math.ceil(bet * 0.5));
     } else if (result === 'win') {
         embed.addField('🎉 WIN 🎉', `***You won ${ bet }!***`)
             .setColor(0x57F287);
         addBalance(interaction.user.id, bet);
+        addXP(interaction.user.id, bet);
     } else if (result === 'lose') {
         embed.addField('😭 LOSE 😭', `***You lost ${bet}$!***`);
         addBalance(interaction.user.id, -bet);

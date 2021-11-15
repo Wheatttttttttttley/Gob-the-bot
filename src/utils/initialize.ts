@@ -4,22 +4,15 @@ import { readdirSync } from 'fs';
 import { connect } from 'mongoose';
 import { client } from '../index';
 
-async function connectDatabase(): Promise<void> {
-    console.log('Connecting to database');
-    await connect(process.env.MONGO_URI as string, {
-        keepAlive: true,
-    });
-    console.log('Connected to database');
-}
+const commandFolders: string[] = [
+    'blackjack',
+    'currency',
+    'information',
+    'minigames',
+];
 
 async function registerCommands(): Promise<void> {
     console.log('Registering commands');
-
-    const commandFolders: string[] = [
-        'blackjack',
-        'currency',
-        'minigames',
-    ];
 
     const commandFiles = [];
 
@@ -81,6 +74,14 @@ async function registerEvents(): Promise<void> {
         });
     }
     console.log('Events registered!');
+}
+
+async function connectDatabase(): Promise<void> {
+    console.log('Connecting to database');
+    await connect(process.env.MONGO_URI as string, {
+        keepAlive: true,
+    });
+    console.log('Connected to database');
 }
 
 function validateEnv(): void {

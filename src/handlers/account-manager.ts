@@ -51,12 +51,64 @@ export function addBalance(id: string, amount: number): Promise<number> {
     });
 }
 
+export function addXP(id: string, amount: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+        try {
+            PlayerModel.findOneAndUpdate({ _id: id }, { $inc: { xp: amount } })
+                .then(() => {
+                    resolve();
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        } catch (err) {
+            reject(err);
+        }
+    });
+}
+
+export function updateLevel(channel: GuildChannel & TextChannel, user: User): Promise<void> {
+    return new Promise((resolve, reject) => {
+        try {
+            getAccount(user.id).then(async (player: PlayerInt) => {
+                if (player.xp >= player.xpToNextLevel) {
+                    await PlayerModel.findOneAndUpdate(
+                        { _id: user.id },
+                        {
+                            $inc: {
+                                level: 1,
+                                xp: -player.xpToNextLevel,
+                            },
+                            $set: {
+                                xpToNextLevel: (2 * ((player.level) ** 2) - (player.level) + 10) * 100,
+                            },
+                        })
+                        .then(() => {
+                            channel.send({ embeds: [
+                                new MessageEmbed()
+                                    .setTitle(`🎊 ${user.username} has leveled up! 🎊`)
+                                    .setDescription(`**${user.username}** is now level **${player.level + 1}!**`)
+                                    .setColor(0x3498DB)],
+                            });
+                            updateLevel(channel, user);
+                        });
+                } else {
+                    resolve();
+                }
+            }).catch(reject);
+        } catch (err) {
+            reject(err);
+        }
+    });
+}
+
+
 function createRole(guild: Guild): Promise<Role> {
     return new Promise((resolve, reject) => {
         try {
             resolve(
                 guild.roles.create({
-                    name: 'Best Gambler',
+                    name: process.env.EXCLUSIVE_ROLE_NAME as string,
                     color: 0x3498DB,
                     permissions: [],
                 }),
@@ -69,7 +121,7 @@ function createRole(guild: Guild): Promise<Role> {
 
 export async function updateRole(channel: GuildChannel & TextChannel, user: User): Promise<void> {
     const guild = channel.guild;
-    const role: Role = guild.roles.cache.find(r => r.name === 'Best Gambler') || await createRole(guild);
+    const role: Role = guild.roles.cache.find(r => r.name === process.env.EXCLUSIVE_ROLE_NAME as string) || await createRole(guild);
     const member: GuildMember = await guild.members.fetch(user.id);
 
     return new Promise<void>((resolve, reject) => {
@@ -80,9 +132,9 @@ export async function updateRole(channel: GuildChannel & TextChannel, user: User
                         await member.roles.add(role);
                         channel.send({ embeds: [
                             new MessageEmbed()
-                                .setTitle(`${user.username} has reached $100,000!`)
+                                .setTitle(`🎊 ${user.username} has reached $100,000! 🎊`)
                                 .setColor(0x2ECC71)
-                                .setDescription(`:tada: **Congratulations!**\n${user.username} are one of the *Best Gambler* now`)],
+                                .setDescription(`🎉 **Congratulations!**\n${user.username} are one of the *Best Gambler* now`)],
                         });
                         resolve();
                     } catch (err) {

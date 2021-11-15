@@ -19,6 +19,11 @@ async function run(interaction: CommandInteraction) {
     const fromPlayer = interaction.user;
     const toPlayer = interaction.options.getUser('to') || interaction.user;
 
+    if (toPlayer.bot) {
+        interaction.reply(warningEmbed({ title: 'Bot accounts cannot have balances!', description: 'Please use a non-bot account.' }));
+        return;
+    }
+
     if (fromPlayer.id === toPlayer.id || toPlayer === undefined) {
         interaction.reply(warningEmbed({ title: 'INVALID USER', description: 'You cannot transfer money to yourself!' }));
         return;

@@ -1,5 +1,5 @@
 import { CommandInteraction, GuildChannel, Interaction, TextChannel } from 'discord.js';
-import { updateRole } from '../handlers/account-manager';
+import { updateLevel, updateRole } from '../handlers/account-manager';
 import { client } from '../index';
 
 export default {
@@ -12,7 +12,10 @@ export default {
 
         try {
             await command.run(interaction)
-                .then(() => updateRole(interaction.channel as GuildChannel & TextChannel, interaction.user));
+                .then(() => {
+                    updateRole(interaction.channel as GuildChannel & TextChannel, interaction.user);
+                    updateLevel(interaction.channel as GuildChannel & TextChannel, interaction.user);
+                }).catch(console.error);
         } catch (error) {
             console.error(error);
         }

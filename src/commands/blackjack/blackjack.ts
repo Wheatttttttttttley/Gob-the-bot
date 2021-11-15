@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
 import { promisify } from 'util';
-import { addBalance, getAccount } from '../../handlers/account-manager';
+import { addBalance, addXP, getAccount } from '../../handlers/account-manager';
 import { warningEmbed } from '../../handlers/warningHandler';
 import { Game } from './blackjack-class/Game';
 
@@ -43,18 +43,21 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
     switch (result) {
     case 'Win':
         addBalance(interaction.user.id, game.bet * 2);
+        addXP(interaction.user.id, game.bet);
 
         resultEmbed.addField('🎉 WIN 🎉', `You won **${ game.bet }** 💵`)
             .setColor(0x57F287);
         break;
     case 'Blackjack':
         addBalance(interaction.user.id, Math.ceil(game.bet * 2.5));
+        addXP(interaction.user.id, Math.ceil(game.bet * 1.5));
 
         resultEmbed.addField('🎉 BLACKJACK 🎉', `You got blackjack! You won **${ Math.ceil(game.bet * 1.5) }** 💵`)
             .setColor(0x57F287);
         break;
     case 'Draw':
         addBalance(interaction.user.id, game.bet * 1.0);
+        addXP(interaction.user.id, Math.ceil(game.bet * 0.5));
 
         resultEmbed.addField('😐 DRAW 😐', 'You got your bet back!')
             .setColor(0x99AAB5);
