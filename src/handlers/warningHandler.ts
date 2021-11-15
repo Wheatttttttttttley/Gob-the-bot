@@ -1,11 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 
-export function warningEmbed(
-    {
-        title = 'ALERT',
-        description = 'Something went wrong. Please contact me!',
-    }: { title?: string; description?: string; } = {},
-): { embeds: MessageEmbed[];} {
+export function warningEmbed({ title = 'ALERT', description = 'Something went wrong. Please contact me!' }
+    : { title?: string; description?: string; } = {}): { embeds: MessageEmbed[];} {
     return { embeds: [
         new MessageEmbed()
             .setTitle(`⚠ ${title} ⚠`)

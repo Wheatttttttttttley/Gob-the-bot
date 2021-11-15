@@ -10,29 +10,14 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
     interaction.reply({
         embeds: [
             new MessageEmbed()
-                .setTitle('ℹ Information ℹ')
                 .setColor(randomColor())
-                .setThumbnail(interaction.client.user?.displayAvatarURL({ format: 'png', size: 512 }) || '')
-                .setDescription('**Gob The Discord Bot**\n\
-                Gob is a Discord bot that is designed to be a fun and easy way to play games.\n\
-                🔵 Features\n\
-                ◻ **Gob** can be used to play a variety of games, including:\n\
-                    ◽ Blackjack\n\
-                    ◽ Coinflip\n\
-                    ◽ Rock, Paper, Scissors\n\
-                    ◽ High/Low\n\
-                    ◽ Dice (WIP)\n\
-                    ◽ Roulette (WIP)\n\
-                    ◽ Poker (WIP)\n\
-                    ◽ slots (WIP)\n\
-                ◻ **Gob** can be used to manage your server\'s economy.\n\
-                    ◽ View your balance\n\
-                    ◽ View your bank account (WIP)\n\
-                    ◽ Get a loan (WIP)\n\
-                    ◽ Pay your loan (WIP)\n\
-                    ◽ Transfer money')
-                .setFooter('This bot is a bot made by [@Wheatley#4748](https://discord.com/users/Wheatley#4748)\n')
-                .addField('GitHub', ''),
+                .setTitle('ℹ Information ℹ')
+                .setDescription('Gob is a bot that mainly does fun and games.')
+                .setThumbnail(interaction.client.user?.displayAvatarURL({ format: 'png', size: 64 }) || '')
+                .addField('Source 🔗', '[GitHub](https://github.com/Wheatttttttttttley/Gob-the-bot.git)', true)
+                .addField('Invite 📧', '[Invite](https://discord.com/api/oauth2/authorize?client_id=902678755397480518&permissions=276220275776&scope=bot%20applications.commands)', true)
+                .addField('Donate 💘', '[Ko-fi](https://ko-fi.com/wheatley62820)', true)
+                .setFooter('Powerd by Wheatley\'s engine. © 2020', interaction.client.user?.displayAvatarURL({ format: 'png', size: 64 }) || ''),
         ],
     });
 };

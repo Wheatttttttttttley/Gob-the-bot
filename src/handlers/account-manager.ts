@@ -82,16 +82,14 @@ export function updateLevel(channel: GuildChannel & TextChannel, user: User): Pr
                             $set: {
                                 xpToNextLevel: (2 * ((player.level) ** 2) - (player.level) + 10) * 100,
                             },
-                        })
-                        .then(() => {
-                            channel.send({ embeds: [
-                                new MessageEmbed()
-                                    .setTitle(`🎊 ${user.username} has leveled up! 🎊`)
-                                    .setDescription(`**${user.username}** is now level **${player.level + 1}!**`)
-                                    .setColor(0x3498DB)],
-                            });
-                            updateLevel(channel, user);
                         });
+                    await channel.send({ embeds: [
+                        new MessageEmbed()
+                            .setTitle(`🎊 ${user.username} has leveled up! 🎊`)
+                            .setDescription(`**${user.username}** is now level **${player.level + 1}!**`)
+                            .setColor(0x3498DB)],
+                    });
+                    await updateLevel(channel, user);
                 } else {
                     resolve();
                 }
@@ -120,8 +118,15 @@ function createRole(guild: Guild): Promise<Role> {
 }
 
 export async function updateRole(channel: GuildChannel & TextChannel, user: User): Promise<void> {
+    if (!channel.guild?.me?.permissions.has('MANAGE_ROLES')) {
+        console.log('Bot does not have permission to manage roles');
+        return;
+    }
     const guild = channel.guild;
-    const role: Role = guild.roles.cache.find(r => r.name === process.env.EXCLUSIVE_ROLE_NAME as string) || await createRole(guild);
+    let role: Role = guild.roles.cache.find(r => r.name === process.env.EXCLUSIVE_ROLE_NAME as string) || await createRole(guild);
+    if (!role) {
+        role = await createRole(guild);
+    }
     const member: GuildMember = await guild.members.fetch(user.id);
 
     return new Promise<void>((resolve, reject) => {
@@ -134,7 +139,7 @@ export async function updateRole(channel: GuildChannel & TextChannel, user: User
                             new MessageEmbed()
                                 .setTitle(`🎊 ${user.username} has reached $100,000! 🎊`)
                                 .setColor(0x2ECC71)
-                                .setDescription(`🎉 **Congratulations!**\n${user.username} are one of the *Best Gambler* now`)],
+                                .setDescription(`🎉 **Congratulations!**\n${user.username} are one of the *${process.env.EXCLUSIVE_ROLE_NAME}* now`)],
                         });
                         resolve();
                     } catch (err) {
@@ -147,7 +152,7 @@ export async function updateRole(channel: GuildChannel & TextChannel, user: User
                             new MessageEmbed()
                                 .setTitle(`${user.username} has dropped below $75,000!`)
                                 .setColor(0xE74C3C)
-                                .setDescription(`:cry: **Oh no!**\n${user.username} are no longer one of the *Best Gambler*`)],
+                                .setDescription(`:cry: **Oh no!**\n${user.username} are no longer one of the *${process.env.EXCLUSIVE_ROLE_NAME}*`)],
                         });
                         resolve();
                     } catch (err) {
