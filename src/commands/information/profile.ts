@@ -43,7 +43,9 @@ async function run(interaction: CommandInteraction): Promise<void> {
                     .setColor(randomColor()),
             ],
         });
-    }).catch(console.error);
+    }).catch(err => {
+        interaction.reply(warningEmbed({ title: 'Error', description: err }));
+    });
 }
 
 export default {

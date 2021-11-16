@@ -1,11 +1,11 @@
-import { ColorResolvable, Guild, GuildChannel, GuildMember, MessageEmbed, Role, TextChannel, User } from 'discord.js';
+import { GuildChannel, MessageEmbed, TextChannel, User } from 'discord.js';
 import PlayerModel, { PlayerInt } from '../models/playerModel';
 
-export function createAccount(id: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+export function createAccount(id: string): Promise<PlayerInt> {
+    return new Promise((resolve, reject) => {
         PlayerModel.create({ _id: id, balance: 1000 })
-            .then(() => {
-                resolve();
+            .then(account => {
+                resolve(account);
             })
             .catch(err => {
                 reject(err);
@@ -21,8 +21,8 @@ export function getAccount(id: string): Promise<PlayerInt> {
                     resolve(player);
                 } else {
                     createAccount(id)
-                        .then(() => {
-                            resolve(player);
+                        .then(newAccount => {
+                            resolve(newAccount);
                         })
                         .catch(err => {
                             reject(err);
@@ -97,74 +97,5 @@ export function updateLevel(channel: GuildChannel & TextChannel, user: User): Pr
         } catch (err) {
             reject(err);
         }
-    });
-}
-
-
-function createRole(guild: Guild, name: string, color: ColorResolvable): Promise<Role> {
-    return new Promise((resolve, reject) => {
-        try {
-            resolve(
-                guild.roles.create({
-                    name: name,
-                    color: color,
-                    permissions: [],
-                }),
-            );
-        } catch (err) {
-            reject(err);
-        }
-    });
-}
-
-export async function updateRole(channel: GuildChannel & TextChannel, user: User): Promise<void> {
-    if (!channel.guild?.me?.permissions.has('MANAGE_ROLES')) {
-        console.log('Bot does not have permission to manage roles');
-        return;
-    }
-
-    const guild = channel.guild;
-    let role: Role = guild.roles.cache.find(r => r.name === process.env.EXCLUSIVE_ROLE_NAME as string) || await createRole(guild, process.env.EXCLUSIVE_ROLE_NAME as string, 0x3498DB);
-    if (!role) {
-        role = await createRole(guild, process.env.EXCLUSIVE_ROLE_NAME as string, 0x3498DB);
-    }
-    if (!role.editable) {
-        console.log('Role is not editable by bot');
-        return;
-    }
-    const member: GuildMember = await guild.members.fetch(user.id);
-
-    return new Promise<void>((resolve, reject) => {
-        getAccount(user.id).then(async (player: PlayerInt): Promise<void> => {
-            if (player.balance >= 100000 && !member.roles.cache.has(role.id)) {
-                try {
-                    await member.roles.add(role);
-                    channel.send({ embeds: [
-                        new MessageEmbed()
-                            .setTitle(`🎊 ${user.username} has reached $100,000! 🎊`)
-                            .setColor(0x2ECC71)
-                            .setDescription(`🎉 **Congratulations!**\n${user.username} are one of the *${process.env.EXCLUSIVE_ROLE_NAME}* now`)],
-                    });
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            } else if (player.balance < 75000 && member.roles.cache.has(role?.id)) {
-                try {
-                    await member.roles.remove(role);
-                    channel.send({ embeds: [
-                        new MessageEmbed()
-                            .setTitle(`${user.username} has dropped below $75,000!`)
-                            .setColor(0xE74C3C)
-                            .setDescription(`:cry: **Oh no!**\n${user.username} are no longer one of the *${process.env.EXCLUSIVE_ROLE_NAME}*`)],
-                    });
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            }
-        }).catch(err => {
-            reject(err);
-        });
     });
 }

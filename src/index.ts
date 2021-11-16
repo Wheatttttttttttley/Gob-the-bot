@@ -13,7 +13,7 @@ export const client = new Client({
 (async (): Promise<void> => {
     client.commands = new Collection();
 
-    await initialize();
+    await initialize(client);
 
     await client.login(process.env.TOKEN);
 })();

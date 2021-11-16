@@ -19,7 +19,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
     const playerBet = interaction.options.getNumber('bet') || 0;
     // Check if bet is valid
     if (!Number.isInteger(playerBet) || playerBet < 0) {
-        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
+        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *positive integer*' }));
         return;
     }
 

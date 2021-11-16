@@ -1,5 +1,5 @@
 import { GuildChannel, GuildChannelResolvable, Interaction, TextChannel } from 'discord.js';
-import { updateLevel, updateRole } from '../handlers/account-manager';
+import { updateLevel } from '../handlers/account-manager';
 import { warningEmbed } from '../handlers/warningHandler';
 import { client } from '../index';
 
@@ -15,14 +15,20 @@ export default {
         const command = client.commands.get(interaction.commandName);
         if (!command) return;
 
+        if (command.ownerOnly && interaction.user.id != process.env.OWNER_ID) {
+            interaction.reply(warningEmbed({ title: 'Missing Permissions', description: 'This command is owner only.' }));
+            return;
+        }
+
         try {
             await command.run(interaction)
                 .then(() => {
-                    updateRole(interaction.channel as GuildChannel & TextChannel, interaction.user);
                     updateLevel(interaction.channel as GuildChannel & TextChannel, interaction.user);
-                }).catch(console.error);
-        } catch (error) {
-            console.error(error);
+                }).catch(err => {
+                    interaction.reply(warningEmbed({ title: 'Command Error', description: err }));
+                });
+        } catch (err) {
+            interaction.reply(warningEmbed({ title: 'Command Error', description: err as string }));
         }
     },
 };
