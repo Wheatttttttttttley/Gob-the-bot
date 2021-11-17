@@ -35,7 +35,7 @@ export function addBalance(id: string, amount: number): Promise<number> {
     return new Promise((resolve, reject) => {
         try {
             PlayerModel.findOneAndUpdate({ _id: id }, { $inc: { balance: amount } }, { upsert: true })
-                .then(player => resolve(player.balance))
+                .then(player => resolve(player?.balance || 0))
                 .catch(reject);
         } catch (err) {
             reject(err);
