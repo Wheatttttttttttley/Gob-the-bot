@@ -10,6 +10,7 @@ export interface PlayerInt {
         daily: Date,
     };
 }
+
 const PlayerModel = new Schema({
     _id: {
         type: String,
@@ -18,6 +19,7 @@ const PlayerModel = new Schema({
     balance: {
         type: Number,
         required: true,
+        default: 1000,
     },
     xp : {
         type: Number,
@@ -29,16 +31,14 @@ const PlayerModel = new Schema({
         required: true,
         default: 1,
     },
-    // min xp to next level = (2 * (level-1 ** 2) - (level-1) + 10) * 100
+    // 2*x^2 - x + 10; x = level-1
     xpToNextLevel : {
         type: Number,
         required: true,
         default: 1000,
     },
     cooldown : {
-        daily : {
-            type: Date,
-        },
+        daily : { type: Date },
     },
 });
 
