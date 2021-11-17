@@ -8,10 +8,10 @@ const data = new SlashCommandBuilder()
     .setDescription('See the leaderboard!');
 
 async function run(interaction: CommandInteraction): Promise<void> {
-    interaction.deferReply();
+    await interaction.deferReply();
     playerModel.find({}).sort({ balance: -1 }).exec(async (err, players) => {
         if (err) {
-            interaction.editReply(warningEmbed({ title: 'ERROR', description: err as unknown as string }));
+            await interaction.editReply(warningEmbed({ title: 'ERROR', description: err as unknown as string }));
             return;
         }
         const playersInGuild = await Promise.all(players.map(async (player) => {
@@ -26,7 +26,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
             }
         }));
         const playersInGuildFiltered = playersInGuild.filter(player => player).splice(0, 5);
-        interaction.editReply({ embeds: [
+        await interaction.editReply({ embeds: [
             new MessageEmbed()
                 .setTitle('🏆 Leaderboard 🏆')
                 .setColor(0x00AE86)
