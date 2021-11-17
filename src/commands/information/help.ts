@@ -6,7 +6,7 @@ const data = new SlashCommandBuilder()
     .setName('help')
     .setDescription('Help! I need somebody help!');
 
-const run = async (interaction: CommandInteraction): Promise<void> => {
+const run = (interaction: CommandInteraction) => {
     interaction.reply({
         embeds: [
             new MessageEmbed()
