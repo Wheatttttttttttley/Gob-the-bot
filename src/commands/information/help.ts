@@ -14,7 +14,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
                 .setColor(randomColor())
                 .setFooter('Powered by Wheatley\'s engine')
                 .setDescription('This is a list of commands you can use in this server.')
-                .addField('💸 Currency 💵',
+                .addField('💰 Currency 💰',
                     '`/balance` - See current balance.\n\
                     `/beg` - Beg people for some money.\n\
                     `/transfer` - Transfer money to someone.\n\

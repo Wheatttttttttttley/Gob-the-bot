@@ -13,34 +13,40 @@ const data = new SlashCommandBuilder()
             .addChoice('level', 'level'));
 
 async function run(interaction: CommandInteraction): Promise<void> {
+    interaction.deferReply();
     const by = interaction.options?.getString('by') || 'balance';
     if (by === 'balance') {
-        playerModel.find({}).sort({ balance: -1 }).exec((err, players) => {
+        playerModel.find({}).sort({ balance: -1 }).exec(async (err, players) => {
             if (err) {
-                interaction.reply(warningEmbed({ title: 'ERROR', description: err as unknown as string }));
+                interaction.editReply(warningEmbed({ title: 'ERROR', description: err as unknown as string }));
                 return;
             }
-            const playersInGuild = players.map(player => {
-                const member = interaction.guild?.members.cache.get(player._id);
-                return {
-                    user: member?.user,
-                    balance: player.balance,
-                };
-            }).filter(player => player.user);
-            interaction.reply({ embeds: [
+            const playersInGuild = await Promise.all(players.map(async (player) => {
+                try {
+                    const member = await interaction.guild?.members.fetch(player._id);
+                    return {
+                        user: member?.user,
+                        balance: player.balance,
+                    };
+                } catch {
+                    return;
+                }
+            }));
+            const playersInGuildFiltered = playersInGuild.filter(player => player).splice(0, 5);
+            interaction.editReply({ embeds: [
                 new MessageEmbed()
                     .setTitle('🏆 Leaderboard 🏆')
                     .setColor(0x00AE86)
                     .setFooter('Top 5 players in this guild')
                     .setDescription(
-                        playersInGuild.map((player, index) => `${index + 1}. **${player.user?.username}** ${player.balance} 💵`).join('\n'),
+                        playersInGuildFiltered.map((player, index) => `${index + 1}. **${player?.user?.username}** ${player?.balance} 💵`).join('\n'),
                     ),
             ] });
         });
     } else if (by === 'level') {
         playerModel.find({}).sort({ level: -1 }).exec((err, players) => {
             if (err) {
-                interaction.reply(warningEmbed({ title: 'ERROR', description: err as unknown as string }));
+                interaction.editReply(warningEmbed({ title: 'ERROR', description: err as unknown as string }));
                 return;
             }
             const playersInGuild = players.map(player => {
@@ -50,7 +56,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
                     level: player.level,
                 };
             }).filter(player => player.user);
-            interaction.reply({ embeds: [
+            interaction.editReply({ embeds: [
                 new MessageEmbed()
                     .setTitle('🏆 Leaderboard 🏆')
                     .setColor(0x00AE86)
@@ -61,7 +67,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
             ] });
         });
     } else {
-        interaction.reply(warningEmbed({ title: 'INVALID OPTION', description: 'leaderboard is only rank by balance or level' }));
+        interaction.editReply(warningEmbed({ title: 'INVALID OPTION', description: 'leaderboard is only rank by balance or level' }));
     }
 }
 
