@@ -6,7 +6,7 @@ import { ResultEmbed } from '../roulette';
 
 export const splitSubcommand = new SlashCommandSubcommandBuilder()
     .setName('split')
-    .setDescription('Play a split roulette, pay 17:1')
+    .setDescription('Play a split, pay 17x')
     .addNumberOption(options => options.setName('bet')
         .setRequired(true)
         .setDescription('The amount of chips you want to bet'))

@@ -5,7 +5,7 @@ import { ResultEmbed } from '../roulette';
 
 export const evenOddSubcommand = new SlashCommandSubcommandBuilder()
     .setName('even-odd')
-    .setDescription('Play an even-odd roulette, pay 1:1')
+    .setDescription('Play an even-odd, pay 1x')
     .addNumberOption(options => options.setName('bet')
         .setRequired(true)
         .setDescription('The amount of chips you want to bet'))

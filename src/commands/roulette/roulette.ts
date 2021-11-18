@@ -28,7 +28,12 @@ const data = new SlashCommandBuilder()
     .addSubcommand(highLowSubcommand);
 
 export const ResultEmbed = (result: 'win' | 'lose', rndNumber: number, guess: string, initialBet: number, gain: number) => {
-    const color = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(rndNumber) ? '🔴' : '⬛';
+    let color = '🟢';
+    if ([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(rndNumber)) {
+        color = '🔴';
+    } else if (rndNumber !== 0) {
+        color = '🔵';
+    }
     return new MessageEmbed()
         .setTitle('💎 Roulette 💎')
         .setDescription(`You bet **${initialBet}** 💵 on **${guess}**!`)

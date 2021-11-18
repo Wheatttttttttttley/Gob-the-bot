@@ -5,7 +5,7 @@ import { ResultEmbed } from '../roulette';
 
 export const highLowSubcommand = new SlashCommandSubcommandBuilder()
     .setName('high-low')
-    .setDescription('Play a high-low roulette, pay 1:1')
+    .setDescription('Play a high-low, pay 1x')
     .addNumberOption(options => options.setName('bet')
         .setRequired(true)
         .setDescription('The amount of chips you want to bet'))
@@ -19,7 +19,11 @@ export const highLowSubcommand = new SlashCommandSubcommandBuilder()
 
 export const highLowRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
     const guess = interaction.options.getNumber('guess');
-    const result = guess === Math.floor(rndNumber / 18);
+    if (rndNumber === 0) {
+        interaction.editReply({ embeds: [ResultEmbed('lose', rndNumber, `${guess ? 'high' : 'low'}`, bet, bet)] });
+        return;
+    }
+    const result = guess ? rndNumber >= 19 : rndNumber < 19;
     if (result) {
         addBalanceXP(interaction.user.id, bet * 2, bet);
 

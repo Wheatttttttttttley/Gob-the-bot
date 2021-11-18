@@ -5,7 +5,7 @@ import { ResultEmbed } from '../roulette';
 
 export const streetSubcommand = new SlashCommandSubcommandBuilder()
     .setName('street')
-    .setDescription('Play a street roulette, pay 11:1')
+    .setDescription('Play a street, pay 11x')
     .addNumberOption(options => options.setName('bet')
         .setRequired(true)
         .setDescription('The amount of chips you want to bet'))

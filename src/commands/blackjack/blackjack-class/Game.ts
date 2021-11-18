@@ -134,7 +134,7 @@ export class Game {
         this.dealer.hand[1].isFaceUp = true;
         this.sendEmbed(this.cardAndPointsEmbed());
 
-        while (this.dealer.points < 17 && this.player.points > this.dealer.points) {
+        while (this.dealer.points <= 17 && this.player.points > this.dealer.points) {
             this.dealer.addCard(new Card());
             this.sendEmbed(this.cardAndPointsEmbed());
             await sleep(500);

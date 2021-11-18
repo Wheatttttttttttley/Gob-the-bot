@@ -5,7 +5,7 @@ import { ResultEmbed } from '../roulette';
 
 export const columnSubcommand = new SlashCommandSubcommandBuilder()
     .setName('column')
-    .setDescription('Play a column roulette, pay 2:1')
+    .setDescription('Play a column, pay 2x')
     .addNumberOption(options => options.setName('bet')
         .setRequired(true)
         .setDescription('The amount of chips you want to bet'))

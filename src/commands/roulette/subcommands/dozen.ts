@@ -5,7 +5,7 @@ import { ResultEmbed } from '../roulette';
 
 export const dozenSubcommand = new SlashCommandSubcommandBuilder()
     .setName('dozen')
-    .setDescription('Play a dozen roulette, pay 2:1')
+    .setDescription('Play a dozen, pay 2x')
     .addNumberOption(options => options.setName('bet')
         .setRequired(true)
         .setDescription('The amount of chips you want to bet'))
@@ -20,7 +20,11 @@ export const dozenSubcommand = new SlashCommandSubcommandBuilder()
 
 export const dozenRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
     const guess = interaction.options.getNumber('guess') || 0;
-    const result = rndNumber / 12 === guess;
+    if (rndNumber === 0) {
+        interaction.editReply({ embeds: [ResultEmbed('lose', rndNumber, `${['1-12', '13-24', '25-36'][guess - 1]}`, bet, -bet)] });
+        return;
+    }
+    const result = Math.ceil(rndNumber / 12) === guess;
     if (result) {
         addBalanceXP(interaction.user.id, bet * 3, bet * 2);
 
