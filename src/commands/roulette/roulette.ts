@@ -44,7 +44,7 @@ const run = async (interaction: CommandInteraction) => {
     const bet = interaction.options.getNumber('bet') || 0;
 
     // bet validation
-    if (!Number.isInteger(bet) && bet < 0) {
+    if (!Number.isInteger(bet) || bet < 0) {
         interaction.editReply(warningEmbed({ title: 'Invalid bet', description: 'The bet must be a positive integer' }));
         return;
     }
