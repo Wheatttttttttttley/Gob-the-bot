@@ -19,17 +19,16 @@ async function run(interaction: CommandInteraction): Promise<void> {
         return;
     }
 
-    getAccount(user.id)
-        .then((player: PlayerInt) => interaction.reply({
-            embeds: [
-                new MessageEmbed()
-                    .setTitle(`💰 Balance of ${user.username} 💰`)
-                    .setColor(randomColor())
-                    .setDescription(`**💵 : ${player.balance}**`),
-            ],
-        })).catch((err?: string) => {
-            interaction.reply(warningEmbed({ title: 'ERROR', description: err }));
-        });
+    getAccount(user.id).then((player: PlayerInt) => interaction.reply({
+        embeds: [
+            new MessageEmbed()
+                .setTitle(`💰 Balance of ${user.username} 💰`)
+                .setColor(randomColor())
+                .setDescription(`**💵 : ${player.balance}**`),
+        ],
+    })).catch((err?: string) => {
+        interaction.reply(warningEmbed({ title: 'ERROR', description: err }));
+    });
 }
 
 export default {

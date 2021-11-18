@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { addBalance, addXP, getAccount } from '../../handlers/account-manager';
+import { addBalance, addBalanceXP, addXP, getAccount } from '../../handlers/account-manager';
 import { warningEmbed } from '../../handlers/warningHandler';
 
 const data = new SlashCommandBuilder()
@@ -58,16 +58,14 @@ async function run(interaction: CommandInteraction) {
         .addField('Bot choice', `:**${{ 'r' : 'ROCK 👊', 'p' : 'PAPER ✋', 's': 'SCISSORS ✌' }[botChoice]}**`, true);
 
     if (result === 'draw') {
+        addXP(interaction.user.id, bet * 0.5);
         embed.addField('😐 DRAW 😐', '***You got your bet back!***').setColor(0x99AAB5);
-        addXP(interaction.user.id, Math.ceil(bet * 0.5));
     } else if (result === 'win') {
-        embed.addField('🎉 WIN 🎉', `***You won ${ bet }!***`)
-            .setColor(0x57F287);
-        addBalance(interaction.user.id, bet);
-        addXP(interaction.user.id, bet);
+        addBalanceXP(interaction.user.id, bet, bet);
+        embed.addField('🎉 WIN 🎉', `***You won ${ bet }!***`).setColor(0x57F287);
     } else if (result === 'lose') {
-        embed.addField('😭 LOSE 😭', `***You lost ${bet}$!***`);
         addBalance(interaction.user.id, -bet);
+        embed.addField('😭 LOSE 😭', `***You lost ${bet}$!***`).setColor(0xE74C3C);
     }
 
     interaction.reply({ embeds: [embed] });

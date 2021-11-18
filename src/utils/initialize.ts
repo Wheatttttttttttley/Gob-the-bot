@@ -11,6 +11,7 @@ const commandFolders: string[] = [
     'minigames',
     // TODO: implement poker
     // 'poker',
+    'roulette',
 ];
 
 async function registerCommands(client: IClient): Promise<void> {

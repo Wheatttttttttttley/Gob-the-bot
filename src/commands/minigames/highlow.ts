@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { promisify } from 'util';
-import { addBalance, addXP, getAccount } from '../../handlers/account-manager';
+import { addBalance, addBalanceXP, addXP, getAccount } from '../../handlers/account-manager';
 import { warningEmbed } from '../../handlers/warningHandler';
 
 const sleep = promisify(setTimeout);
@@ -49,8 +49,7 @@ async function run(interaction: CommandInteraction) {
         embed.setTitle('🎉 YOU WIN 🎉')
             .setColor(0x2ECC71)
             .setDescription(`The number was **${rndNumber}\nYou won ${bet} 💵**`);
-        addBalance(interaction.user.id, bet * 2);
-        addXP(interaction.user.id, bet);
+        addBalanceXP(interaction.user.id, 2 * bet, bet);
     } else {
         embed.setTitle('😭 YOU LOSE 😭')
             .setColor(0xE74C3C)

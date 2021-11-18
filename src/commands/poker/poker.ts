@@ -8,8 +8,7 @@ const data = new SlashCommandBuilder()
     .setDescription('Play poker')
     .addNumberOption(options => options.setName('bet')
         .setRequired(true)
-        .setDescription('The amount of chips you want to bet'))
-    .setDefaultPermission(false);
+        .setDescription('The amount of chips you want to bet'));
 
 async function run(interaction: CommandInteraction) {
     const bet = interaction.options.getNumber('bet') || 0;

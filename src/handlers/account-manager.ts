@@ -32,6 +32,9 @@ export function getAccount(id: string): Promise<PlayerInt> {
 }
 
 export function addBalance(id: string, amount: number): Promise<number> {
+    if (!Number.isInteger(amount)) {
+        amount = Math.ceil(amount);
+    }
     return new Promise((resolve, reject) => {
         try {
             PlayerModel.findOneAndUpdate({ _id: id }, { $inc: { balance: amount } }, { upsert: true })
@@ -44,9 +47,30 @@ export function addBalance(id: string, amount: number): Promise<number> {
 }
 
 export function addXP(id: string, amount: number): Promise<void> {
+    if (!Number.isInteger(amount)) {
+        amount = Math.ceil(amount);
+    }
     return new Promise((resolve, reject) => {
         try {
             PlayerModel.findOneAndUpdate({ _id: id }, { $inc: { xp: amount } }, { upsert: true })
+                .then(resolve)
+                .catch(reject);
+        } catch (err) {
+            reject(err);
+        }
+    });
+}
+
+export function addBalanceXP(id: string, balanceAmount: number, xpAmount: number): Promise<void> {
+    if (!Number.isInteger(balanceAmount)) {
+        balanceAmount = Math.ceil(balanceAmount);
+    }
+    if (!Number.isInteger(xpAmount)) {
+        xpAmount = Math.ceil(xpAmount);
+    }
+    return new Promise((resolve, reject) => {
+        try {
+            PlayerModel.findOneAndUpdate({ _id: id }, { $inc: { balance: balanceAmount, xp: xpAmount } }, { upsert: true })
                 .then(resolve)
                 .catch(reject);
         } catch (err) {
