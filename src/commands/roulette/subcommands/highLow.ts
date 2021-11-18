@@ -23,8 +23,8 @@ export const highLowRun = (interaction: CommandInteraction, bet: number, rndNumb
     if (result) {
         addBalanceXP(interaction.user.id, bet * 2, bet);
 
-        interaction.editReply({ embeds: [ResultEmbed('win', rndNumber, `${guess}`, bet, bet)] });
+        interaction.editReply({ embeds: [ResultEmbed('win', rndNumber, `${guess ? 'high' : 'low'}`, bet, bet)] });
     } else {
-        interaction.editReply({ embeds: [ResultEmbed('lose', rndNumber, `${guess}`, bet, bet)] });
+        interaction.editReply({ embeds: [ResultEmbed('lose', rndNumber, `${guess ? 'high' : 'low'}`, bet, bet)] });
     }
 };

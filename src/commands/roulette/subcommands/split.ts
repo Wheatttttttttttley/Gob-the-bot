@@ -1,6 +1,7 @@
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
 import { addBalanceXP } from '../../../handlers/account-manager';
+import { warningEmbed } from '../../../handlers/warningHandler';
 import { ResultEmbed } from '../roulette';
 
 export const splitSubcommand = new SlashCommandSubcommandBuilder()
@@ -17,8 +18,12 @@ export const splitSubcommand = new SlashCommandSubcommandBuilder()
         .setDescription('The second number you want to bet on'));
 
 export const splitRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
-    const first = interaction.options.getNumber('first');
-    const second = interaction.options.getNumber('second');
+    const first = interaction.options.getNumber('first') || 0;
+    const second = interaction.options.getNumber('second') || 9;
+    if (first < 0 || first > 36 || second < 0 || second > 36) {
+        interaction.editReply(warningEmbed({ title: 'Invalid number', description: 'The number you bet on must be between 0 and 36' }));
+        return;
+    }
     if (first === second) {
         // straight up
         const result = first === rndNumber;

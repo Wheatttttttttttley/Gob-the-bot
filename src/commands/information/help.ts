@@ -27,7 +27,7 @@ const run = async (interaction: CommandInteraction) => {
                     `/rps` - Play Rock, Paper, Scissors.\n\
                     `/highlow`- Play a game of high/low.\n\
                     `/dice (WIP)` - Roll a dice.\n\
-                    `/roulette (WIP)` - Play a game of roulette.\n\
+                    `/roulette` - Play a game of roulette.\n\
                     `/poker (WIP)` - Play a game of poker.\n\
                     `/slots (WIP)` - Play a game of slots.',
                 )

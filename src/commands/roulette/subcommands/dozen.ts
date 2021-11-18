@@ -19,13 +19,13 @@ export const dozenSubcommand = new SlashCommandSubcommandBuilder()
         ]));
 
 export const dozenRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
-    const guess = interaction.options.getNumber('guess');
+    const guess = interaction.options.getNumber('guess') || 0;
     const result = rndNumber / 12 === guess;
     if (result) {
         addBalanceXP(interaction.user.id, bet * 3, bet * 2);
 
-        interaction.editReply({ embeds: [ResultEmbed('win', rndNumber, `${guess}`, bet, bet * 2)] });
+        interaction.editReply({ embeds: [ResultEmbed('win', rndNumber, `${['1-12', '13-24', '25-36'][guess - 1]}`, bet, bet * 2)] });
     } else {
-        interaction.editReply({ embeds: [ResultEmbed('lose', rndNumber, `${guess}`, bet, -bet)] });
+        interaction.editReply({ embeds: [ResultEmbed('lose', rndNumber, `${['1-12', '13-24', '25-36'][guess - 1]}`, bet, -bet)] });
     }
 };
