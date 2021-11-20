@@ -86,8 +86,7 @@ const run = async (interaction: CommandInteraction) => {
     for (let i = 0; i < horseAmount; ++i) {
         const winRate = winnerStats[i] / testGameAmount;
         const lossRate = 1 - winRate;
-        const payRate = lossRate / winRate;
-        // const payRate = Math.log10(1 + (lossRate / winRate));
+        const payRate = Math.log(2 + (lossRate / winRate)) ** 2;
         payRates.push(parseFloat(payRate.toFixed(2)));
     }
 
@@ -160,6 +159,7 @@ const run = async (interaction: CommandInteraction) => {
         if (horses[runner].winning) {
             winner = runner;
             clearInterval(loopShowProgress);
+            showProgress();
             break;
         }
     }
