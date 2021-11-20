@@ -35,7 +35,7 @@ class Horse {
         this.winning = false;
     }
 
-    run() {
+    async run() {
         this.progress += this.speed;
         if (this.progress >= 100) {
             this.winning = true;
@@ -133,7 +133,7 @@ const run = async (interaction: CommandInteraction) => {
         return;
     }
 
-    const showProgress = () => {
+    const showProgress = async () => {
         interaction.editReply({
             embeds: [new MessageEmbed()
                 .setTitle('🏇 Horse Racing! 🏇')
@@ -155,11 +155,11 @@ const run = async (interaction: CommandInteraction) => {
     while (true) {
         await sleep(300);
         const runner = Math.floor(Math.random() * horseAmount);
-        horses[runner].run();
+        await horses[runner].run();
         if (horses[runner].winning) {
             winner = runner;
             clearInterval(loopShowProgress);
-            showProgress();
+            await showProgress();
             break;
         }
     }
