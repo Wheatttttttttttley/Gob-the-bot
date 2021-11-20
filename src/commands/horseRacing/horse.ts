@@ -84,7 +84,7 @@ const run = async (interaction : CommandInteraction) => {
     }, 1000);
     const winner = await game.play();
     clearInterval(showProgressInterval);
-    const result = winner === horseNumber ? 'won' : 'lost';
+    const result = winner === (horseNumber - 1) ? 'won' : 'lost';
     const payout = result === 'won' ? game.horses[horseNumber - 1].pay * bet : 0;
     addBalanceXP(interaction.user.id, result === 'won' ? bet + payout : 0, payout);
 
