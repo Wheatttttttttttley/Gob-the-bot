@@ -8,6 +8,7 @@ export const client = new Client({
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     ],
+    restTimeOffset: 0,
 }) as IClient;
 
 (async (): Promise<void> => {

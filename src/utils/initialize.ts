@@ -10,6 +10,7 @@ const commandFolders: string[] = [
     'information',
     'minigames',
     'roulette',
+    'horseRacing',
 ];
 
 async function registerCommands(client: IClient): Promise<void> {

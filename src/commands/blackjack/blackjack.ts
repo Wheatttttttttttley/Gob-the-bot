@@ -3,7 +3,7 @@ import { CommandInteraction } from 'discord.js';
 import { promisify } from 'util';
 import { addBalance, addBalanceXP, getAccount } from '../../helpers/accountManager';
 import { warningEmbed } from '../../helpers/warningHandler';
-import { Game } from './blackjack-class/Game';
+import { Game } from './classes/Game';
 
 const sleep = promisify(setTimeout);
 
