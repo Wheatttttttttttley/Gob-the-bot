@@ -47,16 +47,15 @@ const numberToEmoji: {[key: number]: string} = { 1 : '1️⃣', 2: '2️⃣', 3:
 const emojiToNumber: {[key: string]: number} = { '1️⃣' : 1, '2️⃣' : 2, '3️⃣' : 3, '4️⃣' : 4, '5️⃣' : 5, '6️⃣' : 6, '7️⃣' : 7, '8️⃣' : 8, '9️⃣' : 9 };
 
 const run = async (interaction: CommandInteraction) => {
-    await interaction.deferReply();
     const bet = interaction.options.getNumber('bet') || 0;
     const horseAmount = interaction.options.getNumber('horse-amount') || 6;
     const account = await getAccount(interaction.user.id);
 
     if (bet < 0 || !Number.isInteger(bet)) {
-        interaction.editReply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
+        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
         return;
     } else if (bet > account.balance) {
-        interaction.editReply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
+        interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
         return;
     }
 
@@ -87,12 +86,13 @@ const run = async (interaction: CommandInteraction) => {
     for (let i = 0; i < horseAmount; ++i) {
         const winRate = winnerStats[i] / testGameAmount;
         const lossRate = 1 - winRate;
-        const payRate = Math.log10(1 + (lossRate / winRate));
+        const payRate = lossRate / winRate;
+        // const payRate = Math.log10(1 + (lossRate / winRate));
         payRates.push(parseFloat(payRate.toFixed(2)));
     }
 
     // game init
-    await interaction.editReply({
+    const message = await interaction.reply({
         embeds: [new MessageEmbed()
             .setTitle('🏇 Horse Racing! 🏇')
             .setColor(0x0099ff)
@@ -105,8 +105,8 @@ const run = async (interaction: CommandInteraction) => {
                 })),
             ),
         ],
-    });
-    const message = (await interaction.fetchReply()) as Message;
+        fetchReply: true,
+    }) as Message;
 
     const numbersEmojiArray = [] as string[];
     // choose horse
@@ -134,8 +134,8 @@ const run = async (interaction: CommandInteraction) => {
         return;
     }
 
-    const showProgress = async () => {
-        await interaction.editReply({
+    const showProgress = () => {
+        interaction.editReply({
             embeds: [new MessageEmbed()
                 .setTitle('🏇 Horse Racing! 🏇')
                 .setColor(0x0099ff)
