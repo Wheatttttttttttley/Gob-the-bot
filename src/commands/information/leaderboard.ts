@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import playerModel from '../../models/playerModel';
-import { warningEmbed } from '../../handlers/warningHandler';
+import { warningEmbed } from '../../helpers/warningHandler';
 
 const data = new SlashCommandBuilder()
     .setName('leaderboard')

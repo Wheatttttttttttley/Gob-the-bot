@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { randomColor } from '../../handlers/randomColor';
+import { randomColor } from '../../helpers/randomColor';
 
 const data = new SlashCommandBuilder()
     .setName('help')
@@ -19,6 +19,7 @@ const data = new SlashCommandBuilder()
                 ['highlow', 'highlow'],
                 ['dice', 'dice'],
                 ['roulette', 'roulette'],
+                ['horse', 'horse'],
                 ['help', 'help'],
                 ['profile', 'profile'],
                 ['info', 'info'],
@@ -35,7 +36,7 @@ const run = async (interaction: CommandInteraction) => {
                     .setFooter('Powered by Wheatley\'s engine ⚡')
                     .setDescription('This is a list of commands you can use in this server.')
                     .addField('💰 Currency 💰', '`/balance` `/beg` `/transfer`')
-                    .addField('🎲 Games 🎲', '`/blackjack` `/flip` `/rps` `/highlow` `/dice` `/roulette`')
+                    .addField('🎲 Games 🎲', '`/blackjack` `/flip` `/rps` `/highlow` `/dice` `/roulette` `/horse`')
                     .addField('ℹ Information ℹ', '`/help` `/profile` `/info`'),
             ],
         });
@@ -48,7 +49,7 @@ const run = async (interaction: CommandInteraction) => {
         .setFooter('Powered by Wheatley\'s engine ⚡');
     switch (command) {
     case 'balance':
-        embed.setDescription('`/balance [user(optional)]` - Shows user\'s current balance.');
+        embed.setDescription('`/balance [user (optional)]` - Shows user\'s current balance.');
         break;
     case 'beg':
         embed.setDescription('`/beg` - Beg people for some money.');
@@ -116,11 +117,17 @@ const run = async (interaction: CommandInteraction) => {
                 { name: 'High/Low', value: '**1x**', inline: true },
             ]);
         break;
+    case 'horse':
+        embed.setDescription('`/horse [bet] [horse-amount (optional)]` - Gambling in horse racing.')
+            .addField('GOALS 🎯', 'Bet on a horse. If the horse wins the race, you wins!')
+            .addField('HORSES 🏇', 'Each race has 6 horses. Each of the horses has its own speed(⚡) and rate(💰).\nThe lower the horse\'s speed the higher rate. You should weigh carefully.')
+            .addField('PAYOUT 💰', '***Depends on the horse***');
+        break;
     case 'help':
-        embed.setDescription('`/help [command(optional)]` - Show a list of commands or help with a specific command.');
+        embed.setDescription('`/help [command (optional)]` - Show a list of commands or help with a specific command.');
         break;
     case 'profile':
-        embed.setDescription('`/profile [user(optional)]` - Shows user\'s profile.');
+        embed.setDescription('`/profile [user (optional)]` - Shows user\'s profile.');
         break;
     case 'info':
         embed.setDescription('`/info` - Shows information about the bot.');

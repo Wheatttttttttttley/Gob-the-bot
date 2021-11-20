@@ -1,7 +1,7 @@
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
-import { addBalanceXP } from '../../../handlers/account-manager';
-import { warningEmbed } from '../../../handlers/warningHandler';
+import { addBalanceXP } from '../../../helpers/accountManager';
+import { warningEmbed } from '../../../helpers/warningHandler';
 import { ResultEmbed } from '../roulette';
 
 export const straightUpSubcommand = new SlashCommandSubcommandBuilder()

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { randomColor } from '../../handlers/randomColor';
+import { randomColor } from '../../helpers/randomColor';
 
 const data = new SlashCommandBuilder()
     .setName('info')

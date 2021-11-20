@@ -1,6 +1,6 @@
 import { Collection, CommandInteraction, Interaction, Message, MessageEmbed, MessageReaction, User } from 'discord.js';
 import { promisify } from 'util';
-import { addBalance, getAccount } from '../../../handlers/account-manager';
+import { addBalance, getAccount } from '../../../helpers/accountManager';
 import { Card } from './Card.js';
 import { Player } from './Player.js';
 

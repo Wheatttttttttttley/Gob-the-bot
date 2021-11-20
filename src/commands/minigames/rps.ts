@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { addBalance, addBalanceXP, addXP, getAccount } from '../../handlers/account-manager';
-import { warningEmbed } from '../../handlers/warningHandler';
+import { addBalance, addBalanceXP, addXP, getAccount } from '../../helpers/accountManager';
+import { warningEmbed } from '../../helpers/warningHandler';
 
 const data = new SlashCommandBuilder()
     .setName('rps')
@@ -55,17 +55,17 @@ async function run(interaction: CommandInteraction) {
     const embed = new MessageEmbed()
         .setTitle('👊✋✌ Rock, Paper, Scissors 👊✋✌')
         .addField('Your choice', `**${{ 'r' : 'ROCK 👊', 'p' : 'PAPER ✋', 's': 'SCISSORS ✌' }[yourChoice]}**`, true)
-        .addField('Bot choice', `:**${{ 'r' : 'ROCK 👊', 'p' : 'PAPER ✋', 's': 'SCISSORS ✌' }[botChoice]}**`, true);
+        .addField('Bot choice', `**${{ 'r' : 'ROCK 👊', 'p' : 'PAPER ✋', 's': 'SCISSORS ✌' }[botChoice]}**`, true);
 
     if (result === 'draw') {
         addXP(interaction.user.id, bet * 0.5);
         embed.addField('😐 DRAW 😐', '***You got your bet back!***').setColor(0x99AAB5);
     } else if (result === 'win') {
         addBalanceXP(interaction.user.id, bet, bet);
-        embed.addField('🎉 WIN 🎉', `***You won ${ bet }!***`).setColor(0x57F287);
+        embed.addField('🎉 WIN 🎉', `You won **${bet}** 💵`).setColor(0x57F287);
     } else if (result === 'lose') {
         addBalance(interaction.user.id, -bet);
-        embed.addField('😭 LOSE 😭', `***You lost ${bet}$!***`).setColor(0xE74C3C);
+        embed.addField('😭 LOSE 😭', `You lost **${bet}** 💵`).setColor(0xE74C3C);
     }
 
     interaction.reply({ embeds: [embed] });

@@ -1,6 +1,6 @@
 import { GuildChannel, GuildChannelResolvable, Interaction, TextChannel } from 'discord.js';
-import { updateLevel } from '../handlers/account-manager';
-import { warningEmbed } from '../handlers/warningHandler';
+import { updateLevel } from '../helpers/accountManager';
+import { warningEmbed } from '../helpers/warningHandler';
 import { client } from '../index';
 
 export default {

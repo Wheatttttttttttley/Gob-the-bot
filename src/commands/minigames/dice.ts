@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { promisify } from 'util';
-import { addBalance, addBalanceXP, getAccount } from '../../handlers/account-manager';
-import { warningEmbed } from '../../handlers/warningHandler';
+import { addBalance, addBalanceXP, getAccount } from '../../helpers/accountManager';
+import { warningEmbed } from '../../helpers/warningHandler';
 
 const sleep = promisify(setTimeout);
 
@@ -54,10 +54,10 @@ async function run(interaction: CommandInteraction) {
     embed.setTitle(`🎲 ${result.toUpperCase()}! 🎲`)
         .setDescription(`Dice rolled: ${['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣'][rndSide - 1]}`);
     if (result === 'win') {
-        embed.addField('✅ You won! ✅', `You won **${bet}**💵`).setColor(0x2ECC71);
+        embed.addField('✅ You won! ✅', `You won **${bet}** 💵`).setColor(0x2ECC71);
         addBalanceXP(interaction.user.id, 6 * bet, 5 * bet);
     } else if (result === 'lose') {
-        embed.addField('❌ You lost! ❌', `You lost **${bet}**💵`).setColor(0xE74C3C);
+        embed.addField('❌ You lost! ❌', `You lost **${bet}** 💵`).setColor(0xE74C3C);
     }
     await interaction.editReply({ embeds: [embed] });
 }

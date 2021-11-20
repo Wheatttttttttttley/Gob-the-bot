@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { getAccount } from '../../handlers/account-manager';
-import { randomColor } from '../../handlers/randomColor';
-import { warningEmbed } from '../../handlers/warningHandler';
+import { getAccount } from '../../helpers/accountManager';
+import { randomColor } from '../../helpers/randomColor';
+import { warningEmbed } from '../../helpers/warningHandler';
 import { PlayerInt } from '../../models/playerModel';
 
 const data = new SlashCommandBuilder()

@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { addBalance, getAccount } from '../../handlers/account-manager';
-import { warningEmbed } from '../../handlers/warningHandler';
+import { addBalance, getAccount } from '../../helpers/accountManager';
+import { warningEmbed } from '../../helpers/warningHandler';
 
 const data = new SlashCommandBuilder()
     .setName('transfer')

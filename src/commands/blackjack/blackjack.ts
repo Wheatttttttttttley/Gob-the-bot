@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
 import { promisify } from 'util';
-import { addBalance, addBalanceXP, getAccount } from '../../handlers/account-manager';
-import { warningEmbed } from '../../handlers/warningHandler';
+import { addBalance, addBalanceXP, getAccount } from '../../helpers/accountManager';
+import { warningEmbed } from '../../helpers/warningHandler';
 import { Game } from './blackjack-class/Game';
 
 const sleep = promisify(setTimeout);

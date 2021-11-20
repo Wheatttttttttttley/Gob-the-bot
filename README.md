@@ -25,12 +25,14 @@ Gob is a Discord bot that is designed to be a fun and easy way to play games.
     * Coinflip
     * Rock, Paper, Scissors
     * High/Low
-    * Dice (WIP)
+    * Dice
+    * Roulette
+    * Horse racing
     * Poker (WIP)
-    * Roulette (WIP)
 * **Gob** can be used to manage your server's economy.
     * View your balance
+    * Beg for money
+    * Transfer money
     * View your bank account (WIP)
     * Get a loan (WIP)
     * Pay your loan (WIP)
-    * Transfer money (WIP)

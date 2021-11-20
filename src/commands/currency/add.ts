@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { addBalance } from '../../handlers/account-manager';
+import { addBalance } from '../../helpers/accountManager';
 
 const data = new SlashCommandBuilder()
     .setName('add')

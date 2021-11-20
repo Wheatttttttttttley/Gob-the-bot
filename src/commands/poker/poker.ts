@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
-import { warningEmbed } from '../../handlers/warningHandler';
+import { warningEmbed } from '../../helpers/warningHandler';
 import { Deck } from './poker-class/Deck';
 
 const data = new SlashCommandBuilder()
