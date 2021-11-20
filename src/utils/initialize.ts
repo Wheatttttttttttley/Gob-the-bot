@@ -9,8 +9,6 @@ const commandFolders: string[] = [
     'currency',
     'information',
     'minigames',
-    // TODO: implement poker
-    // 'poker',
     'roulette',
 ];
 
