@@ -21,7 +21,7 @@ async function run(interaction: CommandInteraction) {
             await sleep(3000);
 
             if (balance <= 10) {
-                const rnd_money = Math.floor(Math.random() * (200 - 50 + 1) + 50);
+                const rnd_money = Math.floor(Math.random() * (200 * account.level - (account.level * 50) + 1) + (account.level * 50));
                 addBalance(user.id, rnd_money);
 
                 const begEmbed = new MessageEmbed()

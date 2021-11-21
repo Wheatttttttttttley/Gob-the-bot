@@ -65,7 +65,8 @@ const run = async (interaction: CommandInteraction) => {
             .addField('PLAYER\'S TURN 🃏', 'The player can hit, stay, double, or surrender. If the player stays, the dealer\'s turn begins.')
             .addField('DEALER\'S TURN 🎴', 'The dealer can hit or stay. If the dealer\'s points are more than 17, the dealer must stay.')
             .addField('WINNING 🏆', 'The winner is the player with the closest count to 21 without going over 21.\nIf the player and dealer have the same count, the player gets their bet back.')
-            .addField('PAYOUT 💰', 'blackjack: **1.5x**\nwin: **1x**\ndraw: *you get your bet back*');
+            .addField('PAYOUT 💰', 'blackjack: **1.5x**\nwin: **1x**\ndraw: *you get your bet back*')
+            .addField('SOURCE 📚', '[Bicycle Cards](https://bicyclecards.com/how-to-play/blackjack/)');
         break;
     case 'flip':
         embed.setDescription('`/flip [heads|tails]` - Flip a coin.')
@@ -115,7 +116,8 @@ const run = async (interaction: CommandInteraction) => {
                 { name: 'Color', value: '**1x**', inline: true },
                 { name: 'Even/Odd', value: '**1x**', inline: true },
                 { name: 'High/Low', value: '**1x**', inline: true },
-            ]);
+            ])
+            .addField('SOURCE 📚', '[Casino News Daily](https://www.casinonewsdaily.com/roulette-guide/european-roulette/)');
         break;
     case 'horse':
         embed.setDescription('`/horse [bet] [horse-amount (optional)]` - Gambling in horse racing.')
