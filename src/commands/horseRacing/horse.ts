@@ -97,7 +97,7 @@ const run = async (interaction : CommandInteraction) => {
                 game.horses.map((horse, index) =>
                     `${`${numberToEmoji[index + 1]} ${'▰'.repeat(Math.floor(horse.progress / 10))}${horse.emoji}${'▱'.repeat(10 - Math.floor(horse.progress / 10))} **${horse.speed}** ⚡`}`,
                 ).join('\n'),
-            ).addField(`${result === 'won' ? '✅' : '❌'} You ${result}! ${result === 'won' ? '✅' : '❌'}`, `You ${result} **${payout}** 💵`),
+            ).addField(`${result === 'won' ? '✅' : '❌'} You ${result}! ${result === 'won' ? '✅' : '❌'}`, `You ${result} **${payout ? payout : bet}** 💵`),
         ],
     });
 };
