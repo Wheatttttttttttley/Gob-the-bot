@@ -31,10 +31,10 @@ const run = async (interaction : CommandInteraction) => {
     const account = await getAccount(interaction.user.id);
 
     if (bet < 0 || !Number.isInteger(bet)) {
-        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
+        interaction.editReply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
         return;
     } else if (bet > account.balance) {
-        interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
+        interaction.editReply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
         return;
     }
 
@@ -73,7 +73,7 @@ const run = async (interaction : CommandInteraction) => {
 
     await message.reactions.removeAll();
     if (horseNumber === -1) {
-        interaction.reply(warningEmbed({ title: 'TIMEOUT ALERT', description: 'You did not choose a horse in time.' }));
+        interaction.editReply(warningEmbed({ title: 'TIMEOUT ALERT', description: 'You did not choose a horse in time.' }));
         return;
     }
 
