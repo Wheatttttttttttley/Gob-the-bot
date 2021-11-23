@@ -21,14 +21,27 @@ export default {
         }
 
         try {
-            await command.run(interaction)
-                .then(() => {
-                    updateLevel(interaction.channel as GuildChannel & TextChannel, interaction.user);
-                }).catch(err => {
+            await command.run(interaction).then(() => {
+                updateLevel(interaction.channel as GuildChannel & TextChannel, interaction.user);
+            }).catch(err => {
+                if (!interaction) {
+                    return;
+                }
+                if (interaction.deferred || interaction.replied) {
+                    interaction.followUp(warningEmbed({ title: 'Command Error', description: err }));
+                } else {
                     interaction.reply(warningEmbed({ title: 'Command Error', description: err }));
-                });
+                }
+            });
         } catch (err) {
-            interaction.reply(warningEmbed({ title: 'Command Error', description: err as string }));
+            if (!interaction) {
+                return;
+            }
+            if (interaction.deferred || interaction.replied) {
+                interaction.followUp(warningEmbed({ title: 'Command Error', description: err as string }));
+            } else {
+                interaction.reply(warningEmbed({ title: 'Command Error', description: err as string }));
+            }
         }
     },
 };

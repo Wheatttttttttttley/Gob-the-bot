@@ -1,11 +1,7 @@
 import { Collection, CommandInteraction, Interaction, Message, MessageEmbed, MessageReaction, User } from 'discord.js';
-import { promisify } from 'util';
 import { addBalance, getAccount } from '../../../helpers/accountManager';
 import { Card } from './Card.js';
 import { Player } from './Player.js';
-
-
-const sleep = promisify(setTimeout);
 
 export class Game {
     interaction: Interaction & CommandInteraction;
@@ -120,8 +116,6 @@ export class Game {
             }
         }
 
-        await sleep(500);
-
         if (this.player.isBusted) {
             return 'Lose';
         } else if (this.player.points === 21) {
@@ -137,7 +131,6 @@ export class Game {
         while (this.dealer.points <= 17 && this.player.points > this.dealer.points) {
             this.dealer.addCard(new Card());
             this.sendEmbed(this.cardAndPointsEmbed());
-            await sleep(500);
         }
 
         // Find winner

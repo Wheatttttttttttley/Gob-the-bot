@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction, Message, MessageEmbed } from 'discord.js';
+import { CommandInteraction, Message, MessageEmbed, MessageReaction, User } from 'discord.js';
 import { addBalance, addBalanceXP, getAccount } from '../../helpers/accountManager';
 import { warningEmbed } from '../../helpers/warningHandler';
 import { Game } from './classes/Game';
@@ -58,18 +58,19 @@ const run = async (interaction : CommandInteraction) => {
     });
     const message = (await interaction.fetchReply() as Message);
     for (let i = 0; i < horseAmount; i++) {
-        message.react(numberToEmoji[i + 1]);
+        await message.react(numberToEmoji[i + 1]);
     }
 
     const numberEmojiArray = Object.values(numberToEmoji).slice(0, horseAmount);
     let horseNumber = -1;
-    await message.awaitReactions({ filter: (reaction, user) => numberEmojiArray.includes(reaction.emoji.name as string) && user.id === interaction.user.id, time: 60000, max : 1 })
-        .then(async (reactions) => {
-            const reaction = reactions.first();
-            horseNumber = emojiToNumber[reaction?.emoji.name as string];
-        }).catch(() => {
-            horseNumber = -1;
-        });
+
+    const filter = (reaction: MessageReaction, user: User) => numberEmojiArray.includes(reaction.emoji.name as string) && user.id === interaction.user.id;
+    await message.awaitReactions({ filter, time: 60000, max : 1 }).then(async (reactions) => {
+        const reaction = reactions.first();
+        horseNumber = emojiToNumber[reaction?.emoji.name as string];
+    }).catch(() => {
+        horseNumber = -1;
+    });
 
     await message.reactions.removeAll();
     if (horseNumber === -1) {
@@ -81,7 +82,7 @@ const run = async (interaction : CommandInteraction) => {
         interaction.editReply({
             embeds: [game.getProgressEmbed(bet, horseNumber)],
         });
-    }, 1000);
+    }, 750);
     const winner = await game.play();
     clearInterval(showProgressInterval);
     const result = winner === (horseNumber - 1) ? 'won' : 'lost';

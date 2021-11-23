@@ -1,11 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
-import { promisify } from 'util';
 import { addBalance, addBalanceXP, getAccount } from '../../helpers/accountManager';
 import { warningEmbed } from '../../helpers/warningHandler';
 import { Game } from './classes/Game';
-
-const sleep = promisify(setTimeout);
 
 const data = new SlashCommandBuilder()
     .setName('blackjack')
@@ -35,7 +32,6 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
 
     type resultType = 'Win' | 'Blackjack' | 'Draw' | 'Lose' | 'Timeout' | 'Surrender';
     const result = await game.gameRunner() as resultType;
-    await sleep(500);
 
     const resultEmbed = game.cardAndPointsEmbed();
 

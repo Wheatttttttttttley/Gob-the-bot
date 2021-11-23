@@ -1,6 +1,7 @@
-import { Horse } from './Horse';
-import { promisify } from 'util';
 import { MessageEmbed } from 'discord.js';
+import { promisify } from 'util';
+import { Horse } from './Horse';
+
 const sleep = promisify(setTimeout);
 
 const numberToEmoji: {[key: number]: string} = { 1 : '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣', 5: '5️⃣', 6: '6️⃣', 7: '7️⃣', 8: '8️⃣', 9: '9️⃣' };
@@ -17,9 +18,9 @@ export class Game {
 
     async play(): Promise<number> {
         while (true) {
-            await sleep(300);
+            await sleep(200);
             const runner = Math.floor(Math.random() * this.horseAmount);
-            this.horses[runner].run();
+            await this.horses[runner].run();
             if (this.horses[runner].winning) {
                 return runner;
             }
