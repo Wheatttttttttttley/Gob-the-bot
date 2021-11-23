@@ -30,7 +30,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
                 return;
             }
 
-            const payout = Math.floor(Math.random() * (player.level * 1000 - (2000 + player.level * 500) + 1) + (2000 + player.level * 500));
+            const payout = 2000 + player.level * 500;
             addBalance(id, payout);
 
             await PlayerModel.findOneAndUpdate(

@@ -15,7 +15,9 @@ async function run(interaction: CommandInteraction) {
         const balance = account.balance;
 
         if (balance <= 10) {
-            const rnd_money = Math.floor(Math.random() * (200 * account.level - (account.level * 50) + 1) + (account.level * 50));
+            const upperBound = 200 + 50 * account.level;
+            const lowerBound = 100 + 25 * account.level;
+            const rnd_money = Math.floor(Math.random() * (upperBound - lowerBound + 1)) + lowerBound;
             addBalance(user.id, rnd_money);
 
             interaction.reply({ embeds: [
