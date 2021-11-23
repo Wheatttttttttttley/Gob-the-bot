@@ -1,7 +1,10 @@
 import { Collection, CommandInteraction, Interaction, Message, MessageEmbed, MessageReaction, User } from 'discord.js';
+import { promisify } from 'util';
 import { addBalance, getAccount } from '../../../helpers/accountManager';
 import { Card } from './Card.js';
 import { Player } from './Player.js';
+
+const sleep = promisify(setTimeout);
 
 export class Game {
     interaction: Interaction & CommandInteraction;
@@ -129,6 +132,7 @@ export class Game {
         this.sendEmbed(this.cardAndPointsEmbed());
 
         while (this.dealer.points <= 17 && this.player.points > this.dealer.points) {
+            await sleep(1000);
             this.dealer.addCard(new Card());
             this.sendEmbed(this.cardAndPointsEmbed());
         }

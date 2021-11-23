@@ -9,7 +9,7 @@ export const client = new Client({
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     ],
     shards: 'auto',
-    restTimeOffset: 0,
+    restTimeOffset: 100,
 }) as IClient;
 
 (async (): Promise<void> => {
