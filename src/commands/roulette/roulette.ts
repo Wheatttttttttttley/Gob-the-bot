@@ -57,6 +57,9 @@ const run = async (interaction: CommandInteraction) => {
         if (account.balance < bet) {
             interaction.editReply(warningEmbed({ title: 'Insufficient funds', description: 'You do not have enough chips to make this bet' }));
             return;
+        } else if (bet < account.balance / 10) {
+            interaction.reply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
+            return;
         }
         addBalance(interaction.user.id, -bet);
         const rndNumber = Math.floor(Math.random() * 37);

@@ -27,6 +27,9 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
     if (player.balance < playerBet) {
         interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${playerBet}` }));
         return;
+    } else if (playerBet < player.balance / 10) {
+        interaction.reply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
+        return;
     }
     addBalance(interaction.user.id, -playerBet);
 
