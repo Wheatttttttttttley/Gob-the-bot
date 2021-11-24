@@ -37,7 +37,7 @@ const run = async (interaction : CommandInteraction) => {
         interaction.editReply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
         return;
     } else if (bet < account.balance / 10) {
-        interaction.reply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
+        interaction.editReply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
         return;
     }
 

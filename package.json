@@ -1,6 +1,6 @@
 {
   "name": "gob-the-bot",
-  "version": "1.0.0",
+  "version": "",
   "description": "",
   "main": "./prod/index.js",
   "scripts": {
