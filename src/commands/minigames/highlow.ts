@@ -1,8 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 import { promisify } from 'util';
-import { addBalance, addBalanceXP, getAccount } from '../../helpers/accountManager';
-import { warningEmbed } from '../../helpers/warningHandler';
+import { addBalance, addBalanceXP } from '../../helpers/accountManager';
 
 const sleep = promisify(setTimeout);
 
@@ -23,18 +22,6 @@ const data = new SlashCommandBuilder()
 async function run(interaction: CommandInteraction) {
     const bet = interaction.options.getNumber('bet') || 0;
     const guess = interaction.options.getString('guess') || '';
-    const account = await getAccount(interaction.user.id);
-
-    if (bet < 0 || !Number.isInteger(bet)) {
-        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
-        return;
-    } else if (bet > account.balance) {
-        interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
-        return;
-    } else if (bet < account.balance / 10) {
-        interaction.reply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
-        return;
-    }
 
     const embed = new MessageEmbed()
         .setTitle('🎲 High/Low 🎲')

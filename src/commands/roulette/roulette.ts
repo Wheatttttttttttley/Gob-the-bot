@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ColorResolvable, CommandInteraction, MessageEmbed } from 'discord.js';
-import { addBalance, getAccount } from '../../helpers/accountManager';
+import { addBalance } from '../../helpers/accountManager';
 import { warningEmbed } from '../../helpers/warningHandler';
 import { colorRun, colorSubcommand } from './subcommands/color';
 import { columnRun, columnSubcommand } from './subcommands/column';
@@ -48,58 +48,42 @@ const run = async (interaction: CommandInteraction) => {
     const subcommand = interaction.options.getSubcommand() || '';
     const bet = interaction.options.getNumber('bet') || 0;
 
-    // bet validation
-    if (!Number.isInteger(bet) || bet < 0) {
-        interaction.editReply(warningEmbed({ title: 'Invalid bet', description: 'The bet must be a positive integer' }));
-        return;
+    addBalance(interaction.user.id, -bet);
+    const rndNumber = Math.floor(Math.random() * 37);
+    switch (subcommand) {
+    case 'straight-up':
+        straightUpRun(interaction, bet, rndNumber);
+        break;
+    case 'split':
+        splitRun(interaction, bet, rndNumber);
+        break;
+    case 'street':
+        streetRun(interaction, bet, rndNumber);
+        break;
+    case 'corner':
+        cornerRun(interaction, bet, rndNumber);
+        break;
+    case 'line':
+        lineRun(interaction, bet, rndNumber);
+        break;
+    case 'column':
+        columnRun(interaction, bet, rndNumber);
+        break;
+    case 'dozen':
+        dozenRun(interaction, bet, rndNumber);
+        break;
+    case 'color':
+        colorRun(interaction, bet, rndNumber);
+        break;
+    case 'even-odd':
+        evenOddRun(interaction, bet, rndNumber);
+        break;
+    case 'high-low':
+        highLowRun(interaction, bet, rndNumber);
+        break;
+    default:
+        interaction.editReply(warningEmbed({ title: 'Invalid subcommand', description: 'Please use a valid subcommand' }));
     }
-    getAccount(interaction.user.id).then((account) => {
-        if (account.balance < bet) {
-            interaction.editReply(warningEmbed({ title: 'Insufficient funds', description: 'You do not have enough chips to make this bet' }));
-            return;
-        } else if (bet < account.balance / 10) {
-            interaction.editReply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
-            return;
-        }
-        addBalance(interaction.user.id, -bet);
-        const rndNumber = Math.floor(Math.random() * 37);
-        switch (subcommand) {
-        case 'straight-up':
-            straightUpRun(interaction, bet, rndNumber);
-            break;
-        case 'split':
-            splitRun(interaction, bet, rndNumber);
-            break;
-        case 'street':
-            streetRun(interaction, bet, rndNumber);
-            break;
-        case 'corner':
-            cornerRun(interaction, bet, rndNumber);
-            break;
-        case 'line':
-            lineRun(interaction, bet, rndNumber);
-            break;
-        case 'column':
-            columnRun(interaction, bet, rndNumber);
-            break;
-        case 'dozen':
-            dozenRun(interaction, bet, rndNumber);
-            break;
-        case 'color':
-            colorRun(interaction, bet, rndNumber);
-            break;
-        case 'even-odd':
-            evenOddRun(interaction, bet, rndNumber);
-            break;
-        case 'high-low':
-            highLowRun(interaction, bet, rndNumber);
-            break;
-        default:
-            interaction.editReply(warningEmbed({ title: 'Invalid subcommand', description: 'Please use a valid subcommand' }));
-        }
-    }).catch(err => {
-        interaction.editReply(warningEmbed({ title: 'Error', description: err.message }));
-    });
 };
 
 export default {

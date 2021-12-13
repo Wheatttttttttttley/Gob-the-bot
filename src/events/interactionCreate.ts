@@ -1,5 +1,5 @@
 import { GuildChannel, GuildChannelResolvable, Interaction, TextChannel } from 'discord.js';
-import { updateLevel } from '../helpers/accountManager';
+import { getAccount, updateLevel } from '../helpers/accountManager';
 import { warningEmbed } from '../helpers/warningHandler';
 import { client } from '../index';
 
@@ -18,6 +18,23 @@ export default {
         if (command.ownerOnly && interaction.user.id != process.env.OWNER_ID) {
             interaction.reply(warningEmbed({ title: 'Missing Permissions', description: 'This command is owner only.' }));
             return;
+        }
+
+        // Bet validator
+        const bet = interaction.options.getNumber('bet');
+        if (bet !== null) {
+            const account = await getAccount(interaction.user.id);
+
+            if (bet < 0 || !Number.isInteger(bet)) {
+                interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
+                return;
+            } else if (bet > account.balance) {
+                interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
+                return;
+            } else if (bet < account.balance / 20) {
+                interaction.reply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 5% of your current balance' }));
+                return;
+            }
         }
 
         try {

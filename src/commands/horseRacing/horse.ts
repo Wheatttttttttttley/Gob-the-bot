@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, Message, MessageEmbed, MessageReaction, User } from 'discord.js';
-import { addBalance, addBalanceXP, getAccount } from '../../helpers/accountManager';
+import { addBalance, addBalanceXP } from '../../helpers/accountManager';
 import { warningEmbed } from '../../helpers/warningHandler';
 import { Game } from './classes/Game';
 
@@ -28,18 +28,6 @@ const run = async (interaction : CommandInteraction) => {
     await interaction.deferReply();
     const bet = interaction.options.getNumber('bet') || 0;
     const horseAmount = interaction.options.getNumber('horse-amount') || 6;
-    const account = await getAccount(interaction.user.id);
-
-    if (bet < 0 || !Number.isInteger(bet)) {
-        interaction.editReply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
-        return;
-    } else if (bet > account.balance) {
-        interaction.editReply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
-        return;
-    } else if (bet < account.balance / 10) {
-        interaction.editReply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
-        return;
-    }
 
     addBalance(interaction.user.id, -bet);
 

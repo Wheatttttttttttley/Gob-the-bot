@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, MessageEmbed } from 'discord.js';
-import { addBalance, addBalanceXP, addXP, getAccount } from '../../helpers/accountManager';
-import { warningEmbed } from '../../helpers/warningHandler';
+import { addBalance, addBalanceXP, addXP } from '../../helpers/accountManager';
 
 const data = new SlashCommandBuilder()
     .setName('rps')
@@ -21,19 +20,6 @@ const data = new SlashCommandBuilder()
 async function run(interaction: CommandInteraction) {
     const bet = interaction.options.getNumber('bet') || 0;
     const yourChoice = interaction.options.getString('choice') || '';
-
-    const account = await getAccount(interaction.user.id);
-
-    if (bet < 0 || !Number.isInteger(bet)) {
-        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *non-negative integer*' }));
-        return;
-    } else if (bet > account.balance) {
-        interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${bet}` }));
-        return;
-    } else if (bet < account.balance / 10) {
-        interaction.reply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
-        return;
-    }
 
     const botChoice = ['r', 'p', 's'][Math.floor(Math.random() * 3)];
 

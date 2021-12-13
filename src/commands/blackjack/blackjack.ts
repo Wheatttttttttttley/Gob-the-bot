@@ -1,8 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction } from 'discord.js';
 import { promisify } from 'util';
-import { addBalance, addBalanceXP, getAccount } from '../../helpers/accountManager';
-import { warningEmbed } from '../../helpers/warningHandler';
+import { addBalance, addBalanceXP } from '../../helpers/accountManager';
 import { Game } from './classes/Game';
 
 const sleep = promisify(setTimeout);
@@ -17,20 +16,7 @@ const data = new SlashCommandBuilder()
 
 const run = async (interaction: CommandInteraction): Promise<void> => {
     const playerBet = interaction.options.getNumber('bet') || 0;
-    // Check if bet is valid
-    if (!Number.isInteger(playerBet) || playerBet < 0) {
-        interaction.reply(warningEmbed({ title: 'INVALID BET ALERT', description: 'Bet must be a *positive integer*' }));
-        return;
-    }
 
-    const player = await getAccount(interaction.user.id);
-    if (player.balance < playerBet) {
-        interaction.reply(warningEmbed({ title: 'INSUFFICIENT FUNDS ALERT', description: `You don't have enough money to bet ${playerBet}` }));
-        return;
-    } else if (playerBet < player.balance / 10) {
-        interaction.reply(warningEmbed({ title: 'TOO LOW BET', description: 'You can\'t bet less than 10% of your current balance' }));
-        return;
-    }
     addBalance(interaction.user.id, -playerBet);
 
     // Create game
