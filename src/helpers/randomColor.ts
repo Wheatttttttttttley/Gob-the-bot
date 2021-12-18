@@ -1,3 +1,10 @@
-import { ColorResolvable } from 'discord.js';
+import { ColorResolvable } from "discord.js";
 
-export const randomColor = () => `0x${Math.floor(Math.random() * 16777215).toString(16)}` as ColorResolvable;
+const letters = "0123456789ABCDEF";
+
+// export random color as #hex
+export const randomColor = () =>
+  `#${Array.from(
+    { length: 6 },
+    () => letters[Math.floor(Math.random() * 16)],
+  ).join("")}` as ColorResolvable;

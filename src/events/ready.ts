@@ -1,9 +1,9 @@
-import { client } from '../index';
+import { client } from "../index";
 
 export default {
-    name: 'ready',
-    once: true,
-    run: async () => {
-        client.user?.setActivity('you crying', { type : 'WATCHING' });
-    },
+  name: "ready",
+  once: true,
+  run: async () => {
+    client.user?.setActivity("you crying", { type: "WATCHING" });
+  },
 };
