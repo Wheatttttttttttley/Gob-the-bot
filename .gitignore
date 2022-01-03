@@ -1,14 +1,10 @@
-/.vscode
+.vscode/
 
 # Dependency directories
-/node_modules
-
-# eslint setting
-.eslintrc.json
-.eslintignore
+node_modules/
 
 # Ignore built ts
-/prod
+prod/
 
 # API keys and secrets
 .env

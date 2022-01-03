@@ -29,7 +29,6 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
           "[Invite](https://discord.com/api/oauth2/authorize?client_id=902678755397480518&permissions=276220275776&scope=bot%20applications.commands)",
           true,
         )
-        .addField("Donate 💘", "[Ko-fi](https://ko-fi.com/wheatley62820)", true)
         .setFooter(
           "Powerd by Wheatley's engine. © 2020",
           interaction.client.user?.displayAvatarURL({
