@@ -22,9 +22,11 @@ const data = new SlashCommandBuilder()
   );
 
 async function run(interaction: CommandInteraction): Promise<void> {
+  await interaction.deferReply();
+
   const isFull = interaction.options.getBoolean("full") ?? false;
   const sortBy = interaction.options.getString("sort-by") ?? "balance";
-  await interaction.deferReply();
+
   playerModel
     .find({})
     .sort(sortBy === "balance" ? { balance: -1 } : { level: -1 })
@@ -38,7 +40,25 @@ async function run(interaction: CommandInteraction): Promise<void> {
         );
         return;
       }
-      const playersToShow = isFull ? players : players.slice(0, 5);
+      const playersToShow = await Promise.all(
+        players.slice(0, isFull ? players.length : 5).map(async (player, _) => {
+          try {
+            const member = await interaction.guild?.members.fetch(player._id);
+            return {
+              username: member?.user?.username,
+              balance: player.balance,
+              level: player.level,
+            };
+          } catch {
+            return {
+              username: "hidden",
+              balance: player.balance,
+              level: player.level,
+            };
+          }
+        }),
+      );
+
       await interaction.editReply({
         embeds: [
           new MessageEmbed()
@@ -48,18 +68,18 @@ async function run(interaction: CommandInteraction): Promise<void> {
             .addField(
               "Players 😎",
               playersToShow
-                .map((player, i) => `${i + 1}. **${player?.user?.username}**`)
+                .map((player, i) => `${i + 1}. **${player.username}**`)
                 .join("\n"),
               true,
             )
             .addField(
               "Balance 💵",
-              playersToShow.map((player, _) => `${player?.balance}`).join("\n"),
+              playersToShow.map((player, _) => `${player.balance}`).join("\n"),
               true,
             )
             .addField(
               "Level 🌟",
-              playersToShow.map((player, _) => `${player?.level}`).join("\n"),
+              playersToShow.map((player, _) => `${player.level}`).join("\n"),
               true,
             ),
         ],
