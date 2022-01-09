@@ -23,7 +23,7 @@ Gob is a Discord bot that is designed to be a fun and easy way to play games.
 1. run `npm run start` to run the bot.
 1. Open your Discord client and join the server.
 1. Type `/help` to see a list of commands.
-1. (WIP) Type `/help <command>` to see more information about a command.
+1. Type `/help <command>` to see more information about a command.
 
 ## Features
 
@@ -35,11 +35,8 @@ Gob is a Discord bot that is designed to be a fun and easy way to play games.
   - Dice
   - Roulette
   - Horse racing
-  - Poker (WIP)
 - **Gob** can be used to manage your server's economy.
   - View your balance
   - Beg for money
   - Transfer money
-  - View your bank account (WIP)
-  - Get a loan (WIP)
-  - Pay your loan (WIP)
+  - Get daily rewards
