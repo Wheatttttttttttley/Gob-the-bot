@@ -5,6 +5,7 @@ import { connect } from "mongoose";
 import { IClient } from "../interfaces/IClient";
 
 const commandFolders: string[] = [
+  "admintools",
   "blackjack",
   "currency",
   "information",
