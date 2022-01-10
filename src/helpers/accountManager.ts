@@ -3,13 +3,7 @@ import PlayerModel, { PlayerInt } from "../models/playerModel";
 
 export function createAccount(id: string): Promise<PlayerInt> {
   return new Promise((resolve, reject) => {
-    PlayerModel.create({ _id: id })
-      .then((account) => {
-        resolve(account);
-      })
-      .catch((err) => {
-        reject(err);
-      });
+    PlayerModel.create({ _id: id }).then(resolve).catch(reject);
   });
 }
 
@@ -23,16 +17,13 @@ export function getAccount(id: string): Promise<PlayerInt> {
           createAccount(id).then(resolve).catch(reject);
         }
       })
-      .catch((err) => {
-        reject(err);
-      });
+      .catch(reject);
   });
 }
 
 export function addBalance(id: string, amount: number): Promise<number> {
-  if (!Number.isInteger(amount)) {
-    amount = Math.ceil(amount);
-  }
+  amount = Math.ceil(amount);
+
   return new Promise((resolve, reject) => {
     try {
       PlayerModel.findOneAndUpdate(
@@ -49,9 +40,8 @@ export function addBalance(id: string, amount: number): Promise<number> {
 }
 
 export function addXP(id: string, amount: number): Promise<void> {
-  if (!Number.isInteger(amount)) {
-    amount = Math.ceil(amount);
-  }
+  amount = Math.ceil(amount);
+
   return new Promise((resolve, reject) => {
     try {
       PlayerModel.findOneAndUpdate(
@@ -72,12 +62,9 @@ export function addBalanceXP(
   balanceAmount: number,
   xpAmount: number,
 ): Promise<void> {
-  if (!Number.isInteger(balanceAmount)) {
-    balanceAmount = Math.ceil(balanceAmount);
-  }
-  if (!Number.isInteger(xpAmount)) {
-    xpAmount = Math.ceil(xpAmount);
-  }
+  balanceAmount = Math.ceil(balanceAmount);
+  xpAmount = Math.ceil(xpAmount);
+
   return new Promise((resolve, reject) => {
     try {
       PlayerModel.findOneAndUpdate(

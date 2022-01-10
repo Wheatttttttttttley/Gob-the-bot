@@ -60,30 +60,20 @@ export default {
           }),
         );
         return;
-      } else if (bet < account.balance / 20) {
-        interaction.reply(
-          warningEmbed({
-            title: "TOO LOW BET",
-            description: "You can't bet less than 5% of your current balance",
-          }),
-        );
-        return;
       }
     }
 
     try {
       await command
         .run(interaction)
-        .then(() => {
+        .then(() =>
           updateLevel(
             interaction.channel as GuildChannel & TextChannel,
             interaction.user,
-          );
-        })
+          ),
+        )
         .catch((err) => {
-          if (!interaction) {
-            return;
-          }
+          if (!interaction) return;
           if (interaction.deferred || interaction.replied) {
             interaction.followUp(
               warningEmbed({ title: "Command Error", description: err }),
@@ -95,9 +85,7 @@ export default {
           }
         });
     } catch (err) {
-      if (!interaction) {
-        return;
-      }
+      if (!interaction) return;
       if (interaction.deferred || interaction.replied) {
         interaction.followUp(
           warningEmbed({ title: "Command Error", description: err as string }),
