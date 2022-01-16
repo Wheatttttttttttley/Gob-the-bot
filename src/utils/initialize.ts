@@ -6,12 +6,12 @@ import { IClient } from "../interfaces/IClient";
 
 const commandFolders: string[] = [
   "admintools",
-  "blackjack",
-  "currency",
+  "economy",
+  "games/blackjack",
+  "games/horseRacing",
+  "games/minigames",
+  "games/roulette",
   "information",
-  "minigames",
-  "roulette",
-  "horseRacing",
 ];
 
 async function registerCommands(client: IClient): Promise<void> {

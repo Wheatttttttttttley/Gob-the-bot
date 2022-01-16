@@ -1,7 +1,7 @@
 import { SlashCommandSubcommandBuilder } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
-import { addBalanceXP } from "../../../helpers/accountManager";
-import { warningEmbed } from "../../../helpers/warningHandler";
+import { addBalanceXP } from "../../../../helpers/accountManager";
+import { warningEmbed } from "../../../../helpers/warningHandler";
 import { ResultEmbed } from "../roulette";
 
 export const splitSubcommand = new SlashCommandSubcommandBuilder()

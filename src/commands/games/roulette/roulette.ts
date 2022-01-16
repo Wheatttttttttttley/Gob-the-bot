@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { ColorResolvable, CommandInteraction, MessageEmbed } from "discord.js";
-import { addBalance } from "../../helpers/accountManager";
-import { warningEmbed } from "../../helpers/warningHandler";
+import { addBalance } from "../../../helpers/accountManager";
+import { warningEmbed } from "../../../helpers/warningHandler";
 import { colorRun, colorSubcommand } from "./subcommands/color";
 import { columnRun, columnSubcommand } from "./subcommands/column";
 import { cornerRun, cornerSubcommand } from "./subcommands/corner";

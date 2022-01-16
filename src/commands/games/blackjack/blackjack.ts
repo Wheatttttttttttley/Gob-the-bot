@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
 import { promisify } from "util";
-import { addBalance, addBalanceXP } from "../../helpers/accountManager";
+import { addBalance, addBalanceXP } from "../../../helpers/accountManager";
 import { Game } from "./classes/Game";
 
 const sleep = promisify(setTimeout);

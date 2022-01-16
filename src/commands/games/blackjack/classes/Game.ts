@@ -8,7 +8,7 @@ import {
   User,
 } from "discord.js";
 import { promisify } from "util";
-import { addBalance, getAccount } from "../../../helpers/accountManager";
+import { addBalance, getAccount } from "../../../../helpers/accountManager";
 import { Card } from "./Card.js";
 import { Player } from "./Player.js";
 

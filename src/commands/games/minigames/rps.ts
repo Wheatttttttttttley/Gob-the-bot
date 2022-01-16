@@ -1,6 +1,10 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
-import { addBalance, addBalanceXP, addXP } from "../../helpers/accountManager";
+import {
+  addBalance,
+  addBalanceXP,
+  addXP,
+} from "../../../helpers/accountManager";
 
 const data = new SlashCommandBuilder()
   .setName("rps")

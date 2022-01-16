@@ -1,6 +1,6 @@
 import { SlashCommandSubcommandBuilder } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
-import { addBalanceXP } from "../../../helpers/accountManager";
+import { addBalanceXP } from "../../../../helpers/accountManager";
 import { ResultEmbed } from "../roulette";
 
 export const highLowSubcommand = new SlashCommandSubcommandBuilder()

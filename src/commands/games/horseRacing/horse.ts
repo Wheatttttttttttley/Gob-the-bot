@@ -6,8 +6,8 @@ import {
   MessageReaction,
   User,
 } from "discord.js";
-import { addBalance, addBalanceXP } from "../../helpers/accountManager";
-import { warningEmbed } from "../../helpers/warningHandler";
+import { addBalance, addBalanceXP } from "../../../helpers/accountManager";
+import { warningEmbed } from "../../../helpers/warningHandler";
 import { Game } from "./classes/Game";
 
 const data = new SlashCommandBuilder()
