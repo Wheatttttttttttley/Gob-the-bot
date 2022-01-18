@@ -1,5 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { promisify } from "util";
+import { clamp } from "../../../../helpers/clamp";
 import { getPseudoRandom } from "../../../../helpers/randomNumber";
 import { Horse } from "./Horse";
 
@@ -16,9 +17,34 @@ const numberToEmoji: { [key: number]: string } = {
   8: "8️⃣",
   9: "9️⃣",
 };
+
+const payRates: { [key: string]: { [key: number]: number } } = {
+  "555": { 5: 3.0 },
+  "556": { 5: 2.9, 6: 3.23 },
+  "557": { 5: 2.9, 7: 3.46 },
+  "558": { 5: 2.74, 8: 3.69 },
+  "566": { 5: 2.81, 6: 3.11 },
+  "567": { 5: 2.74, 6: 3.0, 7: 3.31 },
+  "568": { 5: 2.68, 6: 2.92, 8: 3.52 },
+  "577": { 5: 2.68, 7: 3.19 },
+  "578": { 5: 2.63, 7: 3.09, 8: 3.38 },
+  "588": { 5: 2.58, 8: 3.26 },
+  "666": { 6: 3.0 },
+  "667": { 6: 2.91, 7: 3.19 },
+  "668": { 6: 2.84, 8: 3.38 },
+  "677": { 6: 2.84, 7: 3.09 },
+  "678": { 6: 2.78, 7: 3.0, 8: 3.26 },
+  "688": { 6: 2.72, 8: 3.16 },
+  "777": { 7: 3.0 },
+  "778": { 7: 2.93, 8: 3.16 },
+  "788": { 7: 2.86, 8: 3.07 },
+  "888": { 8: 3.0 },
+};
+
 export class Game {
   horses: Horse[] = [];
-  horseAmount = 0;
+  horseAmount: number = 0;
+
   constructor(horseAmount: number) {
     this.horseAmount = horseAmount;
     for (let i = 0; i < horseAmount; i++) {
@@ -29,16 +55,16 @@ export class Game {
 
   async play(): Promise<number> {
     while (true) {
-      await sleep(200);
+      await sleep(1000);
       const runner = getPseudoRandom(0, this.horseAmount - 1);
-      await this.horses[runner].run();
-      if (this.horses[runner].winning) {
+      this.horses[runner].run();
+      if (this.horses[runner].progress >= 100) {
         return runner;
       }
     }
   }
 
-  getProgressEmbed(bet: number, chosenHorse: number) {
+  getProgressEmbed(bet: number, chosenHorse: number): MessageEmbed {
     return new MessageEmbed()
       .setTitle("🏇 Horse Racing! 🏇")
       .setColor(0x0099ff)
@@ -53,34 +79,26 @@ export class Game {
           .map(
             (horse, index) =>
               `${`${numberToEmoji[index + 1]} ${"▰".repeat(
-                Math.floor(horse.progress / 10),
+                clamp(Math.floor(horse.progress / 10), 0, 10),
               )}${horse.emoji}${"▱".repeat(
-                10 - Math.floor(horse.progress / 10),
+                clamp(10 - Math.floor(horse.progress / 10), 0, 10),
               )} **${horse.speed}** ⚡`}`,
           )
           .join("\n"),
       );
   }
 
-  // TODO: Change this to probability calculation instead of trying out 100000 times
-  findPayRate() {
-    for (let i = 0; i < this.horseAmount; i++) {
-      this.horses[i].pay = this.horseAmount - 1;
+  findPayRate(): void {
+    let key: number[] | string = [];
+    for (let i = 0; i < this.horseAmount; ++i) {
+      key.push(Math.ceil(100 / this.horses[i].speed));
     }
-    // const testGameAmount = 10000;
-    // const winnerStats = Array(this.horseAmount).fill(0);
-    // for (let i = 0; i < testGameAmount; i++) {
-    //     const winner = this.play();
-    //     winnerStats[winner]++;
-    //     for (let j = 0; j < this.horseAmount; j++) {
-    //         this.horses[j].progress = 0;
-    //         this.horses[j].winning = false;
-    //     }
-    // }
-    // for (let i = 0; i < this.horseAmount; i++) {
-    //     const winChance = winnerStats[i] / testGameAmount;
-    //     const loseChance = 1 - winChance;
-    //     this.horses[i].pay = parseFloat((Math.log(2 + (loseChance / winChance)) ** 2).toFixed(2));
-    // }
+    key = key.sort().join("");
+    for (let i = 0; i < this.horseAmount; ++i) {
+      const num = Math.ceil(100 / this.horses[i].speed);
+      this.horses[i].pay = parseFloat(
+        (payRates[key][num] + getPseudoRandom(-10, 10) / 100).toFixed(2),
+      );
+    }
   }
 }

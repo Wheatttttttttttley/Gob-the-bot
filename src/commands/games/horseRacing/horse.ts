@@ -7,6 +7,7 @@ import {
   User,
 } from "discord.js";
 import { addBalance, addBalanceXP } from "../../../helpers/accountManager";
+import { clamp } from "../../../helpers/clamp";
 import { warningEmbed } from "../../../helpers/warningHandler";
 import { Game } from "./classes/Game";
 
@@ -26,8 +27,9 @@ const data = new SlashCommandBuilder()
       .setDescription("The amount of horses in the races.")
       .addChoices([
         ["3", 3],
-        ["6", 6],
-        ["9", 9],
+        //TODO:
+        // ["6", 6],
+        // ["9", 9],
       ]),
   );
 
@@ -56,13 +58,15 @@ const emojiToNumber: { [key: string]: number } = {
 
 const run = async (interaction: CommandInteraction) => {
   await interaction.deferReply();
+
+  // get options from the command
   const bet = interaction.options.getNumber("bet") || 0;
-  const horseAmount = interaction.options.getNumber("horse-amount") || 6;
+  const horseAmount = interaction.options.getNumber("horse-amount") || 3;
 
   addBalance(interaction.user.id, -bet);
 
+  // create a new game
   const game = new Game(horseAmount);
-
   await interaction.editReply({
     embeds: [
       new MessageEmbed()
@@ -78,14 +82,18 @@ const run = async (interaction: CommandInteraction) => {
         ),
     ],
   });
+
+  // add reactions to the message
   const message = (await interaction.fetchReply()) as Message;
   for (let i = 0; i < horseAmount; i++) {
     await message.react(numberToEmoji[i + 1]);
   }
 
   const numberEmojiArray = Object.values(numberToEmoji).slice(0, horseAmount);
-  let horseNumber = -1;
 
+  // wait for a reaction
+  // the chosen horse will be the number of the emoji
+  let horseNumber = -1;
   const filter = (reaction: MessageReaction, user: User) =>
     numberEmojiArray.includes(reaction.emoji.name as string) &&
     user.id === interaction.user.id;
@@ -98,8 +106,9 @@ const run = async (interaction: CommandInteraction) => {
     .catch(() => {
       horseNumber = -1;
     });
-
   await message.reactions.removeAll();
+
+  // if the user didn't choose a horse, end the game
   if (horseNumber === -1) {
     interaction.editReply(
       warningEmbed({
@@ -107,29 +116,38 @@ const run = async (interaction: CommandInteraction) => {
         description: "You did not choose a horse in time.",
       }),
     );
+
     return;
   }
 
+  // show the progress of the game every second
   const showProgressInterval = setInterval(() => {
     interaction.editReply({
       embeds: [game.getProgressEmbed(bet, horseNumber)],
     });
-  }, 750);
+  }, 1000);
+
+  // play the game
   const winner = await game.play();
+
+  // clear the progress interval
   clearInterval(showProgressInterval);
-  const result = winner === horseNumber - 1 ? "won" : "lost";
-  const payout = result === "won" ? game.horses[horseNumber - 1].pay * bet : 0;
-  addBalanceXP(
-    interaction.user.id,
-    result === "won" ? bet + payout : 0,
-    payout,
-  );
+
+  // resulting the game
+  const isWon = winner === horseNumber;
+  if (isWon) {
+    addBalanceXP(
+      interaction.user.id,
+      (1 + game.horses[horseNumber - 1].pay) * bet,
+      game.horses[horseNumber - 1].pay * bet,
+    );
+  }
 
   await interaction.editReply({
     embeds: [
       new MessageEmbed()
-        .setTitle(`🏇 ${result.toUpperCase()} ! 🏇`)
-        .setColor(result === "won" ? 0x2ecc71 : 0xe74c3c)
+        .setTitle(`🏇 ${isWon ? "WON" : "LOST"} ! 🏇`)
+        .setColor(isWon ? 0x2ecc71 : 0xe74c3c)
         .setDescription(
           `You bet ${bet} 💵 on number **${
             numberToEmoji[horseNumber]
@@ -141,18 +159,20 @@ const run = async (interaction: CommandInteraction) => {
             .map(
               (horse, index) =>
                 `${`${numberToEmoji[index + 1]} ${"▰".repeat(
-                  Math.floor(horse.progress / 10),
+                  clamp(Math.floor(horse.progress / 10), 0, 10),
                 )}${horse.emoji}${"▱".repeat(
-                  10 - Math.floor(horse.progress / 10),
+                  clamp(10 - Math.floor(horse.progress / 10), 0, 10),
                 )} **${horse.speed}** ⚡`}`,
             )
             .join("\n"),
         )
         .addField(
-          `${result === "won" ? "✅" : "❌"} You ${result}! ${
-            result === "won" ? "✅" : "❌"
+          `${isWon ? "✅" : "❌"} You ${isWon ? "won" : "lost"}! ${
+            isWon ? "✅" : "❌"
           }`,
-          `You ${result} **${payout ? payout : bet}** 💵`,
+          `You ${isWon ? "won" : "lost"} **${
+            isWon ? game.horses[horseNumber - 1].pay * bet : bet
+          }** 💵`,
         ),
     ],
   });
