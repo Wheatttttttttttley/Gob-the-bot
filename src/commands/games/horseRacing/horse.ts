@@ -134,7 +134,7 @@ const run = async (interaction: CommandInteraction) => {
   clearInterval(showProgressInterval);
 
   // resulting the game
-  const isWon = winner === horseNumber;
+  const isWon = winner === horseNumber - 1;
   if (isWon) {
     addBalanceXP(
       interaction.user.id,
