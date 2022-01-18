@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { promisify } from "util";
 import { addBalance, addBalanceXP } from "../../../helpers/accountManager";
+import { getPseudoRandom } from "../../../helpers/randomNumber";
 
 const sleep = promisify(setTimeout);
 
@@ -35,7 +36,7 @@ async function run(interaction: CommandInteraction) {
   addBalance(interaction.user.id, -bet);
 
   await sleep(1500);
-  const rndNumber = Math.floor(Math.random() * 10) + 1;
+  const rndNumber = getPseudoRandom(1, 10);
 
   const result = rndNumber > 5 ? "high" : "low";
 

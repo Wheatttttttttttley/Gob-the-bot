@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { ColorResolvable, CommandInteraction, MessageEmbed } from "discord.js";
 import { addBalance } from "../../../helpers/accountManager";
+import { getTrueRandom } from "../../../helpers/randomNumber";
 import { warningEmbed } from "../../../helpers/warningHandler";
 import { colorRun, colorSubcommand } from "./subcommands/color";
 import { columnRun, columnSubcommand } from "./subcommands/column";
@@ -63,7 +64,7 @@ const run = async (interaction: CommandInteraction) => {
   const bet = interaction.options.getNumber("bet") || 0;
 
   addBalance(interaction.user.id, -bet);
-  const rndNumber = Math.floor(Math.random() * 37);
+  const rndNumber = await getTrueRandom(0, 36);
   switch (subcommand) {
     case "straight-up":
       straightUpRun(interaction, bet, rndNumber);

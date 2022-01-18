@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { promisify } from "util";
 import { addBalance, addBalanceXP } from "../../../helpers/accountManager";
+import { getPseudoRandom } from "../../../helpers/randomNumber";
 
 const sleep = promisify(setTimeout);
 
@@ -42,7 +43,7 @@ async function run(interaction: CommandInteraction) {
 
   await sleep(1500);
 
-  const rndSide = Math.floor(Math.random() * 6) + 1;
+  const rndSide = getPseudoRandom(1, 6);
   const result = rndSide === sides ? "win" : "lose";
 
   embed

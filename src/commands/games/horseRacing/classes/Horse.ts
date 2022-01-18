@@ -1,3 +1,5 @@
+import { getPseudoRandom } from "../../../../helpers/randomNumber";
+
 // 🐒🦮🐕‍🦺🐩🐕🐈🐅🐆🐎🦌🦏🦛🐂🐃🐄🐖🐏🐑🐐🐪🐫🦙🦘🦥🦨🦡🐘🐁🐀🦔🐇🐿🦎🐊🐢🐍🐉🦕🦖🦦🦈🐬🐳🐋🐟🐠🐡🦆🐓🦃🦅🕊🦢🦜🦩🦚🦉🐦🐧🐤🦇🦋🐌🐛🦟🦗🐜🐝
 const emojiList = [
   "🐒",
@@ -77,8 +79,8 @@ export class Horse {
   winning: boolean;
   pay = 0;
   constructor() {
-    this.emoji = emojiList[Math.floor(Math.random() * emojiList.length)];
-    // this.speed = Math.floor(Math.random() * (12 - 5 + 1) + 5);
+    this.emoji = emojiList[getPseudoRandom(0, emojiList.length)];
+    // this.speed = getPseudoRandom(5, 12);
     this.speed = 5;
     this.progress = 0;
     this.winning = false;

@@ -5,6 +5,7 @@ import {
   addBalanceXP,
   addXP,
 } from "../../../helpers/accountManager";
+import { getPseudoRandom } from "../../../helpers/randomNumber";
 
 const data = new SlashCommandBuilder()
   .setName("rps")
@@ -29,7 +30,7 @@ async function run(interaction: CommandInteraction) {
   const bet = interaction.options.getNumber("bet") || 0;
   const yourChoice = interaction.options.getString("choice") || "";
 
-  const botChoice = ["r", "p", "s"][Math.floor(Math.random() * 3)];
+  const botChoice = ["r", "p", "s"][getPseudoRandom(0, 2)];
 
   const result = {
     ["r" as string]: {

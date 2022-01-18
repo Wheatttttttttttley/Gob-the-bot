@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { addBalance, getAccount } from "../../helpers/accountManager";
+import { getPseudoRandom } from "../../helpers/randomNumber";
 import { warningEmbed } from "../../helpers/warningHandler";
 
 const data = new SlashCommandBuilder()
@@ -16,11 +17,10 @@ async function run(interaction: CommandInteraction) {
       const balance = account.balance;
 
       if (balance <= 10) {
-        const upperBound = 200 + 50 * account.level;
-        const lowerBound = 100 + 25 * account.level;
-        const rnd_money =
-          Math.floor(Math.random() * (upperBound - lowerBound + 1)) +
-          lowerBound;
+        const rnd_money = getPseudoRandom(
+          100 + 25 * account.level,
+          200 + 50 * account.level,
+        );
         addBalance(user.id, rnd_money);
 
         interaction.reply({

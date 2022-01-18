@@ -1,5 +1,6 @@
 import { MessageEmbed } from "discord.js";
 import { promisify } from "util";
+import { getPseudoRandom } from "../../../../helpers/randomNumber";
 import { Horse } from "./Horse";
 
 const sleep = promisify(setTimeout);
@@ -29,7 +30,7 @@ export class Game {
   async play(): Promise<number> {
     while (true) {
       await sleep(200);
-      const runner = Math.floor(Math.random() * this.horseAmount);
+      const runner = getPseudoRandom(0, this.horseAmount - 1);
       await this.horses[runner].run();
       if (this.horses[runner].winning) {
         return runner;
