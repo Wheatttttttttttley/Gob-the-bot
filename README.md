@@ -9,6 +9,7 @@ Gob is a Discord bot that is designed to be a fun and easy way to play games.
 - [Discord.js](https://discord.js.org)
 - [MongoDB](https://www.mongodb.com)
 - [TypeScript](https://www.typescriptlang.org)
+- [Random.org](https://www.random.org)
 - [Heroku](https://www.heroku.com) (optional)
 
 ## Getting Started
@@ -18,7 +19,7 @@ Gob is a Discord bot that is designed to be a fun and easy way to play games.
    git clone https://github.com/Wheatttttttttttley/Gob-the-bot.git
    ```
 1. run `npm install` in the root directory.
-1. Change `.env.example` to `.env` and setup your own token.
+1. Change `.env.example` to `.env` and setup your own environment variables.
 1. run `npm run build` to build the bot.
 1. run `npm run start` to run the bot.
 1. Open your Discord client and join the server.
