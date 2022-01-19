@@ -79,9 +79,9 @@ export class Game {
           .map(
             (horse, index) =>
               `${`${numberToEmoji[index + 1]} ${"▰".repeat(
-                clamp(Math.floor(horse.progress / 10), 0, 10),
+                clamp((horse.progress / 10) >> 0, 0, 10),
               )}${horse.emoji}${"▱".repeat(
-                clamp(10 - Math.floor(horse.progress / 10), 0, 10),
+                clamp(10 - ((horse.progress / 10) >> 0), 0, 10),
               )} **${horse.speed}** ⚡`}`,
           )
           .join("\n"),

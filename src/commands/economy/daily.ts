@@ -17,9 +17,9 @@ async function run(interaction: CommandInteraction): Promise<void> {
       const now = new Date().getTime();
       const diff = now - then;
       const left = 86400000 - diff;
-      const leftHours = Math.floor(left / 3600000);
-      const leftMinutes = Math.floor((left / 60000) % 60);
-      const leftSeconds = Math.floor((left / 1000) % 60);
+      const leftHours = (left / 3600000) >> 0;
+      const leftMinutes = ((left / 60000) >> 0) % 60;
+      const leftSeconds = ((left / 1000) >> 0) % 60;
 
       if (leftHours > 0 || leftMinutes > 0 || leftSeconds > 0) {
         interaction.reply(

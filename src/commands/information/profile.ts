@@ -42,11 +42,11 @@ async function run(interaction: CommandInteraction): Promise<void> {
       let levelString = "";
       while (level > 0) {
         levelString = numberEmoji[level % 10] + levelString;
-        level = Math.floor(level / 10);
+        level = (level / 10) >> 0;
       }
       const xp = account.xp;
       const xpToNextLevel = account.xpToNextLevel;
-      const piece = Math.floor((xp / xpToNextLevel) * 10);
+      const piece = ((xp / xpToNextLevel) * 10) >> 0;
       const progressBar = `${"🟩".repeat(piece)}${"◽".repeat(10 - piece)}`;
 
       interaction.reply({
