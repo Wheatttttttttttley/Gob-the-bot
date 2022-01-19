@@ -1,4 +1,4 @@
-import { getTrueRandom } from "../../../../helpers/randomNumber";
+import { getPseudoRandom } from "../../../../helpers/randomNumber";
 
 const rankList = [
   "🅰",
@@ -22,13 +22,11 @@ export class Card {
   rank: string = "";
   isFaceUp: boolean;
   constructor(isFaceUp = true) {
-    getTrueRandom(0, 51).then((randomNumber) => {
-      this.suit = ["♣️", "♦️", "♥️", "♠️"][randomNumber % 4];
-      this.value = randomNumber % 13;
-      this.rank = rankList[this.value];
-    });
+    const randomNumber = getPseudoRandom(0, 51);
+    this.suit = ["♣️", "♦️", "♥️", "♠️"][randomNumber % 4];
+    this.value = randomNumber % 13;
+    this.rank = rankList[this.value];
 
     this.isFaceUp = isFaceUp;
   }
-  random() {}
 }
