@@ -51,7 +51,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
             };
           } catch {
             return {
-              username: "hidden",
+              username: undefined,
               balance: player.balance,
               level: player.level,
             };
@@ -68,13 +68,24 @@ async function run(interaction: CommandInteraction): Promise<void> {
             .addField(
               "Players 😎",
               playersToShow
-                .map((player, i) => `${i + 1}. **${player.username}**`)
+                .map((player, i) => `${i + 1}. ${player.username}`)
                 .join("\n"),
               true,
             )
             .addField(
               "Balance 💵",
-              playersToShow.map((player, _) => `${player.balance}`).join("\n"),
+              playersToShow
+                .map(
+                  (player, _) =>
+                    `${
+                      player.balance > 1000000
+                        ? `${(player.balance / 1000000).toFixed(1)}M`
+                        : player.balance > 1000
+                        ? `${(player.balance / 1000).toFixed(1)}K`
+                        : player.balance
+                    }`,
+                )
+                .join("\n"),
               true,
             )
             .addField(
@@ -85,6 +96,8 @@ async function run(interaction: CommandInteraction): Promise<void> {
         ],
       });
     });
+
+  return;
 }
 
 export default {
