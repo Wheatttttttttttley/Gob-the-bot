@@ -4,6 +4,6 @@ export default {
   name: "ready",
   once: true,
   run: async () => {
-    client.user?.setActivity("GONNA CRY?", { type: "WATCHING" });
+    client.user?.setActivity("Dota 2", { type: "PLAYING" });
   },
 };
