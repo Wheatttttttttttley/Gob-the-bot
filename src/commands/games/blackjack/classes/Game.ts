@@ -14,7 +14,7 @@ import { Player } from "./Player.js";
 
 const sleep = promisify(setTimeout);
 
-export class Game {
+export class BlackJackGame {
   interaction: Interaction & CommandInteraction;
   user: User;
   player: Player;

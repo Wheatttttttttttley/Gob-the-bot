@@ -41,7 +41,7 @@ const payRates: { [key: string]: { [key: number]: number } } = {
   "888": { 8: 2.0 },
 };
 
-export class Game {
+export class HorseGame {
   horses: Horse[] = [];
   horseAmount: number = 0;
 
@@ -69,8 +69,7 @@ export class Game {
       .setTitle("🏇 Horse Racing! 🏇")
       .setColor(0x0099ff)
       .setDescription(
-        `You bet ${bet} 💵 on number **${
-          numberToEmoji[chosenHorse]
+        `You bet ${bet} 💵 on number **${numberToEmoji[chosenHorse]
         }** with rate **${this.horses[chosenHorse - 1].pay}x**`,
       )
       .addField(

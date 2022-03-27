@@ -9,7 +9,7 @@ import {
 import { addBalance, addBalanceXP } from "../../../helpers/accountManager";
 import { clamp } from "../../../helpers/clamp";
 import { warningEmbed } from "../../../helpers/warningHandler";
-import { Game } from "./classes/Game";
+import { HorseGame } from "./classes/Game";
 
 const data = new SlashCommandBuilder()
   .setName("horse")
@@ -66,7 +66,7 @@ const run = async (interaction: CommandInteraction) => {
   addBalance(interaction.user.id, -bet);
 
   // create a new game
-  const game = new Game(horseAmount);
+  const game = new HorseGame(horseAmount);
   await interaction.editReply({
     embeds: [
       new MessageEmbed()
@@ -149,8 +149,7 @@ const run = async (interaction: CommandInteraction) => {
         .setTitle(`🏇 ${isWon ? "WON" : "LOST"} ! 🏇`)
         .setColor(isWon ? 0x2ecc71 : 0xe74c3c)
         .setDescription(
-          `You bet ${bet} 💵 on number **${
-            numberToEmoji[horseNumber]
+          `You bet ${bet} 💵 on number **${numberToEmoji[horseNumber]
           }** with rate **${game.horses[horseNumber - 1].pay}x**`,
         )
         .addField(
@@ -167,11 +166,9 @@ const run = async (interaction: CommandInteraction) => {
             .join("\n"),
         )
         .addField(
-          `${isWon ? "✅" : "❌"} You ${isWon ? "won" : "lost"}! ${
-            isWon ? "✅" : "❌"
+          `${isWon ? "✅" : "❌"} You ${isWon ? "won" : "lost"}! ${isWon ? "✅" : "❌"
           }`,
-          `You ${isWon ? "won" : "lost"} **${
-            isWon ? game.horses[horseNumber - 1].pay * bet : bet
+          `You ${isWon ? "won" : "lost"} **${isWon ? game.horses[horseNumber - 1].pay * bet : bet
           }** 💵`,
         ),
     ],

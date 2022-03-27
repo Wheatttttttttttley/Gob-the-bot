@@ -77,10 +77,9 @@ async function run(interaction: CommandInteraction): Promise<void> {
               playersToShow
                 .map(
                   (player, _) =>
-                    `${
-                      player.balance > 1000000
-                        ? `${(player.balance / 1000000).toFixed(1)}M`
-                        : player.balance > 1000
+                    `${player.balance > 1000000
+                      ? `${(player.balance / 1000000).toFixed(1)}M`
+                      : player.balance > 1000
                         ? `${(player.balance / 1000).toFixed(1)}K`
                         : player.balance
                     }`,

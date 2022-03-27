@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
 import { promisify } from "util";
 import { addBalance, addBalanceXP } from "../../../helpers/accountManager";
-import { Game } from "./classes/Game";
+import { BlackJackGame } from "./classes/Game";
 
 const sleep = promisify(setTimeout);
 
@@ -22,7 +22,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
   addBalance(interaction.user.id, -playerBet);
 
   // Create game
-  const game = new Game(interaction, playerBet);
+  const game = new BlackJackGame(interaction, playerBet);
 
   type resultType =
     | "Win"

@@ -139,21 +139,21 @@ const run = async (interaction: CommandInteraction) => {
         .addField(
           "TYPES 🎲",
           "**Straight Up** : Place a bet on a number between 1-36.\n" +
-            "**Split** : Place a bet on 2 numbers between 1-36.\n" +
-            "**Street** : Place a bet on a row of numbers.\n" +
-            "**Corner** : Place a bet on 1 corner of 4 numbers.\n" +
-            "**Line** : Place a bet on 2 adjacency rows of numbers.\n" +
-            "**Column** : Place a bet 1 column of numbers.\n" +
-            "**Dozen** : Place a bet on a dozen of numbers.\n" +
-            "**Color** : Place a bet on a color of numbers.\n" +
-            "**Even/Odd** : You can guess that the number is even or odd.\n" +
-            "**High/Low** : You can guess that the number is low[1-18] or high.[19-36]",
+          "**Split** : Place a bet on 2 numbers between 1-36.\n" +
+          "**Street** : Place a bet on a row of numbers.\n" +
+          "**Corner** : Place a bet on 1 corner of 4 numbers.\n" +
+          "**Line** : Place a bet on 2 adjacency rows of numbers.\n" +
+          "**Column** : Place a bet 1 column of numbers.\n" +
+          "**Dozen** : Place a bet on a dozen of numbers.\n" +
+          "**Color** : Place a bet on a color of numbers.\n" +
+          "**Even/Odd** : You can guess that the number is even or odd.\n" +
+          "**High/Low** : You can guess that the number is low[1-18] or high.[19-36]",
         )
         .addField(
           "COLORS 🎨",
           "🔴 Red: 1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36\n" +
-            "🔵 Black: 2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35\n" +
-            "🟢 Green: 0",
+          "🔵 Black: 2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35\n" +
+          "🟢 Green: 0",
         )
         .addField("PAYOUT 💰", "Payout rates:")
         .addFields([
