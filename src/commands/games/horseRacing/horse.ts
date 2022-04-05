@@ -84,37 +84,38 @@ const run = async (interaction: CommandInteraction) => {
 
   // wait for a reaction
   // the chosen horse will be the number of the emoji
-  let horseNumber = -1;
+  let horseNumber: number | undefined = undefined;
   const filter = (reaction: MessageReaction, user: User) =>
     numberEmojiArray.includes(reaction.emoji.name as string) && user.id === interaction.user.id;
   await message
-    .awaitReactions({ filter, time: 60000, max: 1 })
+    .awaitReactions({ filter, time: 10000, max: 1 })
     .then(async (reactions) => {
       const reaction = reactions.first();
       horseNumber = emojiToNumber[reaction?.emoji.name as string];
     })
     .catch(() => {
-      horseNumber = -1;
+      horseNumber = undefined;
     });
   await message.reactions.removeAll();
 
-  // if the user didn't choose a horse, end the game
-  if (horseNumber === -1) {
+  // if the user didn't choose a horse in time, end the game
+  if (horseNumber === undefined) {
+    addBalance(interaction.user.id, bet * 0.5);
+
     interaction.editReply(
       warningEmbed({
         title: "TIMEOUT ALERT",
-        description: "You did not choose a horse in time.",
+        description: "You did not choose a horse in time. You lost half of your bet.",
       }),
     );
 
-    addBalance(interaction.user.id, bet);
     return;
   }
 
   // show the progress of the game every second
   const showProgressInterval = setInterval(() => {
     interaction.editReply({
-      embeds: [game.getProgressEmbed(bet, horseNumber)],
+      embeds: [game.getProgressEmbed(bet, horseNumber ?? 0)],
     });
   }, 1000);
 
@@ -127,11 +128,7 @@ const run = async (interaction: CommandInteraction) => {
   // resulting the game
   const isWon = winner === horseNumber - 1;
   if (isWon) {
-    addBalanceXP(
-      interaction.user.id,
-      (1 + game.horses[horseNumber - 1].pay) * bet,
-      game.horses[horseNumber - 1].pay * bet,
-    );
+    addBalanceXP(interaction.user.id, game.horses[horseNumber - 1].pay * bet, game.horses[horseNumber - 1].pay * bet);
   }
 
   await interaction.editReply({
