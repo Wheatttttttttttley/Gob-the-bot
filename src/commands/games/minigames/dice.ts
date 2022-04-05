@@ -10,10 +10,7 @@ const data = new SlashCommandBuilder()
   .setName("dice")
   .setDescription("Roll a dice!")
   .addNumberOption((option) =>
-    option
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of money you want to bet."),
+    option.setName("bet").setRequired(true).setDescription("The amount of money you want to bet."),
   )
   .addNumberOption((option) =>
     option
@@ -48,18 +45,12 @@ async function run(interaction: CommandInteraction) {
 
   embed
     .setTitle(`🎲 ${result.toUpperCase()}! 🎲`)
-    .setDescription(
-      `Dice rolled: ${["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣"][rndSide - 1]}`,
-    );
+    .setDescription(`Dice rolled: ${["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣"][rndSide - 1]}`);
   if (result === "win") {
-    embed
-      .addField("✅ You won! ✅", `You won **${bet}** 💵`)
-      .setColor(0x2ecc71);
+    embed.addField("✅ You won! ✅", `You won **${bet}** 💵`).setColor(0x2ecc71);
     addBalanceXP(interaction.user.id, 6 * bet, 5 * bet);
   } else if (result === "lose") {
-    embed
-      .addField("❌ You lost! ❌", `You lost **${bet}** 💵`)
-      .setColor(0xe74c3c);
+    embed.addField("❌ You lost! ❌", `You lost **${bet}** 💵`).setColor(0xe74c3c);
   }
   await interaction.editReply({ embeds: [embed] });
 }

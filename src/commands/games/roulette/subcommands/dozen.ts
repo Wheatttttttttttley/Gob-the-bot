@@ -7,10 +7,7 @@ export const dozenSubcommand = new SlashCommandSubcommandBuilder()
   .setName("dozen")
   .setDescription("Play a dozen, pay 2x")
   .addNumberOption((options) =>
-    options
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of chips you want to bet"),
+    options.setName("bet").setRequired(true).setDescription("The amount of chips you want to bet"),
   )
   .addNumberOption((options) =>
     options
@@ -24,23 +21,11 @@ export const dozenSubcommand = new SlashCommandSubcommandBuilder()
       ]),
   );
 
-export const dozenRun = (
-  interaction: CommandInteraction,
-  bet: number,
-  rndNumber: number,
-) => {
+export const dozenRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
   const guess = interaction.options.getNumber("guess") || 0;
   if (rndNumber === 0) {
     interaction.editReply({
-      embeds: [
-        ResultEmbed(
-          "lose",
-          rndNumber,
-          `${["1-12", "13-24", "25-36"][guess - 1]}`,
-          bet,
-          -bet,
-        ),
-      ],
+      embeds: [ResultEmbed("lose", rndNumber, `${["1-12", "13-24", "25-36"][guess - 1]}`, bet, -bet)],
     });
     return;
   }
@@ -49,27 +34,11 @@ export const dozenRun = (
     addBalanceXP(interaction.user.id, bet * 3, bet * 2);
 
     interaction.editReply({
-      embeds: [
-        ResultEmbed(
-          "win",
-          rndNumber,
-          `${["1-12", "13-24", "25-36"][guess - 1]}`,
-          bet,
-          bet * 2,
-        ),
-      ],
+      embeds: [ResultEmbed("win", rndNumber, `${["1-12", "13-24", "25-36"][guess - 1]}`, bet, bet * 2)],
     });
   } else {
     interaction.editReply({
-      embeds: [
-        ResultEmbed(
-          "lose",
-          rndNumber,
-          `${["1-12", "13-24", "25-36"][guess - 1]}`,
-          bet,
-          -bet,
-        ),
-      ],
+      embeds: [ResultEmbed("lose", rndNumber, `${["1-12", "13-24", "25-36"][guess - 1]}`, bet, -bet)],
     });
   }
 };

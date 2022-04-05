@@ -7,10 +7,7 @@ export const streetSubcommand = new SlashCommandSubcommandBuilder()
   .setName("street")
   .setDescription("Play a street, pay 11x")
   .addNumberOption((options) =>
-    options
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of chips you want to bet"),
+    options.setName("bet").setRequired(true).setDescription("The amount of chips you want to bet"),
   )
   .addStringOption((options) =>
     options
@@ -35,11 +32,7 @@ export const streetSubcommand = new SlashCommandSubcommandBuilder()
       ]),
   );
 
-export const streetRun = (
-  interaction: CommandInteraction,
-  bet: number,
-  rndNumber: number,
-) => {
+export const streetRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
   const guess = interaction.options.getString("guess") || "";
   const result = guess.split(" ").includes(rndNumber.toString());
   if (result) {

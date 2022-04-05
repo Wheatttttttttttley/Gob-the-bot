@@ -8,29 +8,16 @@ export const splitSubcommand = new SlashCommandSubcommandBuilder()
   .setName("split")
   .setDescription("Play a split, pay 17x")
   .addNumberOption((options) =>
-    options
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of chips you want to bet"),
+    options.setName("bet").setRequired(true).setDescription("The amount of chips you want to bet"),
   )
   .addNumberOption((options) =>
-    options
-      .setName("first")
-      .setRequired(true)
-      .setDescription("The first number you want to bet on"),
+    options.setName("first").setRequired(true).setDescription("The first number you want to bet on"),
   )
   .addNumberOption((options) =>
-    options
-      .setName("second")
-      .setRequired(true)
-      .setDescription("The second number you want to bet on"),
+    options.setName("second").setRequired(true).setDescription("The second number you want to bet on"),
   );
 
-export const splitRun = (
-  interaction: CommandInteraction,
-  bet: number,
-  rndNumber: number,
-) => {
+export const splitRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
   const first = interaction.options.getNumber("first") || 0;
   const second = interaction.options.getNumber("second") || 9;
   if (first < 0 || first > 36 || second < 0 || second > 36) {
@@ -63,9 +50,7 @@ export const splitRun = (
     addBalanceXP(interaction.user.id, bet * 18, bet * 17);
 
     interaction.editReply({
-      embeds: [
-        ResultEmbed("win", rndNumber, `${first} ${second}`, bet, bet * 17),
-      ],
+      embeds: [ResultEmbed("win", rndNumber, `${first} ${second}`, bet, bet * 17)],
     });
   } else {
     interaction.editReply({

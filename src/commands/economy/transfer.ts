@@ -7,17 +7,9 @@ const data = new SlashCommandBuilder()
   .setName("transfer")
   .setDescription("Transfers money to another user")
   .addUserOption((options) =>
-    options
-      .setName("to")
-      .setDescription("The user to transfer the money to")
-      .setRequired(true),
+    options.setName("to").setDescription("The user to transfer the money to").setRequired(true),
   )
-  .addNumberOption((options) =>
-    options
-      .setName("amount")
-      .setRequired(true)
-      .setDescription("The amount to transfer."),
-  );
+  .addNumberOption((options) => options.setName("amount").setRequired(true).setDescription("The amount to transfer."));
 
 async function run(interaction: CommandInteraction) {
   const fromPlayer = interaction.user;
@@ -85,9 +77,7 @@ async function run(interaction: CommandInteraction) {
     embeds: [
       new MessageEmbed()
         .setTitle("💸 TRANSFER 💸")
-        .setDescription(
-          `**${fromPlayer.username}** transferred **${amount}** 💵 to **${toPlayer.username}**`,
-        )
+        .setDescription(`**${fromPlayer.username}** transferred **${amount}** 💵 to **${toPlayer.username}**`)
         .setColor(0x2ecc71),
     ],
   });

@@ -8,9 +8,7 @@ import { PlayerInt } from "../../models/playerModel";
 const data = new SlashCommandBuilder()
   .setName("balance")
   .setDescription("Check your balance!")
-  .addUserOption((options) =>
-    options.setName("user").setDescription("The user to check the balance of."),
-  );
+  .addUserOption((options) => options.setName("user").setDescription("The user to check the balance of."));
 
 async function run(interaction: CommandInteraction): Promise<void> {
   const user = interaction.options?.getUser("user") || interaction.user;

@@ -7,9 +7,7 @@ import { warningEmbed } from "../../helpers/warningHandler";
 const data = new SlashCommandBuilder()
   .setName("profile")
   .setDescription("View your profile")
-  .addUserOption((options) =>
-    options.setName("user").setDescription("The user to view the profile of"),
-  );
+  .addUserOption((options) => options.setName("user").setDescription("The user to view the profile of"));
 
 async function run(interaction: CommandInteraction): Promise<void> {
   const user = interaction.options?.getUser("user") || interaction.user;
@@ -26,18 +24,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
 
   getAccount(user.id)
     .then((account) => {
-      const numberEmoji = [
-        "0️⃣",
-        "1️⃣",
-        "2️⃣",
-        "3️⃣",
-        "4️⃣",
-        "5️⃣",
-        "6️⃣",
-        "7️⃣",
-        "8️⃣",
-        "9️⃣",
-      ];
+      const numberEmoji = ["0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣"];
       let level = account.level;
       let levelString = "";
       while (level > 0) {
@@ -56,10 +43,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
             .setThumbnail(user.displayAvatarURL({ format: "png", size: 512 }))
             .addField("Balance", `💵 **: ${account.balance}**`, true)
             .addField("Level", `🌟 **:** ${levelString}`, true)
-            .addField(
-              " 🔸 XP 🔸",
-              `**${xp}** / **${xpToNextLevel}**\n${progressBar}`,
-            )
+            .addField(" 🔸 XP 🔸", `**${xp}** / **${xpToNextLevel}**\n${progressBar}`)
             .setColor(randomColor()),
         ],
       });

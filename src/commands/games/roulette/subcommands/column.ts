@@ -7,10 +7,7 @@ export const columnSubcommand = new SlashCommandSubcommandBuilder()
   .setName("column")
   .setDescription("Play a column, pay 2x")
   .addNumberOption((options) =>
-    options
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of chips you want to bet"),
+    options.setName("bet").setRequired(true).setDescription("The amount of chips you want to bet"),
   )
   .addStringOption((options) =>
     options
@@ -18,26 +15,13 @@ export const columnSubcommand = new SlashCommandSubcommandBuilder()
       .setRequired(true)
       .setDescription("The column you want to bet on")
       .addChoices([
-        [
-          "1 4 7 10 13 16 19 22 25 28 31 34",
-          "1 4 7 10 13 16 19 22 25 28 31 34",
-        ],
-        [
-          "2 5 8 11 14 17 20 23 26 29 32 35",
-          "2 5 8 11 14 17 20 23 26 29 32 35",
-        ],
-        [
-          "3 6 9 12 15 18 21 24 27 30 33 36",
-          "3 6 9 12 15 18 21 24 27 30 33 36",
-        ],
+        ["1 4 7 10 13 16 19 22 25 28 31 34", "1 4 7 10 13 16 19 22 25 28 31 34"],
+        ["2 5 8 11 14 17 20 23 26 29 32 35", "2 5 8 11 14 17 20 23 26 29 32 35"],
+        ["3 6 9 12 15 18 21 24 27 30 33 36", "3 6 9 12 15 18 21 24 27 30 33 36"],
       ]),
   );
 
-export const columnRun = (
-  interaction: CommandInteraction,
-  bet: number,
-  rndNumber: number,
-) => {
+export const columnRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
   const guess = interaction.options.getString("guess") || "";
   const result = guess.split(" ").includes(rndNumber.toString());
   if (result) {

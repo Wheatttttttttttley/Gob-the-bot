@@ -1,12 +1,4 @@
-import {
-  Collection,
-  CommandInteraction,
-  Interaction,
-  Message,
-  MessageEmbed,
-  MessageReaction,
-  User,
-} from "discord.js";
+import { Collection, CommandInteraction, Interaction, Message, MessageEmbed, MessageReaction, User } from "discord.js";
 import { promisify } from "util";
 import { addBalance, getAccount } from "../../../../helpers/accountManager";
 import { Card } from "./Card.js";
@@ -61,9 +53,7 @@ export class BlackJackGame {
           value: this.dealer.showCards(),
         },
       )
-      .setFooter(
-        "React with either 👍 to hit, 👎 to stand, 💵 to double, or 🏳 to surrender",
-      );
+      .setFooter("React with either 👍 to hit, 👎 to stand, 💵 to double, or 🏳 to surrender");
     return embed;
   }
 
@@ -103,10 +93,7 @@ export class BlackJackGame {
     this.reactMessageEmbed();
 
     const emojiFilter = (reaction: MessageReaction, user: User) => {
-      return (
-        this.emojiArray.includes(reaction.emoji.name as string) &&
-        user.id === this.user.id
-      );
+      return this.emojiArray.includes(reaction.emoji.name as string) && user.id === this.user.id;
     };
 
     let playerTurn = true,
@@ -119,27 +106,23 @@ export class BlackJackGame {
           time: 60000,
           errors: ["time"],
         })
-        .then(
-          async (
-            collected: Collection<string, MessageReaction>,
-          ): Promise<void> => {
-            const reaction = collected.first();
+        .then(async (collected: Collection<string, MessageReaction>): Promise<void> => {
+          const reaction = collected.first();
 
-            if (reaction?.emoji.name === "👍") {
-              this.player.addCard(new Card());
-            } else if (reaction?.emoji.name === "👎") {
-              playerTurn = false;
-            } else if (reaction?.emoji.name === "💵") {
-              addBalance(this.user.id, -this.bet);
-              this.bet *= 2;
-              this.player.addCard(new Card());
-              playerTurn = false;
-            } else if (reaction?.emoji.name === "🏳") {
-              isSurrender = true;
-              playerTurn = false;
-            }
-          },
-        )
+          if (reaction?.emoji.name === "👍") {
+            this.player.addCard(new Card());
+          } else if (reaction?.emoji.name === "👎") {
+            playerTurn = false;
+          } else if (reaction?.emoji.name === "💵") {
+            addBalance(this.user.id, -this.bet);
+            this.bet *= 2;
+            this.player.addCard(new Card());
+            playerTurn = false;
+          } else if (reaction?.emoji.name === "🏳") {
+            isSurrender = true;
+            playerTurn = false;
+          }
+        })
         .catch(() => {
           return "Timeout";
         });
@@ -163,10 +146,7 @@ export class BlackJackGame {
     this.dealer.hand[1].isFaceUp = true;
     this.sendEmbed(this.cardAndPointsEmbed());
 
-    while (
-      this.dealer.points <= 17 &&
-      this.player.points > this.dealer.points
-    ) {
+    while (this.dealer.points <= 17 && this.player.points > this.dealer.points) {
       await sleep(1000);
       this.dealer.addCard(new Card());
       this.sendEmbed(this.cardAndPointsEmbed());

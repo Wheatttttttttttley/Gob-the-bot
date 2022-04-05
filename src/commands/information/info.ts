@@ -2,9 +2,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { randomColor } from "../../helpers/randomColor";
 
-const data = new SlashCommandBuilder()
-  .setName("info")
-  .setDescription("Information about the bot.");
+const data = new SlashCommandBuilder().setName("info").setDescription("Information about the bot.");
 
 const run = async (interaction: CommandInteraction): Promise<void> => {
   interaction.reply({
@@ -19,11 +17,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
             size: 64,
           }) || "",
         )
-        .addField(
-          "Source 🔗",
-          "[GitHub](https://github.com/Wheatttttttttttley/Gob-the-bot.git)",
-          true,
-        )
+        .addField("Source 🔗", "[GitHub](https://github.com/Wheatttttttttttley/Gob-the-bot.git)", true)
         .addField(
           "Invite 📧",
           "[Invite](https://discord.com/api/oauth2/authorize?client_id=902678755397480518&permissions=276220275776&scope=bot%20applications.commands)",

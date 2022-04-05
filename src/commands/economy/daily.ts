@@ -4,9 +4,7 @@ import { addBalance, getAccount } from "../../helpers/accountManager";
 import { warningEmbed } from "../../helpers/warningHandler";
 import PlayerModel, { PlayerInt } from "../../models/playerModel";
 
-const data = new SlashCommandBuilder()
-  .setName("daily")
-  .setDescription("Get your daily rewards!");
+const data = new SlashCommandBuilder().setName("daily").setDescription("Get your daily rewards!");
 
 async function run(interaction: CommandInteraction): Promise<void> {
   const id = interaction.user.id;
@@ -35,27 +33,19 @@ async function run(interaction: CommandInteraction): Promise<void> {
       const payout = 2000 + player.level * 500;
       addBalance(id, payout);
 
-      await PlayerModel.findOneAndUpdate(
-        { _id: id },
-        { $set: { cooldown: { daily: new Date() } } },
-        { upsert: true },
-      );
+      await PlayerModel.findOneAndUpdate({ _id: id }, { $set: { cooldown: { daily: new Date() } } }, { upsert: true });
 
       interaction.reply({
         embeds: [
           new MessageEmbed()
             .setTitle("✅ SUCCESS")
-            .setDescription(
-              `You have claimed your daily rewards!\nYou have received\n**${payout}** 💵`,
-            )
+            .setDescription(`You have claimed your daily rewards!\nYou have received\n**${payout}** 💵`)
             .setColor(0x2ecc71),
         ],
       });
     })
     .catch((err: Error) => {
-      interaction.reply(
-        warningEmbed({ description: `An error occured: ${err.message}` }),
-      );
+      interaction.reply(warningEmbed({ description: `An error occured: ${err.message}` }));
     });
 }
 

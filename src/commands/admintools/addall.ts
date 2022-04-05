@@ -8,10 +8,7 @@ const data = new SlashCommandBuilder()
   .setName("addall")
   .setDescription("Add balance to all players")
   .addNumberOption((options) =>
-    options
-      .setName("amount")
-      .setDescription("Amount to add to all players")
-      .setRequired(true),
+    options.setName("amount").setDescription("Amount to add to all players").setRequired(true),
   );
 
 const run = async (interaction: CommandInteraction): Promise<void> => {
@@ -35,9 +32,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
       embeds: [
         new MessageEmbed()
           .setTitle("💸 Balance Added 💸")
-          .setDescription(
-            `Everyone's balance has been added by **${interaction.user.username}**`,
-          )
+          .setDescription(`Everyone's balance has been added by **${interaction.user.username}**`)
           .addField("Amount", `**💵 : ${amount}**`)
           .setColor(0x57f287),
       ],

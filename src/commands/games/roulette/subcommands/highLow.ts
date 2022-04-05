@@ -7,10 +7,7 @@ export const highLowSubcommand = new SlashCommandSubcommandBuilder()
   .setName("high-low")
   .setDescription("Play a high-low, pay 1x")
   .addNumberOption((options) =>
-    options
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of chips you want to bet"),
+    options.setName("bet").setRequired(true).setDescription("The amount of chips you want to bet"),
   )
   .addNumberOption((options) =>
     options
@@ -23,17 +20,11 @@ export const highLowSubcommand = new SlashCommandSubcommandBuilder()
       ]),
   );
 
-export const highLowRun = (
-  interaction: CommandInteraction,
-  bet: number,
-  rndNumber: number,
-) => {
+export const highLowRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
   const guess = interaction.options.getNumber("guess");
   if (rndNumber === 0) {
     interaction.editReply({
-      embeds: [
-        ResultEmbed("lose", rndNumber, `${guess ? "high" : "low"}`, bet, bet),
-      ],
+      embeds: [ResultEmbed("lose", rndNumber, `${guess ? "high" : "low"}`, bet, bet)],
     });
     return;
   }
@@ -42,15 +33,11 @@ export const highLowRun = (
     addBalanceXP(interaction.user.id, bet * 2, bet);
 
     interaction.editReply({
-      embeds: [
-        ResultEmbed("win", rndNumber, `${guess ? "high" : "low"}`, bet, bet),
-      ],
+      embeds: [ResultEmbed("win", rndNumber, `${guess ? "high" : "low"}`, bet, bet)],
     });
   } else {
     interaction.editReply({
-      embeds: [
-        ResultEmbed("lose", rndNumber, `${guess ? "high" : "low"}`, bet, bet),
-      ],
+      embeds: [ResultEmbed("lose", rndNumber, `${guess ? "high" : "low"}`, bet, bet)],
     });
   }
 };

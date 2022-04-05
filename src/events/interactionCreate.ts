@@ -1,9 +1,4 @@
-import {
-  GuildChannel,
-  GuildChannelResolvable,
-  Interaction,
-  TextChannel,
-} from "discord.js";
+import { GuildChannel, GuildChannelResolvable, Interaction, TextChannel } from "discord.js";
 import { getAccount, updateLevel } from "../helpers/accountManager";
 import { warningEmbed } from "../helpers/warningHandler";
 import { client } from "../index";
@@ -12,11 +7,7 @@ export default {
   name: "interactionCreate",
   run: async (interaction: Interaction): Promise<void> => {
     if (!interaction.isCommand()) return;
-    if (
-      !interaction.guild?.me
-        ?.permissionsIn(interaction.channel as GuildChannelResolvable)
-        .has("MANAGE_MESSAGES")
-    ) {
+    if (!interaction.guild?.me?.permissionsIn(interaction.channel as GuildChannelResolvable).has("MANAGE_MESSAGES")) {
       interaction.reply(
         warningEmbed({
           title: "Missing Permissions",
@@ -66,23 +57,14 @@ export default {
     try {
       await command
         .run(interaction)
-        .then(() =>
-          updateLevel(
-            interaction.channel as GuildChannel & TextChannel,
-            interaction.user,
-          ),
-        );
+        .then(() => updateLevel(interaction.channel as GuildChannel & TextChannel, interaction.user));
     } catch (err) {
       if (!interaction) {
         return;
       } else if (interaction.deferred || interaction.replied) {
-        interaction.followUp(
-          warningEmbed({ title: "Command Error", description: err as string }),
-        );
+        interaction.followUp(warningEmbed({ title: "Command Error", description: err as string }));
       } else {
-        interaction.reply(
-          warningEmbed({ title: "Command Error", description: err as string }),
-        );
+        interaction.reply(warningEmbed({ title: "Command Error", description: err as string }));
       }
     }
   },

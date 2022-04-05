@@ -1,20 +1,13 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
-import {
-  addBalance,
-  addBalanceXP,
-  addXP,
-} from "../../../helpers/accountManager";
+import { addBalance, addBalanceXP, addXP } from "../../../helpers/accountManager";
 import { getPseudoRandom } from "../../../helpers/randomNumber";
 
 const data = new SlashCommandBuilder()
   .setName("rps")
   .setDescription("Play a game of rock, paper, scissors with the bot.")
   .addNumberOption((option) =>
-    option
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of money you want to bet."),
+    option.setName("bet").setRequired(true).setDescription("The amount of money you want to bet."),
   )
   .addStringOption((option) =>
     option
@@ -52,22 +45,12 @@ async function run(interaction: CommandInteraction) {
 
   const embed = new MessageEmbed()
     .setTitle("👊✋✌ Rock, Paper, Scissors 👊✋✌")
-    .addField(
-      "Your choice",
-      `**${{ r: "ROCK 👊", p: "PAPER ✋", s: "SCISSORS ✌" }[yourChoice]}**`,
-      true,
-    )
-    .addField(
-      "Bot choice",
-      `**${{ r: "ROCK 👊", p: "PAPER ✋", s: "SCISSORS ✌" }[botChoice]}**`,
-      true,
-    );
+    .addField("Your choice", `**${{ r: "ROCK 👊", p: "PAPER ✋", s: "SCISSORS ✌" }[yourChoice]}**`, true)
+    .addField("Bot choice", `**${{ r: "ROCK 👊", p: "PAPER ✋", s: "SCISSORS ✌" }[botChoice]}**`, true);
 
   if (result === "draw") {
     addXP(interaction.user.id, bet * 0.5);
-    embed
-      .addField("😐 DRAW 😐", "***You got your bet back!***")
-      .setColor(0x99aab5);
+    embed.addField("😐 DRAW 😐", "***You got your bet back!***").setColor(0x99aab5);
   } else if (result === "win") {
     addBalanceXP(interaction.user.id, bet, bet);
     embed.addField("🎉 WIN 🎉", `You won **${bet}** 💵`).setColor(0x57f287);

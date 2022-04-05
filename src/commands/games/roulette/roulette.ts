@@ -36,11 +36,7 @@ export const ResultEmbed = (
   gain: number,
 ) => {
   let color = "🟢";
-  if (
-    [
-      1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
-    ].includes(rndNumber)
-  ) {
+  if ([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(rndNumber)) {
     color = "🔴";
   } else if (rndNumber !== 0) {
     color = "🔵";
@@ -51,9 +47,7 @@ export const ResultEmbed = (
     .addField("Rolled", `${color}** : ${rndNumber}**`)
     .addField(
       result === "win" ? "🤑 WIN 🤑" : "😭 LOSE 😭",
-      result === "win"
-        ? `You won **${gain}** 💵`
-        : `You lost **${initialBet} 💵**`,
+      result === "win" ? `You won **${gain}** 💵` : `You lost **${initialBet} 💵**`,
     )
     .setColor((result === "win" ? "0x57F287" : "0xE74C3C") as ColorResolvable);
 };

@@ -7,10 +7,7 @@ export const cornerSubcommand = new SlashCommandSubcommandBuilder()
   .setName("corner")
   .setDescription("Play a corner, pay 8x")
   .addNumberOption((options) =>
-    options
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of chips you want to bet"),
+    options.setName("bet").setRequired(true).setDescription("The amount of chips you want to bet"),
   )
   .addStringOption((options) =>
     options
@@ -44,11 +41,7 @@ export const cornerSubcommand = new SlashCommandSubcommandBuilder()
       ]),
   );
 
-export const cornerRun = (
-  interaction: CommandInteraction,
-  bet: number,
-  rndNumber: number,
-) => {
+export const cornerRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
   const guess = interaction.options.getString("guess") || "";
   const result = guess.split(" ").includes(rndNumber.toString());
   if (result) {

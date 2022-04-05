@@ -10,10 +10,7 @@ const data = new SlashCommandBuilder()
   .setName("highlow")
   .setDescription("Guess the number is high[6-10] or low[1-5].")
   .addNumberOption((option) =>
-    option
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of money you want to bet."),
+    option.setName("bet").setRequired(true).setDescription("The amount of money you want to bet."),
   )
   .addStringOption((option) =>
     option

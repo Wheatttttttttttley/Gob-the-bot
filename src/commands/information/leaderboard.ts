@@ -14,12 +14,7 @@ const data = new SlashCommandBuilder()
       .addChoice("balance", "balance")
       .addChoice("level", "level"),
   )
-  .addBooleanOption((option) =>
-    option
-      .setName("full")
-      .setRequired(false)
-      .setDescription("Show full list of players"),
-  );
+  .addBooleanOption((option) => option.setName("full").setRequired(false).setDescription("Show full list of players"));
 
 async function run(interaction: CommandInteraction): Promise<void> {
   await interaction.deferReply();
@@ -65,21 +60,16 @@ async function run(interaction: CommandInteraction): Promise<void> {
             .setTitle("🏆 Leaderboard 🏆")
             .setColor(0x00ae86)
             .setDescription(`Top Players`)
-            .addField(
-              "Players 😎",
-              playersToShow
-                .map((player, i) => `${i + 1}. ${player.username}`)
-                .join("\n"),
-              true,
-            )
+            .addField("Players 😎", playersToShow.map((player, i) => `${i + 1}. ${player.username}`).join("\n"), true)
             .addField(
               "Balance 💵",
               playersToShow
                 .map(
                   (player, _) =>
-                    `${player.balance > 1000000
-                      ? `${(player.balance / 1000000).toFixed(1)}M`
-                      : player.balance > 1000
+                    `${
+                      player.balance > 1000000
+                        ? `${(player.balance / 1000000).toFixed(1)}M`
+                        : player.balance > 1000
                         ? `${(player.balance / 1000).toFixed(1)}K`
                         : player.balance
                     }`,
@@ -87,11 +77,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
                 .join("\n"),
               true,
             )
-            .addField(
-              "Level 🌟",
-              playersToShow.map((player, _) => `${player.level}`).join("\n"),
-              true,
-            ),
+            .addField("Level 🌟", playersToShow.map((player, _) => `${player.level}`).join("\n"), true),
         ],
       });
     });

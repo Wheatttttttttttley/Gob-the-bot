@@ -17,15 +17,11 @@ const commandFolders: string[] = [
 async function registerCommands(client: IClient): Promise<void> {
   const commandFiles = [];
 
-  for (const file of readdirSync("./prod/commands").filter((filename) =>
-    filename.endsWith(".js"),
-  )) {
+  for (const file of readdirSync("./prod/commands").filter((filename) => filename.endsWith(".js"))) {
     commandFiles.push(`../commands/${file}`);
   }
   for (const folder of commandFolders) {
-    for (const file of readdirSync(`./prod/commands/${folder}`).filter(
-      (filename) => filename.endsWith(".js"),
-    )) {
+    for (const file of readdirSync(`./prod/commands/${folder}`).filter((filename) => filename.endsWith(".js"))) {
       commandFiles.push(`../commands/${folder}/${file}`);
     }
   }
@@ -42,18 +38,11 @@ async function registerCommands(client: IClient): Promise<void> {
   const rest = new REST({ version: "9" }).setToken(process.env.TOKEN as string);
   try {
     if (process.env.GUILD_ID) {
-      await rest.put(
-        Routes.applicationGuildCommands(
-          process.env.CLIENT_ID as string,
-          process.env.GUILD_ID as string,
-        ),
-        { body: JSONCommands },
-      );
+      await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID as string, process.env.GUILD_ID as string), {
+        body: JSONCommands,
+      });
     } else {
-      await rest.put(
-        Routes.applicationCommands(process.env.CLIENT_ID as string),
-        { body: JSONCommands },
-      );
+      await rest.put(Routes.applicationCommands(process.env.CLIENT_ID as string), { body: JSONCommands });
     }
   } catch (error) {
     return;
@@ -61,9 +50,7 @@ async function registerCommands(client: IClient): Promise<void> {
 }
 
 async function registerEvents(client: IClient): Promise<void> {
-  const eventFiles = readdirSync("./prod/events").filter((file) =>
-    file.endsWith(".js"),
-  );
+  const eventFiles = readdirSync("./prod/events").filter((file) => file.endsWith(".js"));
   for (const file of eventFiles) {
     import(`../events/${file}`).then((module) => {
       const event = module.default;

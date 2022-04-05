@@ -10,10 +10,7 @@ const data = new SlashCommandBuilder()
   .setName("blackjack")
   .setDescription("Start a game of blackjack!")
   .addNumberOption((option) =>
-    option
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of money you want to bet."),
+    option.setName("bet").setRequired(true).setDescription("The amount of money you want to bet."),
   );
 
 const run = async (interaction: CommandInteraction): Promise<void> => {
@@ -24,13 +21,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
   // Create game
   const game = new BlackJackGame(interaction, playerBet);
 
-  type resultType =
-    | "Win"
-    | "Blackjack"
-    | "Draw"
-    | "Lose"
-    | "Timeout"
-    | "Surrender";
+  type resultType = "Win" | "Blackjack" | "Draw" | "Lose" | "Timeout" | "Surrender";
   const result = (await game.gameRunner()) as resultType;
 
   const resultEmbed = game.cardAndPointsEmbed();
@@ -41,47 +32,30 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
     case "Win":
       addBalanceXP(interaction.user.id, game.bet * 2, game.bet);
 
-      resultEmbed
-        .addField("🎉 WIN 🎉", `You won **${game.bet}** 💵`)
-        .setColor(0x57f287);
+      resultEmbed.addField("🎉 WIN 🎉", `You won **${game.bet}** 💵`).setColor(0x57f287);
       break;
     case "Blackjack":
       addBalanceXP(interaction.user.id, game.bet * 2.5, game.bet * 1.5);
 
       resultEmbed
-        .addField(
-          "🎉 BLACKJACK 🎉",
-          `You got blackjack! You won **${Math.ceil(game.bet * 1.5)}** 💵`,
-        )
+        .addField("🎉 BLACKJACK 🎉", `You got blackjack! You won **${Math.ceil(game.bet * 1.5)}** 💵`)
         .setColor(0x57f287);
       break;
     case "Draw":
       addBalanceXP(interaction.user.id, game.bet, game.bet * 0.5);
 
-      resultEmbed
-        .addField("😐 DRAW 😐", "You got your bet back!")
-        .setColor(0x99aab5);
+      resultEmbed.addField("😐 DRAW 😐", "You got your bet back!").setColor(0x99aab5);
       break;
     case "Lose":
-      resultEmbed
-        .addField("😭 LOSE 😭", `You lost **${game.bet}** 💵`)
-        .setColor(0xe74c3c);
+      resultEmbed.addField("😭 LOSE 😭", `You lost **${game.bet}** 💵`).setColor(0xe74c3c);
       break;
     case "Timeout":
-      resultEmbed
-        .addField(
-          "😭 TIMEOUT 😭",
-          `You didn't react in time! You lost **${game.bet}** 💵`,
-        )
-        .setColor(0xe74c3c);
+      resultEmbed.addField("😭 TIMEOUT 😭", `You didn't react in time! You lost **${game.bet}** 💵`).setColor(0xe74c3c);
       break;
     case "Surrender":
       addBalance(interaction.user.id, game.bet * 0.5);
       resultEmbed
-        .addField(
-          "🏳 SURRENDER 🏳",
-          `You surrendered! You lost **${Math.ceil(game.bet * 0.5)}** 💵`,
-        )
+        .addField("🏳 SURRENDER 🏳", `You surrendered! You lost **${Math.ceil(game.bet * 0.5)}** 💵`)
         .setColor(0xe74c3c);
       break;
   }

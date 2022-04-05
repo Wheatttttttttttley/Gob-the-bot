@@ -6,20 +6,10 @@ const data = new SlashCommandBuilder()
   .setName("add")
   .setDescription("Add balance to your account")
   .addNumberOption((options) =>
-    options
-      .setName("amount")
-      .setDescription("Amount to add to your balance")
-      .setRequired(true),
+    options.setName("amount").setDescription("Amount to add to your balance").setRequired(true),
   )
-  .addUserOption((options) =>
-    options
-      .setName("user")
-      .setDescription("User to add balance to")
-      .setRequired(false),
-  )
-  .addBooleanOption((options) =>
-    options.setName("silent").setDescription("Silent mode").setRequired(false),
-  );
+  .addUserOption((options) => options.setName("user").setDescription("User to add balance to").setRequired(false))
+  .addBooleanOption((options) => options.setName("silent").setDescription("Silent mode").setRequired(false));
 
 const run = async (interaction: CommandInteraction): Promise<void> => {
   const toUser = interaction.options.getUser("user") ?? interaction.user;
@@ -32,9 +22,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
     embeds: [
       new MessageEmbed()
         .setTitle("💸 Balance Added 💸")
-        .setDescription(
-          `**${toUser.username}'s** balance has been added by **${interaction.user.username}**`,
-        )
+        .setDescription(`**${toUser.username}'s** balance has been added by **${interaction.user.username}**`)
         .addField("Amount", `**💵 : ${amount}**`)
         .setColor(0x57f287),
     ],

@@ -4,9 +4,7 @@ import { addBalance, getAccount } from "../../helpers/accountManager";
 import { getPseudoRandom } from "../../helpers/randomNumber";
 import { warningEmbed } from "../../helpers/warningHandler";
 
-const data = new SlashCommandBuilder()
-  .setName("beg")
-  .setDescription("to beg for money...😓");
+const data = new SlashCommandBuilder().setName("beg").setDescription("to beg for money...😓");
 
 async function run(interaction: CommandInteraction) {
   const user = interaction.options?.getUser("user") || interaction.user;
@@ -17,10 +15,7 @@ async function run(interaction: CommandInteraction) {
       const balance = account.balance;
 
       if (balance <= 10) {
-        const rnd_money = getPseudoRandom(
-          100 + 25 * account.level,
-          200 + 50 * account.level,
-        );
+        const rnd_money = getPseudoRandom(100 + 25 * account.level, 200 + 50 * account.level);
         addBalance(user.id, rnd_money);
 
         interaction.reply({

@@ -69,19 +69,18 @@ export class HorseGame {
       .setTitle("🏇 Horse Racing! 🏇")
       .setColor(0x0099ff)
       .setDescription(
-        `You bet ${bet} 💵 on number **${numberToEmoji[chosenHorse]
-        }** with rate **${this.horses[chosenHorse - 1].pay}x**`,
+        `You bet ${bet} 💵 on number **${numberToEmoji[chosenHorse]}** with rate **${
+          this.horses[chosenHorse - 1].pay
+        }x**`,
       )
       .addField(
         "🚩 Field 🚩",
         this.horses
           .map(
             (horse, index) =>
-              `${`${numberToEmoji[index + 1]} ${"▰".repeat(
-                clamp((horse.progress / 10) >> 0, 0, 10),
-              )}${horse.emoji}${"▱".repeat(
-                clamp(10 - ((horse.progress / 10) >> 0), 0, 10),
-              )} **${horse.speed}** ⚡`}`,
+              `${`${numberToEmoji[index + 1]} ${"▰".repeat(clamp((horse.progress / 10) >> 0, 0, 10))}${
+                horse.emoji
+              }${"▱".repeat(clamp(10 - ((horse.progress / 10) >> 0), 0, 10))} **${horse.speed}** ⚡`}`,
           )
           .join("\n"),
       );
@@ -95,9 +94,7 @@ export class HorseGame {
     key = key.sort().join("");
     for (let i = 0; i < this.horseAmount; ++i) {
       const num = Math.ceil(100 / this.horses[i].speed);
-      this.horses[i].pay = parseFloat(
-        (payRates[key][num] + getPseudoRandom(-10, 10) / 100).toFixed(2),
-      );
+      this.horses[i].pay = parseFloat((payRates[key][num] + getPseudoRandom(-10, 10) / 100).toFixed(2));
     }
   }
 }

@@ -7,10 +7,7 @@ export const lineSubcommand = new SlashCommandSubcommandBuilder()
   .setName("line")
   .setDescription("Play a line, pay 5x")
   .addNumberOption((options) =>
-    options
-      .setName("bet")
-      .setRequired(true)
-      .setDescription("The amount of chips you want to bet"),
+    options.setName("bet").setRequired(true).setDescription("The amount of chips you want to bet"),
   )
   .addStringOption((options) =>
     options
@@ -32,11 +29,7 @@ export const lineSubcommand = new SlashCommandSubcommandBuilder()
       ]),
   );
 
-export const lineRun = (
-  interaction: CommandInteraction,
-  bet: number,
-  rndNumber: number,
-) => {
+export const lineRun = (interaction: CommandInteraction, bet: number, rndNumber: number) => {
   const guess = interaction.options.getString("guess") || "";
   const result = guess.split(" ").includes(rndNumber.toString());
   if (result) {
