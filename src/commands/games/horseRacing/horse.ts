@@ -88,7 +88,7 @@ const run = async (interaction: CommandInteraction) => {
   const filter = (reaction: MessageReaction, user: User) =>
     numberEmojiArray.includes(reaction.emoji.name as string) && user.id === interaction.user.id;
   await message
-    .awaitReactions({ filter, time: 10000, max: 1 })
+    .awaitReactions({ filter, time: 60000, max: 1 })
     .then(async (reactions) => {
       const reaction = reactions.first();
       horseNumber = emojiToNumber[reaction?.emoji.name as string];
