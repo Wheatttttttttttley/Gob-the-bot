@@ -107,6 +107,7 @@ const run = async (interaction: CommandInteraction) => {
       }),
     );
 
+    addBalance(interaction.user.id, bet);
     return;
   }
 

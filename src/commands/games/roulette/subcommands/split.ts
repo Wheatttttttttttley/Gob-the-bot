@@ -1,6 +1,6 @@
 import { SlashCommandSubcommandBuilder } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
-import { addBalanceXP } from "../../../../helpers/accountManager";
+import { addBalance, addBalanceXP } from "../../../../helpers/accountManager";
 import { warningEmbed } from "../../../../helpers/warningHandler";
 import { ResultEmbed } from "../roulette";
 
@@ -27,6 +27,8 @@ export const splitRun = (interaction: CommandInteraction, bet: number, rndNumber
         description: "The number you bet on must be between 0 and 36",
       }),
     );
+
+    addBalance(interaction.user.id, bet);
     return;
   }
   if (first === second) {
