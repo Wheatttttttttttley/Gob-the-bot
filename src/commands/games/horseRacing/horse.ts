@@ -128,7 +128,11 @@ const run = async (interaction: CommandInteraction) => {
   // resulting the game
   const isWon = winner === horseNumber - 1;
   if (isWon) {
-    addBalanceXP(interaction.user.id, game.horses[horseNumber - 1].pay * bet, game.horses[horseNumber - 1].pay * bet);
+    addBalanceXP(
+      interaction.user.id,
+      (1 + game.horses[horseNumber - 1].pay) * bet,
+      game.horses[horseNumber - 1].pay * bet,
+    );
   }
 
   await interaction.editReply({
