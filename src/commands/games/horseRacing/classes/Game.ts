@@ -3,6 +3,7 @@ import { promisify } from "util";
 import { clamp } from "../../../../helpers/clamp";
 import { getPseudoRandom } from "../../../../helpers/randomNumber";
 import { Horse } from "./Horse";
+import { payRates } from "./PayRates";
 
 const sleep = promisify(setTimeout);
 
@@ -16,29 +17,6 @@ const numberToEmoji: { [key: number]: string } = {
   7: "7️⃣",
   8: "8️⃣",
   9: "9️⃣",
-};
-
-const payRates: { [key: string]: { [key: number]: number } } = {
-  "555": { 5: 2.0 },
-  "556": { 5: 1.9, 6: 2.23 },
-  "557": { 5: 1.9, 7: 2.46 },
-  "558": { 5: 1.74, 8: 2.69 },
-  "566": { 5: 1.81, 6: 2.11 },
-  "567": { 5: 1.74, 6: 2.0, 7: 2.31 },
-  "568": { 5: 1.68, 6: 1.92, 8: 2.52 },
-  "577": { 5: 1.68, 7: 2.19 },
-  "578": { 5: 1.63, 7: 2.09, 8: 2.38 },
-  "588": { 5: 1.58, 8: 2.26 },
-  "666": { 6: 2.0 },
-  "667": { 6: 1.91, 7: 2.19 },
-  "668": { 6: 1.84, 8: 2.38 },
-  "677": { 6: 1.84, 7: 2.09 },
-  "678": { 6: 1.78, 7: 2.0, 8: 2.26 },
-  "688": { 6: 1.72, 8: 2.16 },
-  "777": { 7: 2.0 },
-  "778": { 7: 1.93, 8: 2.16 },
-  "788": { 7: 1.86, 8: 2.07 },
-  "888": { 8: 2.0 },
 };
 
 export class HorseGame {
@@ -94,7 +72,9 @@ export class HorseGame {
     key = key.sort().join("");
     for (let i = 0; i < this.horseAmount; ++i) {
       const num = Math.ceil(100 / this.horses[i].speed);
-      this.horses[i].pay = parseFloat((payRates[key][num] + getPseudoRandom(-10, 10) / 100).toFixed(2));
+      this.horses[i].pay = parseFloat(
+        (payRates[key][num] + getPseudoRandom(-5 * this.horseAmount, 5 * this.horseAmount) / 100).toFixed(2),
+      );
     }
   }
 }

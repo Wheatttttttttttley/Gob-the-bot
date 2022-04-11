@@ -17,10 +17,11 @@ const data = new SlashCommandBuilder()
       .setRequired(false)
       .setDescription("The amount of horses in the races.")
       .addChoices([
+        ["2", 2],
         ["3", 3],
-        //TODO:
-        // ["6", 6],
-        // ["9", 9],
+        ["4", 4],
+        ["5", 5],
+        ["6", 6],
       ]),
   );
 
