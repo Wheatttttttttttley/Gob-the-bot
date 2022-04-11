@@ -34,7 +34,6 @@ export default {
 
     // Cooldown check
     if (interaction.user.id in cooldown) {
-      console.log("Hey");
       const timeLeft = cooldown[interaction.user.id] - Date.now();
       if (timeLeft > 0) {
         interaction.reply(
