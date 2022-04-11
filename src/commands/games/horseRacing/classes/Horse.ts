@@ -70,7 +70,7 @@ const emojiList = [
 ];
 
 export class Horse {
-  emoji: string = emojiList[getPseudoRandom(0, emojiList.length)];
+  emoji: string = emojiList[getPseudoRandom(0, emojiList.length - 1)] ?? "🐎";
   speed: number = getPseudoRandom(13, 24);
   progress: number = 0;
   pay: number = 0;
