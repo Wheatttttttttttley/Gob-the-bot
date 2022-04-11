@@ -153,7 +153,7 @@ const run = async (interaction: CommandInteraction) => {
         .addField("GOALS 🎯", "Bet on a horse. If the horse wins the race, you wins!")
         .addField(
           "HORSES 🏇",
-          "Each race has 6 horses. Each of the horses has its own speed(⚡) and rate(💰).\nThe lower the horse's speed the higher rate. You should weigh carefully.",
+          "Each race has 3 horses. Each of the horses has its own speed(⚡) and rate(💰).\nThe lower the horse's speed the higher rate. You should weigh carefully.",
         )
         .addField("PAYOUT 💰", "***Depends on the horse***");
       break;
