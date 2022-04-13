@@ -55,7 +55,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
     case "Surrender":
       addBalance(interaction.user.id, game.bet * 0.5);
       resultEmbed
-        .addField("🏳 SURRENDER 🏳", `You surrendered! You lost **${Math.ceil(game.bet * 0.5)}** 💵`)
+        .addField("🏳 SURRENDER 🏳", `You surrendered! You lost **${Math.floor(game.bet * 0.5)}** 💵`)
         .setColor(0xe74c3c);
       break;
   }
