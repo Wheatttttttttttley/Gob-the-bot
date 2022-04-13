@@ -12,18 +12,15 @@ export class BlackJackGame {
   player: Player;
   dealer: Player;
   bet: number;
-  gameMessage: Message | null;
-  emojiArray: string[];
+  gameMessage: Message | null = null;
+  isDoubled: boolean = false;
+  emojiArray: string[] = ["👍", "👎", "🏳"];
   constructor(interaction: Interaction & CommandInteraction, bet: number) {
     this.interaction = interaction;
     this.user = interaction.user;
     this.player = new Player();
     this.dealer = new Player();
     this.bet = bet;
-
-    this.gameMessage = null;
-
-    this.emojiArray = ["👍", "👎", "🏳"];
   }
 
   async reactMessageEmbed() {
@@ -42,7 +39,7 @@ export class BlackJackGame {
     const embed = new MessageEmbed()
       .setColor("#0099ff")
       .setTitle(`🃏 ${this.user.username}'s Blackjack card 🃏`)
-      .setDescription(`Bet: **${this.bet}** 💵`)
+      .setDescription(`Bet: **${this.bet}** 💵${this.isDoubled ? ` *(Doubled)*` : ""}`)
       .addFields(
         {
           name: `Player (Points: ${this.player.getPoints()})`,
@@ -117,6 +114,7 @@ export class BlackJackGame {
             addBalance(this.user.id, -this.bet);
             this.bet *= 2;
             this.player.addCard(new Card());
+            this.isDoubled = true;
             playerTurn = false;
           } else if (reaction?.emoji.name === "🏳") {
             isSurrender = true;
