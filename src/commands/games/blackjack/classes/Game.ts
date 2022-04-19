@@ -144,7 +144,7 @@ export class BlackJackGame {
     this.dealer.hand[1].isFaceUp = true;
     this.sendEmbed(this.cardAndPointsEmbed());
 
-    while (this.dealer.points <= 17 && this.player.points > this.dealer.points) {
+    while (this.dealer.points < 17 && this.player.points > this.dealer.points) {
       await sleep(1000);
       this.dealer.addCard(new Card());
       this.sendEmbed(this.cardAndPointsEmbed());
