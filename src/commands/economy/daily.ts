@@ -11,10 +11,16 @@ async function run(interaction: CommandInteraction): Promise<void> {
 
   await getAccount(interaction.user.id)
     .then(async (player: PlayerInt) => {
-      const then = new Date(player.cooldown.daily);
-      const now = new Date();
+      // get the current date + GMT offset (+07:00)
+      const then = new Date(player.cooldown.daily.getTime() + 25200000);
+      const now = new Date(Date.now() + 25200000);
 
-      if (then.getDate == now.getDate && then.getMonth == now.getMonth && then.getFullYear == now.getFullYear) {
+      // if it's the same day, return
+      if (
+        then.getUTCDate() === now.getUTCDate() &&
+        then.getUTCMonth() === now.getUTCMonth() &&
+        then.getUTCFullYear() === now.getUTCFullYear()
+      ) {
         interaction.reply(
           warningEmbed({
             title: "ALREADY CLAIMED",
