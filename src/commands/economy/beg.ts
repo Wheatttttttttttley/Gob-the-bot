@@ -15,7 +15,7 @@ async function run(interaction: CommandInteraction) {
       const balance = account.balance;
 
       if (balance <= 10) {
-        const rnd_money = getPseudoRandom(100 + 25 * account.level, 200 + 50 * account.level);
+        const rnd_money = getPseudoRandom(1000 + 25 * account.level, 2000 + 50 * account.level);
         addBalance(user.id, rnd_money);
 
         interaction.reply({
