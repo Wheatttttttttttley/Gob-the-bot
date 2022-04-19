@@ -24,7 +24,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
         return;
       }
 
-      const payout = 2000 + player.level * 500;
+      const payout = 10000 + player.level * 2000;
       addBalance(id, payout);
 
       await PlayerModel.findOneAndUpdate({ _id: id }, { $set: { cooldown: { daily: new Date() } } }, { upsert: true });
