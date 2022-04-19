@@ -19,7 +19,7 @@ const PlayerModel = new Schema({
   balance: {
     type: Number,
     required: true,
-    default: 1000,
+    default: 10000,
   },
   xp: {
     type: Number,
