@@ -3,8 +3,6 @@ import { getAccount, updateLevel } from "../helpers/accountManager";
 import { warningEmbed } from "../helpers/warningHandler";
 import { client } from "../index";
 
-let cooldown: { [key: string]: number } = {};
-
 export default {
   name: "interactionCreate",
   run: async (interaction: Interaction): Promise<void> => {
@@ -31,21 +29,6 @@ export default {
       );
       return;
     }
-
-    // Cooldown check
-    if (interaction.user.id in cooldown) {
-      const timeLeft = cooldown[interaction.user.id] - Date.now();
-      if (timeLeft > 0) {
-        interaction.reply(
-          warningEmbed({
-            title: "Cooldown",
-            description: `You must wait ${Math.ceil(timeLeft / 10) / 100} seconds before using command again.`,
-          }),
-        );
-        return;
-      }
-    }
-    cooldown[interaction.user.id] = Date.now() + 3000;
 
     // Bet validator
     const bet = interaction.options.getNumber("bet");
