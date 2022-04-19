@@ -11,20 +11,14 @@ async function run(interaction: CommandInteraction): Promise<void> {
 
   await getAccount(interaction.user.id)
     .then(async (player: PlayerInt) => {
-      const then = new Date(player.cooldown.daily).getTime();
-      const now = new Date().getTime();
-      const diff = now - then;
-      const left = 86400000 - diff;
-      const leftHours = (left / 3600000) >> 0;
-      const leftMinutes = ((left / 60000) >> 0) % 60;
-      const leftSeconds = ((left / 1000) >> 0) % 60;
+      const then = new Date(player.cooldown.daily);
+      const now = new Date();
 
-      if (leftHours > 0 || leftMinutes > 0 || leftSeconds > 0) {
+      if (then.getDate == now.getDate && then.getMonth == now.getMonth && then.getFullYear == now.getFullYear) {
         interaction.reply(
           warningEmbed({
             title: "ALREADY CLAIMED",
-            description: `You have already claimed your daily rewards!\n\
-                        Cooldown (⌛): ${leftHours} h ${leftMinutes} m ${leftSeconds} s`,
+            description: `You have already claimed your daily rewards today!`,
           }),
         );
         return;
