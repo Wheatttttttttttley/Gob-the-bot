@@ -38,7 +38,7 @@ const PlayerModel = new Schema({
     default: 1000,
   },
   cooldown: {
-    daily: { type: Date },
+    daily: { type: Date, default: new Date(0) },
   },
 });
 
