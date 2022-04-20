@@ -41,9 +41,9 @@ async function run(interaction: CommandInteraction): Promise<void> {
           new MessageEmbed()
             .setTitle(`${user.username}'s Profile`)
             .setThumbnail(user.displayAvatarURL({ format: "png", size: 512 }))
-            .addField("Balance", `💵 **: ${account.balance}**`, true)
+            .addField("Balance", `💵 **: ${account.balance.toLocaleString()}**`, true)
             .addField("Level", `🌟 **:** ${levelString}`, true)
-            .addField(" 🔸 XP 🔸", `**${xp}** / **${xpToNextLevel}**\n${progressBar}`)
+            .addField(" 🔸 XP 🔸", `**${xp.toLocaleString()}** / **${xpToNextLevel.toLocaleString()}**\n${progressBar}`)
             .setColor(randomColor()),
         ],
       });
