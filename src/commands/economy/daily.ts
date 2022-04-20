@@ -49,7 +49,9 @@ async function run(interaction: CommandInteraction): Promise<void> {
         embeds: [
           new MessageEmbed()
             .setTitle("✅ SUCCESS ✅")
-            .setDescription(`You successfully claimed your daily rewards!\nYou received **${payout}** 💵`)
+            .setDescription(
+              `You successfully claimed your daily rewards!\nYou received **${payout.toLocaleString()}** 💵`,
+            )
             .setColor(0x2ecc71),
         ],
       });

@@ -29,7 +29,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
           new MessageEmbed()
             .setTitle(`💰 Balance of ${user.username} 💰`)
             .setColor(randomColor())
-            .setDescription(`**💵 : ${player.balance}**`),
+            .setDescription(`**💵 : ${player.balance.toLocaleString()}**`),
         ],
       }),
     )

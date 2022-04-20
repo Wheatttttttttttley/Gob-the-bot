@@ -142,7 +142,7 @@ const run = async (interaction: CommandInteraction) => {
         .setTitle(`🏇 ${isWon ? "WON" : "LOST"} ! 🏇`)
         .setColor(isWon ? 0x2ecc71 : 0xe74c3c)
         .setDescription(
-          `You bet ${bet} 💵 on number **${numberToEmoji[horseNumber]}** with rate **${
+          `You bet ${bet.toLocaleString()} 💵 on number **${numberToEmoji[horseNumber]}** with rate **${
             game.horses[horseNumber - 1].pay
           }x**`,
         )

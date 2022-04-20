@@ -22,7 +22,7 @@ async function run(interaction: CommandInteraction) {
           embeds: [
             new MessageEmbed()
               .setTitle("😥 Poor little beggar, here's some money! 😥")
-              .setDescription(`You got **${rnd_money}** 💵 from begging!`)
+              .setDescription(`You got **${rnd_money.toLocaleString()}** 💵 from begging!`)
               .setColor(0xf1c40f),
           ],
         });

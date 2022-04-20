@@ -32,13 +32,13 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
     case "Win":
       addBalanceXP(interaction.user.id, game.bet * 2, game.bet);
 
-      resultEmbed.addField("🎉 WIN 🎉", `You won **${game.bet}** 💵`).setColor(0x57f287);
+      resultEmbed.addField("🎉 WIN 🎉", `You won **${game.bet.toLocaleString()}** 💵`).setColor(0x57f287);
       break;
     case "Blackjack":
       addBalanceXP(interaction.user.id, game.bet * 2.5, game.bet * 1.5);
 
       resultEmbed
-        .addField("🎉 BLACKJACK 🎉", `You got blackjack! You won **${Math.ceil(game.bet * 1.5)}** 💵`)
+        .addField("🎉 BLACKJACK 🎉", `You got blackjack! You won **${Math.ceil(game.bet * 1.5).toLocaleString()}** 💵`)
         .setColor(0x57f287);
       break;
     case "Draw":
@@ -47,15 +47,17 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
       resultEmbed.addField("😐 DRAW 😐", "You got your bet back!").setColor(0x99aab5);
       break;
     case "Lose":
-      resultEmbed.addField("😭 LOSE 😭", `You lost **${game.bet}** 💵`).setColor(0xe74c3c);
+      resultEmbed.addField("😭 LOSE 😭", `You lost **${game.bet.toLocaleString()}** 💵`).setColor(0xe74c3c);
       break;
     case "Timeout":
-      resultEmbed.addField("😭 TIMEOUT 😭", `You didn't react in time! You lost **${game.bet}** 💵`).setColor(0xe74c3c);
+      resultEmbed
+        .addField("😭 TIMEOUT 😭", `You didn't react in time! You lost **${game.bet.toLocaleString()}** 💵`)
+        .setColor(0xe74c3c);
       break;
     case "Surrender":
       addBalance(interaction.user.id, game.bet * 0.5);
       resultEmbed
-        .addField("🏳 SURRENDER 🏳", `You surrendered! You lost **${Math.floor(game.bet * 0.5)}** 💵`)
+        .addField("🏳 SURRENDER 🏳", `You surrendered! You lost **${Math.floor(game.bet * 0.5).toLocaleString()}** 💵`)
         .setColor(0xe74c3c);
       break;
   }

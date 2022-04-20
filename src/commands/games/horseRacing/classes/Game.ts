@@ -47,7 +47,7 @@ export class HorseGame {
       .setTitle("🏇 Horse Racing! 🏇")
       .setColor(0x0099ff)
       .setDescription(
-        `You bet ${bet} 💵 on number **${numberToEmoji[chosenHorse]}** with rate **${
+        `You bet ${bet.toLocaleString()} 💵 on number **${numberToEmoji[chosenHorse]}** with rate **${
           this.horses[chosenHorse - 1].pay
         }x**`,
       )

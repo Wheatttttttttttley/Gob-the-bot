@@ -33,7 +33,7 @@ const run = async (interaction: CommandInteraction): Promise<void> => {
         new MessageEmbed()
           .setTitle("💸 Balance Added 💸")
           .setDescription(`Everyone's balance has been added by **${interaction.user.username}**`)
-          .addField("Amount", `**💵 : ${amount}**`)
+          .addField("Amount", `**💵 : ${amount.toLocaleString()}**`)
           .setColor(0x57f287),
       ],
     });

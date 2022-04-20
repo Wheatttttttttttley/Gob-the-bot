@@ -39,7 +39,7 @@ export class BlackJackGame {
     const embed = new MessageEmbed()
       .setColor("#0099ff")
       .setTitle(`🃏 ${this.user.username}'s Blackjack card 🃏`)
-      .setDescription(`Bet: **${this.bet}** 💵${this.isDoubled ? ` *(Doubled)*` : ""}`)
+      .setDescription(`Bet: **${this.bet.toLocaleString()}** 💵${this.isDoubled ? ` *(Doubled)*` : ""}`)
       .addFields(
         {
           name: `Player (Points: ${this.player.getPoints()})`,

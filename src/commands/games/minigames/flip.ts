@@ -27,7 +27,7 @@ async function run(interaction: CommandInteraction) {
 
   const embed = new MessageEmbed()
     .setTitle("🎲 Coin flipping 🎲")
-    .setDescription(`You bet **${bet}** on **${side === "h" ? "heads" : "tails"}**`)
+    .setDescription(`You bet **${bet.toLocaleString()}** on **${side === "h" ? "heads" : "tails"}**`)
     .setColor(0xe91e63);
   await interaction.reply({ embeds: [embed] });
   addBalance(interaction.user.id, -bet);
@@ -39,10 +39,10 @@ async function run(interaction: CommandInteraction) {
 
   embed.setTitle(`🎲 ${result.toUpperCase()}! 🎲`).setDescription(rndSide === "h" ? "**HEADS** 🌝" : "**TAILS** 🌚");
   if (result === "win") {
-    embed.addField("✅ You won! ✅", `You won **${bet}** 💵`).setColor(0x2ecc71);
+    embed.addField("✅ You won! ✅", `You won **${bet.toLocaleString()}** 💵`).setColor(0x2ecc71);
     addBalanceXP(interaction.user.id, 2 * bet, bet);
   } else if (result === "lose") {
-    embed.addField("❌ You lost! ❌", `You lost **${bet}** 💵`).setColor(0xe74c3c);
+    embed.addField("❌ You lost! ❌", `You lost **${bet.toLocaleString()}** 💵`).setColor(0xe74c3c);
   }
   await interaction.editReply({ embeds: [embed] });
 }

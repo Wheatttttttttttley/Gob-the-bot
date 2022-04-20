@@ -53,10 +53,10 @@ async function run(interaction: CommandInteraction) {
     embed.addField("😐 DRAW 😐", "***You got your bet back!***").setColor(0x99aab5);
   } else if (result === "win") {
     addBalanceXP(interaction.user.id, bet, bet);
-    embed.addField("🎉 WIN 🎉", `You won **${bet}** 💵`).setColor(0x57f287);
+    embed.addField("🎉 WIN 🎉", `You won **${bet.toLocaleString()}** 💵`).setColor(0x57f287);
   } else if (result === "lose") {
     addBalance(interaction.user.id, -bet);
-    embed.addField("😭 LOSE 😭", `You lost **${bet}** 💵`).setColor(0xe74c3c);
+    embed.addField("😭 LOSE 😭", `You lost **${bet.toLocaleString()}** 💵`).setColor(0xe74c3c);
   }
 
   interaction.reply({ embeds: [embed] });

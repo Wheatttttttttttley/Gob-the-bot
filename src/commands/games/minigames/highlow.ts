@@ -27,7 +27,7 @@ async function run(interaction: CommandInteraction) {
 
   const embed = new MessageEmbed()
     .setTitle("🎲 High/Low 🎲")
-    .setDescription(`You bet **${bet}$** and guessed **${guess}**`)
+    .setDescription(`You bet **${bet.toLocaleString()}$** and guessed **${guess}**`)
     .setColor(0xffff00);
   await interaction.reply({ embeds: [embed] });
   addBalance(interaction.user.id, -bet);
@@ -41,13 +41,13 @@ async function run(interaction: CommandInteraction) {
     embed
       .setTitle("🎉 YOU WIN 🎉")
       .setColor(0x2ecc71)
-      .setDescription(`The number was **${rndNumber}\nYou won ${bet} 💵**`);
+      .setDescription(`The number was **${rndNumber}\nYou won ${bet.toLocaleString()} 💵**`);
     addBalanceXP(interaction.user.id, 2 * bet, bet);
   } else {
     embed
       .setTitle("😭 YOU LOSE 😭")
       .setColor(0xe74c3c)
-      .setDescription(`The number was **${rndNumber}\nYou lost ${bet} 💵**`);
+      .setDescription(`The number was **${rndNumber}\nYou lost ${bet.toLocaleString()} 💵**`);
   }
   await interaction.editReply({ embeds: [embed] });
 }

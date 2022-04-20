@@ -43,11 +43,11 @@ export const ResultEmbed = (
   }
   return new MessageEmbed()
     .setTitle("💎 Roulette 💎")
-    .setDescription(`You bet **${initialBet}** 💵 on **${guess}**!`)
+    .setDescription(`You bet **${initialBet.toLocaleString()}** 💵 on **${guess}**!`)
     .addField("Rolled", `${color}** : ${rndNumber}**`)
     .addField(
       result === "win" ? "🤑 WIN 🤑" : "😭 LOSE 😭",
-      result === "win" ? `You won **${gain}** 💵` : `You lost **${initialBet} 💵**`,
+      result === "win" ? `You won **${gain.toLocaleString()}** 💵` : `You lost **${initialBet.toLocaleString()} 💵**`,
     )
     .setColor((result === "win" ? "0x57F287" : "0xE74C3C") as ColorResolvable);
 };

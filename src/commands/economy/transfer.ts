@@ -77,7 +77,9 @@ async function run(interaction: CommandInteraction) {
     embeds: [
       new MessageEmbed()
         .setTitle("💸 TRANSFER 💸")
-        .setDescription(`**${fromPlayer.username}** transferred **${amount}** 💵 to **${toPlayer.username}**`)
+        .setDescription(
+          `**${fromPlayer.username}** transferred **${amount.toLocaleString()}** 💵 to **${toPlayer.username}**`,
+        )
         .setColor(0x2ecc71),
     ],
   });
