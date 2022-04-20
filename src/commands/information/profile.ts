@@ -16,7 +16,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
     interaction.reply(
       warningEmbed({
         title: "Bot profiles are not supported",
-        description: "Please use a human profile",
+        description: "Please use a human profile.",
       }),
     );
     return;
@@ -49,7 +49,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
       });
     })
     .catch((err) => {
-      interaction.reply(warningEmbed({ title: "Error", description: err }));
+      interaction.reply(warningEmbed({ title: "Error", description: err as string }));
     });
 }
 

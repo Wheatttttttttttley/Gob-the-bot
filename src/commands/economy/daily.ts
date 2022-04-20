@@ -30,7 +30,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
         interaction.reply(
           warningEmbed({
             title: "ALREADY CLAIMED",
-            description: `You've already claimed your daily rewards!\n\nYou can claim again in ${diffHours}h ${diffMinutes}m ${diffSeconds}s.`,
+            description: `You've already claimed your daily rewards!\nYou can claim again in **${diffHours}h ${diffMinutes}m ${diffSeconds}s ⏲️**`,
           }),
         );
         return;
@@ -55,7 +55,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
       });
     })
     .catch((err: Error) => {
-      interaction.reply(warningEmbed({ description: `An error occured: ${err.message}` }));
+      interaction.reply(warningEmbed({ description: `An error occured: **${err.message}**` }));
     });
 }
 

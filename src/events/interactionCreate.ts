@@ -11,7 +11,7 @@ export default {
       interaction.reply(
         warningEmbed({
           title: "Missing Permissions",
-          description: "I do not have the `Manage Messages` permission.",
+          description: "I do not have the **Manage Messages** permission.",
         }),
       );
       return;
@@ -24,7 +24,7 @@ export default {
       interaction.reply(
         warningEmbed({
           title: "Missing Permissions",
-          description: "This command is owner only.",
+          description: "You don't have the permission to use this command.",
         }),
       );
       return;
@@ -38,16 +38,16 @@ export default {
       if (bet < 0 || !Number.isInteger(bet)) {
         interaction.reply(
           warningEmbed({
-            title: "INVALID BET ALERT",
-            description: "Bet must be a *non-negative integer*",
+            title: "INVALID BET",
+            description: "Bet must be **zero/positive integer.**",
           }),
         );
         return;
       } else if (bet > account.balance) {
         interaction.reply(
           warningEmbed({
-            title: "INSUFFICIENT FUNDS ALERT",
-            description: `You don't have enough money to bet ${bet}`,
+            title: "INSUFFICIENT FUNDS",
+            description: `You don't have enough money to bet **${bet}**💵`,
           }),
         );
         return;

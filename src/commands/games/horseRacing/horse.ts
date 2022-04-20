@@ -106,7 +106,7 @@ const run = async (interaction: CommandInteraction) => {
     interaction.editReply(
       warningEmbed({
         title: "TIMEOUT ALERT",
-        description: "You did not choose a horse in time. You lost half of your bet.",
+        description: "You did not choose a horse in time.\n*You lost half of your bet.*",
       }),
     );
 

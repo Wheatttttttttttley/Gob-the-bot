@@ -30,7 +30,7 @@ async function run(interaction: CommandInteraction): Promise<void> {
         await interaction.editReply(
           warningEmbed({
             title: "ERROR",
-            description: err as unknown as string,
+            description: err.toString(),
           }),
         );
         return;

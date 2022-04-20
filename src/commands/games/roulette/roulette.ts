@@ -94,7 +94,7 @@ const run = async (interaction: CommandInteraction) => {
       interaction.editReply(
         warningEmbed({
           title: "Invalid subcommand",
-          description: "Please use a valid subcommand",
+          description: "Please use a valid subcommand.",
         }),
       );
   }
