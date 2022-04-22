@@ -159,7 +159,7 @@ const run = async (interaction: CommandInteraction) => {
         )
         .addField(
           `${isWon ? "✅" : "❌"} You ${isWon ? "won" : "lost"}! ${isWon ? "✅" : "❌"}`,
-          `You ${isWon ? "won" : "lost"} **${Math.ceil(isWon ? game.horses[horseNumber - 1].pay * bet : bet)}** 💵`,
+          `You ${isWon ? "won" : "lost"} **${Math.ceil(isWon ? game.horses[horseNumber - 1].pay * bet : bet).toLocaleString()}** 💵`,
         ),
     ],
   });
